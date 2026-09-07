@@ -1,24 +1,53 @@
-# projectG
+# Antiquities and Heritage
 
-Staticki sajt Udruzenja agronoma i poljoprivrednika — izlozba i arhiv antikviteta i seoskog nasleda.
+Static website of the Agricultural Producers Association — exhibition and archive of
+antiquities and rural heritage from Semberija and the wider region.
 
-## Stranice
+## Pages
 
-- `index.html` — pocetna sa herojem, sekcijama o udruzenju, celinama arhiva i kontaktom.
-- `current.html` — galerija fotografija sa trenutne izlozbe.
-- `archive.html` — arhiv izlozbe 2025 sa cetiri tematske celine (domacinstvo, tekstil, tehnika, memorabilije).
-- `styles.css` — kompletan vizuelni sistem (tamnorusticani tonovi, zlatni akcent, serifne naslove).
-- `script.js` — meni, reveal efekat i kontakt forma.
+- `index.html` — homepage with hero, association overview, current exhibition teaser,
+  contribution call-to-action and contact form.
+- `udruzenje.html` — about the association: founding, members, collection and contact.
+- `current.html` — gallery of photographs from the current ethno exhibition
+  ("Srce Semberije") with a three-card carousel.
+- `archive.html` — archive of the 2025 exhibition with carousel, media links and
+  previous exhibitions (e.g. "Zvuci prošlosti").
+- `styles.css` — full visual system (dark warm tones, gold accents, serif headings,
+  carousel, theme chips, archive media list, etc.).
+- `script.js` — mobile menu toggle, reveal-on-scroll, contact form, lightbox and
+  carousel logic, read-more / read-less toggle.
 
-## Pokretanje lokalno
+## Folder structure
 
-Otvori `index.html` u pretrazivacu ili preko VS Code Live Server ekstenzije.
+```
+projectG/
+├── index.html
+├── udruzenje.html
+├── current.html
+├── archive.html
+├── styles.css
+├── script.js
+├── logo.jpg              ← site logo
+├── favicon.svg
+├── staroselo.jpeg        ← featured village photo (current.html hero)
+├── slika*.png            ← unused — ignored by git
+├── slike/                ← archive photos used by archive.html
+└── trenutnaizlozba/      ← current exhibition photos used by current.html
+```
 
-## GitHub Pages
+## Running locally
 
-1. Posalji promene na `main` granu.
-2. U GitHub repozitorijumu otvori Settings > Pages.
-3. Kao source izaberi `Deploy from a branch`.
-4. Kao branch izaberi `main` i folder `/ (root)`.
+Open `index.html` in your browser, or use VS Code's **Live Server** extension for
+hot reloads. There is no build step — the site is 100% static (HTML, CSS, JS,
+images).
 
-Stranica koristi samo staticke fajlove i spremna je za Pages.
+## Hosting
+
+The site is fully static and ready for any free static host:
+
+- **GitHub Pages** — `Settings → Pages → Branch: main → /(root)` (recommended)
+- **Netlify** — drag and drop the folder, or connect the GitHub repo
+- **Cloudflare Pages** — connect the GitHub repo for fast global delivery
+- **Vercel** — works out of the box
+
+No build, no package manager, no server-side code.

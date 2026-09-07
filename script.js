@@ -65,15 +65,15 @@ function buildLightbox() {
   lightboxEl.className = 'lightbox';
   lightboxEl.setAttribute('role', 'dialog');
   lightboxEl.setAttribute('aria-modal', 'true');
-  lightboxEl.setAttribute('aria-label', 'Pregled fotografije');
+  lightboxEl.setAttribute('aria-label', 'Photo viewer');
   lightboxEl.innerHTML = `
-    <button class="lightbox-close" type="button" aria-label="Zatvori">&times;</button>
-    <button class="lightbox-nav lightbox-prev" type="button" aria-label="Prethodna">&lsaquo;</button>
+    <button class="lightbox-close" type="button" aria-label="Close">&times;</button>
+    <button class="lightbox-nav lightbox-prev" type="button" aria-label="Previous">&lsaquo;</button>
     <figure class="lightbox-figure">
       <img src="" alt="" />
       <figcaption></figcaption>
     </figure>
-    <button class="lightbox-nav lightbox-next" type="button" aria-label="Sledeća">&rsaquo;</button>
+    <button class="lightbox-nav lightbox-next" type="button" aria-label="Next">&rsaquo;</button>
   `;
   document.body.appendChild(lightboxEl);
 
@@ -124,7 +124,7 @@ if (galleryImages.length) {
     figure.style.cursor = 'zoom-in';
     img.tabIndex = 0;
     img.setAttribute('role', 'button');
-    img.setAttribute('aria-label', 'Uvećaj fotografiju');
+    img.setAttribute('aria-label', 'Enlarge photo');
 
     const handleOpen = (event) => {
       event.preventDefault();
@@ -171,10 +171,10 @@ if (carousel && carouselDataEl && carouselSourceItems.length) {
   const nextBtn = carousel.querySelector('.carousel-next');
 
   const themeLabels = {
-    domacinstvo: 'Domaćinstvo',
-    tekstil: 'Tekstil',
-    tehnika: 'Tehnika',
-    memorabilije: 'Memorabilije',
+    domacinstvo: 'Household',
+    tekstil: 'Textile',
+    tehnika: 'Technology',
+    memorabilije: 'Memorabilia',
   };
 
   const themeTabs = Array.from(
@@ -201,7 +201,7 @@ if (carousel && carouselDataEl && carouselSourceItems.length) {
         decoding="async"
       />
       <figcaption>
-        <span class="label">Foto ${pad(idx + 1)}</span>
+        <span class="label">Photo ${pad(idx + 1)}</span>
         <h3>${title}</h3>
       </figcaption>
     `;
@@ -252,7 +252,7 @@ if (carousel && carouselDataEl && carouselSourceItems.length) {
       dot.type = 'button';
       dot.className = 'carousel-dot';
       dot.setAttribute('role', 'tab');
-      dot.setAttribute('aria-label', `Slika ${i + 1}: ${item.title || ''}`);
+      dot.setAttribute('aria-label', `Image ${i + 1}: ${item.title || ''}`);
       dot.addEventListener('click', () => {
         current = i;
         render();
@@ -361,3 +361,26 @@ if (carousel && carouselDataEl && carouselSourceItems.length) {
     }
   });
 }
+
+// === Read more / read less toggle (index.html, etc.) ===
+const readMoreBtns = document.querySelectorAll('.about-readmore-btn');
+readMoreBtns.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const targetId = btn.getAttribute('aria-controls');
+    const more = targetId ? document.getElementById(targetId) : null;
+    if (!more) return;
+
+    const wasHidden = more.hidden;
+    more.hidden = !wasHidden;
+
+    const showText = btn.querySelector('.readmore-text-show');
+    const hideText = btn.querySelector('.readmore-text-hide');
+    const icon = btn.querySelector('.readmore-icon');
+
+    if (showText) showText.hidden = wasHidden;
+    if (hideText) hideText.hidden = !wasHidden;
+    if (icon) icon.style.transform = wasHidden ? 'rotate(180deg)' : '';
+
+    btn.setAttribute('aria-expanded', String(wasHidden));
+  });
+});
