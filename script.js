@@ -1,10 +1,8 @@
 // === App config (set Formspree endpoint here once signed up at formspree.io) ===
 const APP_CONFIG = {
-  // Sign up at https://formspree.io with perkan66@gmail.com
-  // After creating a form, paste the endpoint URL below.
-  // Leave empty (or containing the placeholder) to disable remote sending
-  // — the on-page confirmation panel will still appear.
-  formspreeEndpoint: 'https://formspree.io/f/yourEndpointId',
+  // Formspree endpoint for delivering contact-form inquiries to
+  // perkan66@gmail.com. Set up at https://formspree.io.
+  formspreeEndpoint: 'https://formspree.io/f/mnpqgngz',
 };
 
 const menuToggle = document.querySelector('.menu-toggle');
