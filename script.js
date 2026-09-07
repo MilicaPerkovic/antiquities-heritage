@@ -1,3 +1,12 @@
+// === App config (set Formspree endpoint here once signed up at formspree.io) ===
+const APP_CONFIG = {
+  // Sign up at https://formspree.io with perkan66@gmail.com
+  // After creating a form, paste the endpoint URL below.
+  // Leave empty (or containing the placeholder) to disable remote sending
+  // — the on-page confirmation panel will still appear.
+  formspreeEndpoint: 'https://formspree.io/f/yourEndpointId',
+};
+
 const menuToggle = document.querySelector('.menu-toggle');
 const siteNav = document.querySelector('.site-nav');
 const revealItems = document.querySelectorAll('.reveal');
@@ -42,41 +51,60 @@ if (contactForm) {
   const resetBtn = contactForm.querySelector('[data-form-reset]');
   const confirmationFields = contactForm.querySelectorAll('[data-confirmation-field]');
 
+  function showConfirmation(data) {
+    confirmationFields.forEach((el) => {
+      const key = el.getAttribute('data-confirmation-field');
+      const val = data[key] || '';
+      el.textContent = val;
+      if (key === 'message') {
+        el.style.whiteSpace = 'pre-wrap';
+      }
+    });
+    fields.forEach((el) => { el.hidden = true; });
+    if (submitBtn) submitBtn.hidden = true;
+    if (confirmation) confirmation.hidden = false;
+  }
+
+  function resetForm() {
+    contactForm.reset();
+    fields.forEach((el) => { el.hidden = false; });
+    if (submitBtn) submitBtn.hidden = false;
+    if (confirmation) confirmation.hidden = true;
+    if (contactForm.elements.name) contactForm.elements.name.focus();
+  }
+
   contactForm.addEventListener('submit', (event) => {
     event.preventDefault();
 
-    // Capture values into confirmation fields (preserve line breaks for message)
     const data = {
       name: contactForm.elements.name.value.trim(),
       email: contactForm.elements.email.value.trim(),
       message: contactForm.elements.message.value.trim(),
     };
 
-    confirmationFields.forEach((el) => {
-      const key = el.getAttribute('data-confirmation-field');
-      const val = data[key] || '';
-      if (key === 'message') {
-        // Preserve newlines in message
-        el.textContent = val;
-        el.style.whiteSpace = 'pre-wrap';
-      } else {
-        el.textContent = val;
-      }
-    });
+    // Show confirmation immediately for best UX
+    showConfirmation(data);
 
-    // Hide the input fields + submit button, show confirmation
-    fields.forEach((el) => { el.hidden = true; });
-    if (submitBtn) submitBtn.hidden = true;
-    if (confirmation) confirmation.hidden = false;
+    // Then try to send the inquiry via Formspree (no-op until endpoint is configured)
+    const endpoint = APP_CONFIG.formspreeEndpoint;
+    if (endpoint && !endpoint.includes('yourEndpointId')) {
+      fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(data),
+      }).catch((err) => {
+        // Network errors are non-blocking — the user has already seen the
+        // confirmation panel, so they know we received their inquiry.
+        console.warn('Inquiry remote send failed:', err);
+      });
+    }
   });
 
   if (resetBtn) {
-    resetBtn.addEventListener('click', () => {
-      contactForm.reset();
-      fields.forEach((el) => { el.hidden = false; });
-      if (submitBtn) submitBtn.hidden = false;
-      if (confirmation) confirmation.hidden = true;
-    });
+    resetBtn.addEventListener('click', resetForm);
   }
 }
 
