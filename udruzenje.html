@@ -1,11 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-i18n-title="site.title.about">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>About the Association | Antiquities and Heritage</title>
     <meta
       name="description"
+      data-i18n="site.description.about"
       content="Agricultural Producers Association Poljoprivreda from Bijeljina — founding, members, collection of over 30,000 exhibits and the preservation of Semberija's tradition."
     />
     <meta name="theme-color" content="#1b0f0b" />
@@ -53,10 +54,10 @@
     <header class="site-header">
       <div class="container header-inner">
         <a class="brand" href="index.html">
-          <span class="brand-mark"><img src="logo.jpg" alt="Antiquities and Heritage" /></span>
+          <span class="brand-mark"><img src="logo.jpg" data-i18n-alt="brand.img.alt" alt="Antiquities and Heritage" /></span>
           <span>
-            <strong>Association "Poljoprivreda"</strong>
-            <small>About the Association</small>
+            <strong data-i18n="brand.home.about">Association "Poljoprivreda"</strong>
+            <small data-i18n="brand.subtitle.about">About the Association</small>
           </span>
         </a>
 
@@ -67,10 +68,11 @@
         </button>
 
         <nav id="site-nav" class="site-nav">
-          <a href="udruzenje.html" aria-current="page">About the Association</a>
-          <a href="current.html">Upcoming Exhibition</a>
-          <a href="archive.html">Archive</a>
-          <a href="index.html#kontakt">Contact</a>
+          <a href="udruzenje.html" aria-current="page" data-i18n="nav.about">About the Association</a>
+          <a href="current.html" data-i18n="nav.upcoming">Upcoming Exhibition</a>
+          <a href="archive.html" data-i18n="nav.archive">Archive</a>
+          <a href="index.html#kontakt" data-i18n="nav.contact">Contact</a>
+          <button class="lang-toggle" type="button" data-lang-toggle>SR</button>
         </nav>
       </div>
     </header>
@@ -95,14 +97,14 @@
                 transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
               "
             >
-              <span class="label">Headquarters</span>
+              <span class="label" data-i18n="about.headquarters.label">Headquarters</span>
               <strong style="
                 display: block;
                 margin-top: 6px;
                 font-family: 'Cormorant Garamond', Georgia, serif;
                 font-size: 1.3rem;
                 color: var(--text);
-              ">Bijeljina, Bosnia and Herzegovina</strong>
+              " data-i18n="about.headquarters.value">Bijeljina, Bosnia and Herzegovina</strong>
             </article>
             <article
               style="
@@ -114,14 +116,14 @@
                 transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
               "
             >
-              <span class="label">Founded</span>
+              <span class="label" data-i18n="about.founded.label">Founded</span>
               <strong style="
                 display: block;
                 margin-top: 6px;
                 font-family: 'Cormorant Garamond', Georgia, serif;
                 font-size: 1.3rem;
                 color: var(--text);
-              ">2007</strong>
+              " data-i18n="about.founded.value">2007</strong>
             </article>
             <article
               style="
@@ -133,14 +135,14 @@
                 transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
               "
             >
-              <span class="label">Members</span>
+              <span class="label" data-i18n="about.members.label">Members</span>
               <strong style="
                 display: block;
                 margin-top: 6px;
                 font-family: 'Cormorant Garamond', Georgia, serif;
                 font-size: 1.3rem;
                 color: var(--text);
-              ">14 dedicated members</strong>
+              " data-i18n="about.members.value">14 dedicated members</strong>
             </article>
           </div>
         </div>
@@ -154,7 +156,7 @@
             max-width: 880px;
             margin: 0 auto;
           ">
-            <p style="
+            <p data-i18n="about.prose" style="
               text-align: justify;
               font-size:1.02reml;
               line-height: 1.85;
@@ -192,16 +194,17 @@
       <div class="container footer-inner">
         <div>
           <strong>Antiquities and Heritage</strong>
-          <p>Exhibition and archive of the Agricultural Producers Association "Poljoprivreda".</p>
+          <p data-i18n="footer.copy.about">Exhibition and archive of the Agricultural Producers Association "Poljoprivreda".</p>
         </div>
         <div class="footer-meta">
           <span>© 2026 ProjectG</span>
-          <a href="udruzenje.html">About the Association</a>
-          <a href="current.html">Current Exhibition</a>
-          <a href="archive.html">Archive</a>
-          <a href="index.html#kontakt">Contact</a>
+          <a href="udruzenje.html" data-i18n="footer.about">About the Association</a>
+          <a href="current.html" data-i18n="footer.current">Current Exhibition</a>
+          <a href="archive.html" data-i18n="footer.archive">Archive</a>
+          <a href="index.html#kontakt" data-i18n="footer.contact">Contact</a>
         </div>
       </div>
     </footer>
   </body>
 </html>
+

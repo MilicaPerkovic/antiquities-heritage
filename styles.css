@@ -159,6 +159,44 @@ body::before {
   color: var(--text);
 }
 
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid rgba(200, 155, 82, 0.4);
+  border-radius: 999px;
+  background: rgba(34, 18, 13, 0.85);
+  color: var(--gold);
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  cursor: pointer;
+  margin-left: 8px;
+  transition: transform 200ms ease, border-color 200ms ease,
+    background 200ms ease, color 200ms ease, box-shadow 220ms ease;
+}
+
+.lang-toggle:hover {
+  transform: translateY(-2px);
+  border-color: var(--gold);
+  background: rgba(200, 155, 82, 0.18);
+  color: var(--text);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.3);
+}
+
+.lang-toggle:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.lang-toggle:active {
+  transform: scale(0.95);
+}
+
 .menu-toggle {
   display: none;
   width: 48px;

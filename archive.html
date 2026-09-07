@@ -1,11 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-i18n-title="site.title.archive">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Archive | Antiquities and Heritage</title>
     <meta
       name="description"
+      data-i18n="site.description.archive"
       content="Archive page with clearly arranged photographs of the 2025 exhibition of antiquities and rural heritage."
     />
     <meta name="theme-color" content="#1b0f0b" />
@@ -35,10 +36,10 @@
     <header class="site-header">
       <div class="container header-inner">
         <a class="brand" href="index.html">
-          <span class="brand-mark"><img src="logo.jpg" alt="Antiquities and Heritage" /></span>
+          <span class="brand-mark"><img src="logo.jpg" data-i18n-alt="brand.img.alt" alt="Antiquities and Heritage" /></span>
           <span>
-            <strong>Association "Poljoprivrednik"</strong>
-            <small>Exhibition Archive</small>
+            <strong data-i18n="brand.home">Association "Poljoprivrednik"</strong>
+            <small data-i18n="brand.subtitle.archive">Exhibition Archive</small>
           </span>
         </a>
 
@@ -49,10 +50,11 @@
         </button>
 
         <nav id="site-nav" class="site-nav">
-          <a href="udruzenje.html">About the Association</a>
-          <a href="current.html">Upcoming Exhibition</a>
-          <a href="archive.html" aria-current="page">Archive</a>
-          <a href="index.html#kontakt">Contact</a>
+          <a href="udruzenje.html" data-i18n="nav.about">About the Association</a>
+          <a href="current.html" data-i18n="nav.upcoming">Upcoming Exhibition</a>
+          <a href="archive.html" aria-current="page" data-i18n="nav.archive">Archive</a>
+          <a href="index.html#kontakt" data-i18n="nav.contact">Contact</a>
+          <button class="lang-toggle" type="button" data-lang-toggle>SR</button>
         </nav>
       </div>
     </header>
@@ -60,12 +62,13 @@
     <main>
       <section class="hero section archive-hero reveal">
         <div class="container hero-grid">
-          <div class="eyebrow">Ethno Exhibition, October 2025</div>
-          <p>The Agricultural Producers Association "Poljoprivreda" from Bijeljina and the Faculty of Agriculture of the University of East Sarajevo organised an ethno exhibition in Bijeljina with several hundred exhibits.</p>
+          <div class="eyebrow" data-i18n="archive.eyebrow.hero">Ethno Exhibition, October 2025</div>
+          <p data-i18n="archive.hero.p">The Agricultural Producers Association "Poljoprivreda" from Bijeljina and the Faculty of Agriculture of the University of East Sarajevo organised an ethno exhibition in Bijeljina with several hundred exhibits.</p>
            <div class="carousel" data-carousel>
             <button
               class="carousel-arrow carousel-prev"
               type="button"
+              data-i18n-aria="current.carousel.prev"
               aria-label="Previous image"
             >
               <span aria-hidden="true">‹</span>
@@ -75,16 +78,19 @@
               <article
                 class="carousel-card carousel-card-side"
                 data-carousel-side="left"
+                data-i18n-aria="current.carousel.prev"
                 aria-label="Previous image"
               ></article>
               <article
                 class="carousel-card carousel-card-active"
                 data-carousel-side="center"
+                data-i18n-aria="current.carousel.center"
                 aria-label="Center image — click to enlarge"
               ></article>
               <article
                 class="carousel-card carousel-card-side"
                 data-carousel-side="right"
+                data-i18n-aria="current.carousel.right"
                 aria-label="Next image"
               ></article>
             </div>
@@ -92,6 +98,7 @@
             <button
               class="carousel-arrow carousel-next"
               type="button"
+              data-i18n-aria="current.carousel.right"
               aria-label="Next image"
             >
               <span aria-hidden="true">›</span>
@@ -103,6 +110,7 @@
           <ul
             class="carousel-dots"
             role="tablist"
+            data-i18n-aria="current.carousel.dots.aria"
             aria-label="Direct image selection"
           ></ul>
 
@@ -152,39 +160,39 @@
       <section class="section reveal">
         <div class="container">
           <div class="section-heading">
-            <span class="eyebrow">Media about the Exhibition</span>
+            <span class="eyebrow" data-i18n="archive.media.eyebrow">Media about the Exhibition</span>
             <p></p>
           </div>
 
           <ul class="archive-media-list">
             <li>
-              <span class="label">Video</span>
+              <span class="label" data-i18n="archive.media.label1">Video</span>
               <a
                 href="https://www.youtube.com/watch?v=gKn2Y_U2BnE"
                 target="_blank"
                 rel="noopener"
               >
-                Goran Perković on the ethno exhibition in Bijeljina — 15.10.2025.
+                <span data-i18n="archive.media.title1">Goran Perković on the ethno exhibition in Bijeljina — 15.10.2025.</span>
               </a>
             </li>
             <li>
-              <span class="label">TV Show</span>
+              <span class="label" data-i18n="archive.media.label2">TV Show</span>
               <a
                 href="https://www.youtube.com/watch?v=oej5N43hMgU"
                 target="_blank"
                 rel="noopener"
               >
-                Morning for Everyone: Goran Perković, collector from Bijeljina
+                <span data-i18n="archive.media.title2">Morning for Everyone: Goran Perković, collector from Bijeljina</span>
               </a>
             </li>
             <li>
-              <span class="label">Article</span>
+              <span class="label" data-i18n="archive.media.label3">Article</span>
               <a
                 href="https://infobijeljina.com/vijesti/etno-izlozba-u-bijeljini--predmeti-stari-vise-od-vijeka-ozivjeli-duh-proslih-vremena"
                 target="_blank"
                 rel="noopener"
               >
-                Objects older than a century exhibited in Bijeljina — Infobijeljina
+                <span data-i18n="archive.media.title3">Objects older than a century exhibited in Bijeljina — Infobijeljina</span>
               </a>
             </li>
           </ul>
@@ -194,13 +202,13 @@
       <section class="section reveal">
         <div class="container">
           <div class="section-heading">
-            <span class="eyebrow">Previous Exhibitions</span>
+            <span class="eyebrow" data-i18n="archive.events.eyebrow">Previous Exhibitions</span>
 
           </div>
 
           <article class="archive-event">
-            <h3>"Zvuci prošlosti" (Sounds of the Past), September 2023.</h3>
-            <p>
+            <h3 data-i18n="archive.event1.title">"Zvuci prošlosti" (Sounds of the Past), September 2023.</h3>
+            <p data-i18n="archive.event1.text">
               "Zvuci prošlosti" — Sounds of the Past — from the radio device collection
               is the name of an exhibition with 43 exhibits held at the Semberija
               Museum.
@@ -212,7 +220,7 @@
                   target="_blank"
                   rel="noopener"
                 >
-                  Sounds of the Past — Radio Device Collection
+                  <span data-i18n="archive.event1.link1">Sounds of the Past — Radio Device Collection</span>
                 </a>
               </li>
               <li>
@@ -221,7 +229,7 @@
                   target="_blank"
                   rel="noopener"
                 >
-                  Collection of 43 Radio Devices
+                  <span data-i18n="archive.event1.link2">Collection of 43 Radio Devices</span>
                 </a>
               </li>
               <li>
@@ -230,15 +238,15 @@
                   target="_blank"
                   rel="noopener"
                 >
-                  Sounds of the Past — RTRS
+                  <span data-i18n="archive.event1.link3">Sounds of the Past — RTRS</span>
                 </a>
               </li>
             </ul>
           </article>
 
           <article class="archive-event">
-            <h3>Agriculture Fair "Interagro", September 2023.</h3>
-            <p>
+            <h3 data-i18n="archive.event2.title">Agriculture Fair "Interagro", September 2023.</h3>
+            <p data-i18n="archive.event2.text">
               An ethno collection with 40 types of pliers used by blacksmiths was
               exhibited at the "Interagro" Agriculture Fair in Bijeljina.
             </p>
