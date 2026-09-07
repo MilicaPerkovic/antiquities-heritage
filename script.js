@@ -2,7 +2,6 @@ const menuToggle = document.querySelector('.menu-toggle');
 const siteNav = document.querySelector('.site-nav');
 const revealItems = document.querySelectorAll('.reveal');
 const contactForm = document.querySelector('.contact-form');
-const formStatus = document.querySelector('.form-status');
 
 if (menuToggle && siteNav) {
   menuToggle.addEventListener('click', () => {
@@ -37,16 +36,48 @@ if ('IntersectionObserver' in window) {
 }
 
 if (contactForm) {
+  const fields = contactForm.querySelectorAll('.contact-field');
+  const submitBtn = contactForm.querySelector('button[type="submit"]');
+  const confirmation = contactForm.querySelector('[data-form-confirmation]');
+  const resetBtn = contactForm.querySelector('[data-form-reset]');
+  const confirmationFields = contactForm.querySelectorAll('[data-confirmation-field]');
+
   contactForm.addEventListener('submit', (event) => {
     event.preventDefault();
-    contactForm.reset();
-    if (formStatus) {
-      formStatus.hidden = false;
-      window.setTimeout(() => {
-        formStatus.hidden = true;
-      }, 6000);
-    }
+
+    // Capture values into confirmation fields (preserve line breaks for message)
+    const data = {
+      name: contactForm.elements.name.value.trim(),
+      email: contactForm.elements.email.value.trim(),
+      message: contactForm.elements.message.value.trim(),
+    };
+
+    confirmationFields.forEach((el) => {
+      const key = el.getAttribute('data-confirmation-field');
+      const val = data[key] || '';
+      if (key === 'message') {
+        // Preserve newlines in message
+        el.textContent = val;
+        el.style.whiteSpace = 'pre-wrap';
+      } else {
+        el.textContent = val;
+      }
+    });
+
+    // Hide the input fields + submit button, show confirmation
+    fields.forEach((el) => { el.hidden = true; });
+    if (submitBtn) submitBtn.hidden = true;
+    if (confirmation) confirmation.hidden = false;
   });
+
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      contactForm.reset();
+      fields.forEach((el) => { el.hidden = false; });
+      if (submitBtn) submitBtn.hidden = false;
+      if (confirmation) confirmation.hidden = true;
+    });
+  }
 }
 
 // === Lightbox + Carousel shared state ===
@@ -399,6 +430,7 @@ const I18N = {
     'brand.subtitle.about': 'About the Association',
     'brand.img.alt': 'Antiquities and Heritage',
     'nav.about': 'About the Association',
+    'nav.home': 'Home',
     'nav.upcoming': 'Upcoming Exhibition',
     'nav.archive': 'Archive',
     'nav.contact': 'Contact',
@@ -475,6 +507,12 @@ const I18N = {
     'contact.form.message.placeholder': "Briefly write what you'd like to know",
     'contact.form.submit': 'Send Inquiry',
     'contact.form.status': 'Thank you for your message. The association will reply as soon as possible.',
+    'contact.form.confirmation.title': 'Your message has been received',
+    'contact.form.confirmation.lead': 'Thank you for reaching out. Here is what we received from you:',
+    'contact.form.confirmation.name': 'Name',
+    'contact.form.confirmation.email': 'Email',
+    'contact.form.confirmation.message': 'Message',
+    'contact.form.confirmation.new': 'Send another message',
 
     // current.html
     'current.eyebrow.current': 'Current Exhibition',
@@ -542,6 +580,7 @@ const I18N = {
     'brand.subtitle.about': 'O udruženju',
     'brand.img.alt': 'Antikviteti i nasleđe',
     'nav.about': 'O udruženju',
+    'nav.home': 'Početna',
     'nav.upcoming': 'Predstojeća izložba',
     'nav.archive': 'Arhiv',
     'nav.contact': 'Kontakt',
@@ -613,6 +652,12 @@ const I18N = {
     'contact.form.message.placeholder': 'Napiši kratko šta te zanima',
     'contact.form.submit': 'Pošalji upit',
     'contact.form.status': 'Hvala na poruci. Udruženje će odgovoriti u najkraćem roku.',
+    'contact.form.confirmation.title': 'Vaša poruka je primljena',
+    'contact.form.confirmation.lead': 'Hvala vam što ste nas kontaktirali. Evo šta smo primili od vas:',
+    'contact.form.confirmation.name': 'Ime',
+    'contact.form.confirmation.email': 'Email',
+    'contact.form.confirmation.message': 'Poruka',
+    'contact.form.confirmation.new': 'Pošalji novu poruku',
 
     'current.eyebrow.current': 'Trenutna postavka',
     'current.h1.current': 'Srce Semberije',
