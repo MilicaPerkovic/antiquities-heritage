@@ -29,6 +29,169 @@
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
     <script defer src="script.js"></script>
+    <style>
+      /* === Radio exhibition gallery (inline, archive.html only) === */
+      .radio-gallery {
+        margin-top: 24px;
+        padding: 18px 20px;
+        border: 1px solid rgba(200, 155, 82, 0.18);
+        border-radius: 14px;
+        background: rgba(34, 18, 13, 0.46);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+      }
+      .radio-gallery-eyebrow {
+        display: block;
+        margin-bottom: 14px;
+        color: var(--gold, #c89b52);
+        font-family: "Inter", system-ui, sans-serif;
+        font-size: 0.78rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        font-weight: 600;
+      }
+      .radio-gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+        gap: 8px;
+      }
+      .radio-thumb {
+        display: block;
+        margin: 0;
+        padding: 0;
+        border: 1px solid rgba(200, 155, 82, 0.18);
+        border-radius: 8px;
+        overflow: hidden;
+        cursor: zoom-in;
+        background: #25130f;
+        aspect-ratio: 1 / 1;
+        transition: transform 200ms ease, border-color 200ms ease,
+          box-shadow 200ms ease;
+      }
+      .radio-thumb:hover,
+      .radio-thumb:focus-visible {
+        transform: scale(1.04);
+        border-color: rgba(200, 155, 82, 0.62);
+        box-shadow: 0 10px 22px rgba(0, 0, 0, 0.38);
+        outline: none;
+      }
+      .radio-thumb img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      /* Lightbox overlay (clean image, no caption) */
+      .radio-lightbox {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: rgba(8, 4, 2, 0.94);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+      .radio-lightbox.is-open {
+        display: flex;
+      }
+      .radio-lightbox-img {
+        display: block;
+        max-width: 100%;
+        max-height: 88vh;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        border-radius: 6px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+        user-select: none;
+      }
+      .radio-lb-close,
+      .radio-lb-prev,
+      .radio-lb-next {
+        position: absolute;
+        border: 1px solid rgba(200, 155, 82, 0.45);
+        background: rgba(43, 24, 18, 0.92);
+        color: var(--gold, #c89b52);
+        cursor: pointer;
+        border-radius: 999px;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+        padding: 0;
+        transition: transform 180ms ease, border-color 180ms ease,
+          background 180ms ease, color 180ms ease;
+      }
+      .radio-lb-close:hover,
+      .radio-lb-prev:hover,
+      .radio-lb-next:hover {
+        border-color: var(--gold, #c89b52);
+        background: rgba(200, 155, 82, 0.2);
+        color: var(--text, #f0dbc0);
+      }
+      .radio-lb-close:focus-visible,
+      .radio-lb-prev:focus-visible,
+      .radio-lb-next:focus-visible {
+        outline: 2px solid var(--gold, #c89b52);
+        outline-offset: 3px;
+      }
+      .radio-lb-close {
+        top: 18px;
+        right: 18px;
+        width: 50px;
+        height: 50px;
+        font-size: 2rem;
+      }
+      .radio-lb-close:hover {
+        transform: scale(1.06);
+      }
+      .radio-lb-prev,
+      .radio-lb-next {
+        top: 50%;
+        width: 58px;
+        height: 58px;
+        font-size: 2.4rem;
+        transform: translateY(-50%);
+      }
+      .radio-lb-prev:hover {
+        transform: translateY(-50%) scale(1.06);
+      }
+      .radio-lb-next:hover {
+        transform: translateY(-50%) scale(1.06);
+      }
+      .radio-lb-prev {
+        left: 18px;
+      }
+      .radio-lb-next {
+        right: 18px;
+      }
+      body.radio-lb-active {
+        overflow: hidden;
+      }
+
+      @media (max-width: 760px) {
+        .radio-gallery-grid {
+          grid-template-columns: repeat(4, 1fr);
+          gap: 6px;
+        }
+        .radio-lb-close {
+          width: 44px;
+          height: 44px;
+          font-size: 1.6rem;
+        }
+        .radio-lb-prev,
+        .radio-lb-next {
+          width: 44px;
+          height: 44px;
+          font-size: 1.7rem;
+        }
+        .radio-lightbox {
+          padding: 16px;
+        }
+      }
+    </style>
   </head>
   <body class="archive-page">
     <div class="page-noise"></div>
@@ -241,61 +404,12 @@
 
             <div
               class="radio-gallery"
-              data-i18n-block="archive.event1.gallery"
-              style="margin-top: 18px; padding: 16px 18px; border-radius: 14px; background: rgba(34, 18, 13, 0.46); border: 1px solid rgba(200, 155, 82, 0.2);"
+              data-radio-gallery
+              aria-label="Pogledajte fotografije izložbe"
             >
-              <div
-                class="label"
-                data-i18n="archive.event1.gallery.label"
-                style="display: block; margin-bottom: 12px; color: var(--gold); letter-spacing: 0.18em; text-transform: uppercase; font-size: 0.78rem;"
-              >Pogledajte fotografije izložbe</div>
-
-              <div class="radio-gallery-grid">
-                <a href="#" data-radio-gallery-index="0" aria-label="Photograph 1"><img src="radioizlozba/IMG_5365.JPG" alt="" loading="lazy" decoding="async" /></a>
-                <a href="#" data-radio-gallery-index="1" aria-label="Photograph 2"><img src="radioizlozba/IMG_5366.JPG" alt="" loading="lazy" decoding="async" /></a>
-                <a href="#" data-radio-gallery-index="2" aria-label="Photograph 3"><img src="radioizlozba/IMG_5367.JPG" alt="" loading="lazy" decoding="async" /></a>
-                <a href="#" data-radio-gallery-index="3" aria-label="Photograph 4"><img src="radioizlozba/IMG_5368.JPG" alt="" loading="lazy" decoding="async" /></a>
-                <a href="#" data-radio-gallery-index="4" aria-label="Photograph 5"><img src="radioizlozba/IMG_5369.JPG" alt="" loading="lazy" decoding="async" /></a>
-                <a href="#" data-radio-gallery-index="5" aria-label="Photograph 6"><img src="radioizlozba/IMG_5370.JPG" alt="" loading="lazy" decoding="async" /></a>
-                <a href="#" data-radio-gallery-index="6" aria-label="Photograph 7"><img src="radioizlozba/IMG_5371.JPG" alt="" loading="lazy" decoding="async" /></a>
-                <a href="#" data-radio-gallery-index="7" aria-label="Photograph 8"><img src="radioizlozba/IMG_5372.JPG" alt="" loading="lazy" decoding="async" /></a>
-                <a href="#" data-radio-gallery-index="8" aria-label="Photograph 9"><img src="radioizlozba/IMG_5373.JPG" alt="" loading="lazy" decoding="async" /></a>
-                <a href="#" data-radio-gallery-index="9" aria-label="Photograph 10"><img src="radioizlozba/IMG_5374.JPG" alt="" loading="lazy" decoding="async" /></a>
-                <a href="#" data-radio-gallery-index="10" aria-label="Photograph 11"><img src="radioizlozba/IMG_5375.JPG" alt="" loading="lazy" decoding="async" /></a>
-                <a href="#" data-radio-gallery-index="11" aria-label="Photograph 12"><img src="radioizlozba/IMG_5376.JPG" alt="" loading="lazy" decoding="async" /></a>
-                <a href="#" data-radio-gallery-index="12" aria-label="Photograph 13"><img src="radioizlozba/IMG_5377.JPG" alt="" loading="lazy" decoding="async" /></a>
-                <a href="#" data-radio-gallery-index="13" aria-label="Photograph 14"><img src="radioizlozba/IMG_5378.JPG" alt="" loading="lazy" decoding="async" /></a>
-                <a href="#" data-radio-gallery-index="14" aria-label="Photograph 15"><img src="radioizlozba/IMG_5379.JPG" alt="" loading="lazy" decoding="async" /></a>
-                <a href="#" data-radio-gallery-index="15" aria-label="Photograph 16"><img src="radioizlozba/IMG_5380.JPG" alt="" loading="lazy" decoding="async" /></a>
-                <a href="#" data-radio-gallery-index="16" aria-label="Photograph 17"><img src="radioizlozba/IMG_5381.JPG" alt="" loading="lazy" decoding="async" /></a>
-                <a href="#" data-radio-gallery-index="17" aria-label="Photograph 18"><img src="radioizlozba/IMG_5382.JPG" alt="" loading="lazy" decoding="async" /></a>
-                <a href="#" data-radio-gallery-index="18" aria-label="Photograph 19"><img src="radioizlozba/IMG_5383.JPG" alt="" loading="lazy" decoding="async" /></a>
-                <a href="#" data-radio-gallery-index="19" aria-label="Photograph 20"><img src="radioizlozba/IMG_5384.JPG" alt="" loading="lazy" decoding="async" /></a>
-              </div>
+              <div class="radio-gallery-eyebrow">Pogledajte fotografije izložbe</div>
+              <div class="radio-gallery-grid" data-radio-gallery-grid></div>
             </div>
-
-            <ul class="radio-gallery-source" hidden aria-hidden="true">
-              <li><img src="radioizlozba/IMG_5365.JPG" alt="" /></li>
-              <li><img src="radioizlozba/IMG_5366.JPG" alt="" /></li>
-              <li><img src="radioizlozba/IMG_5367.JPG" alt="" /></li>
-              <li><img src="radioizlozba/IMG_5368.JPG" alt="" /></li>
-              <li><img src="radioizlozba/IMG_5369.JPG" alt="" /></li>
-              <li><img src="radioizlozba/IMG_5370.JPG" alt="" /></li>
-              <li><img src="radioizlozba/IMG_5371.JPG" alt="" /></li>
-              <li><img src="radioizlozba/IMG_5372.JPG" alt="" /></li>
-              <li><img src="radioizlozba/IMG_5373.JPG" alt="" /></li>
-              <li><img src="radioizlozba/IMG_5374.JPG" alt="" /></li>
-              <li><img src="radioizlozba/IMG_5375.JPG" alt="" /></li>
-              <li><img src="radioizlozba/IMG_5376.JPG" alt="" /></li>
-              <li><img src="radioizlozba/IMG_5377.JPG" alt="" /></li>
-              <li><img src="radioizlozba/IMG_5378.JPG" alt="" /></li>
-              <li><img src="radioizlozba/IMG_5379.JPG" alt="" /></li>
-              <li><img src="radioizlozba/IMG_5380.JPG" alt="" /></li>
-              <li><img src="radioizlozba/IMG_5381.JPG" alt="" /></li>
-              <li><img src="radioizlozba/IMG_5382.JPG" alt="" /></li>
-              <li><img src="radioizlozba/IMG_5383.JPG" alt="" /></li>
-              <li><img src="radioizlozba/IMG_5384.JPG" alt="" /></li>
-            </ul>
           </article>
 
           <article class="archive-event">
@@ -314,5 +428,122 @@
 
       </div>
     </footer>
+
+    <script>
+      // === Radio exhibition gallery — inline script, archive.html only ===
+      (function () {
+        var IMAGES = [];
+        for (var i = 5365; i <= 5384; i++) {
+          IMAGES.push('radioizlozba/IMG_' + i + '.JPG');
+        }
+
+        var gallery = document.querySelector('[data-radio-gallery]');
+        var grid = document.querySelector('[data-radio-gallery-grid]');
+        if (!gallery || !grid || !IMAGES.length) return;
+
+        // Build thumbnails
+        IMAGES.forEach(function (src, idx) {
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'radio-thumb';
+          btn.setAttribute('aria-label', 'Fotografija ' + (idx + 1) + ' od ' + IMAGES.length);
+          btn.dataset.radioIndex = String(idx);
+          var img = document.createElement('img');
+          img.src = src;
+          img.alt = '';
+          img.loading = 'lazy';
+          img.decoding = 'async';
+          btn.appendChild(img);
+          grid.appendChild(btn);
+        });
+
+        // Build lightbox DOM
+        var lb = document.createElement('div');
+        lb.className = 'radio-lightbox';
+        lb.setAttribute('role', 'dialog');
+        lb.setAttribute('aria-modal', 'true');
+        lb.setAttribute('aria-label', 'Pregled fotografije');
+
+        var closeBtn = document.createElement('button');
+        closeBtn.type = 'button';
+        closeBtn.className = 'radio-lb-close';
+        closeBtn.setAttribute('aria-label', 'Zatvori');
+        closeBtn.innerHTML = '&times;';
+
+        var prevBtn = document.createElement('button');
+        prevBtn.type = 'button';
+        prevBtn.className = 'radio-lb-prev';
+        prevBtn.setAttribute('aria-label', 'Prethodna fotografija');
+        prevBtn.innerHTML = '&lsaquo;';
+
+        var nextBtn = document.createElement('button');
+        nextBtn.type = 'button';
+        nextBtn.className = 'radio-lb-next';
+        nextBtn.setAttribute('aria-label', 'Sljedeća fotografija');
+        nextBtn.innerHTML = '&rsaquo;';
+
+        var lbImg = document.createElement('img');
+        lbImg.className = 'radio-lightbox-img';
+        lbImg.alt = '';
+
+        lb.appendChild(closeBtn);
+        lb.appendChild(prevBtn);
+        lb.appendChild(lbImg);
+        lb.appendChild(nextBtn);
+        document.body.appendChild(lb);
+
+        var current = 0;
+
+        function show() {
+          lbImg.src = IMAGES[current];
+        }
+
+        function open(idx) {
+          current = ((idx % IMAGES.length) + IMAGES.length) % IMAGES.length;
+          show();
+          lb.classList.add('is-open');
+          document.body.classList.add('radio-lb-active');
+        }
+
+        function close() {
+          lb.classList.remove('is-open');
+          document.body.classList.remove('radio-lb-active');
+        }
+
+        function step(delta) {
+          current = ((current + delta) % IMAGES.length + IMAGES.length) % IMAGES.length;
+          show();
+        }
+
+        // Click a thumbnail -> open at its index
+        grid.addEventListener('click', function (event) {
+          var btn = event.target.closest('.radio-thumb');
+          if (!btn) return;
+          var idx = parseInt(btn.dataset.radioIndex, 10);
+          if (Number.isInteger(idx)) open(idx);
+        });
+
+        closeBtn.addEventListener('click', close);
+        prevBtn.addEventListener('click', function () { step(-1); });
+        nextBtn.addEventListener('click', function () { step(1); });
+
+        // Click on overlay (but not on image / buttons) -> close
+        lb.addEventListener('click', function (event) {
+          if (event.target === lb) close();
+        });
+
+        // Keyboard: Esc / ← / →
+        document.addEventListener('keydown', function (event) {
+          if (!lb.classList.contains('is-open')) return;
+          if (event.key === 'Escape') {
+            close();
+          } else if (event.key === 'ArrowLeft') {
+            step(-1);
+          } else if (event.key === 'ArrowRight') {
+            step(1);
+          }
+        });
+      })();
+    </script>
   </body>
 </html>
