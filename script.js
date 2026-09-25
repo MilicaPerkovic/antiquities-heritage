@@ -822,3 +822,187 @@ document.querySelectorAll('[data-lang-toggle]').forEach((btn) => {
   });
 });
 
+
+// === Otvorenje izložbe — gallery section ===
+(function () {
+  var OPENING_IMAGES = [
+    "otvorenje/jpg/IMG_5396.jpg",
+    "otvorenje/jpg/IMG_5399.jpg",
+    "otvorenje/jpg/IMG_5402.jpg",
+    "otvorenje/jpg/IMG_5403.jpg",
+    "otvorenje/jpg/IMG_5404.jpg",
+    "otvorenje/jpg/IMG_5405.jpg",
+    "otvorenje/jpg/IMG_5406.jpg",
+    "otvorenje/jpg/IMG_5407.jpg",
+    "otvorenje/jpg/IMG_5408.jpg",
+    "otvorenje/jpg/IMG_5409.jpg",
+    "otvorenje/jpg/IMG_5410.jpg",
+    "otvorenje/jpg/IMG_5411.jpg",
+    "otvorenje/jpg/IMG_5413.jpg",
+    "otvorenje/jpg/IMG_5414.jpg",
+    "otvorenje/jpg/IMG_5416.jpg",
+    "otvorenje/jpg/IMG_5417.jpg",
+    "otvorenje/jpg/IMG_5419.jpg",
+    "otvorenje/jpg/IMG_5421.jpg",
+    "otvorenje/jpg/IMG_5422.jpg",
+    "otvorenje/jpg/IMG_5423.jpg",
+    "otvorenje/jpg/IMG_5424.jpg",
+    "otvorenje/jpg/IMG_5425.jpg",
+    "otvorenje/jpg/IMG_5426.jpg",
+    "otvorenje/jpg/IMG_5427.jpg",
+    "otvorenje/jpg/IMG_5429.jpg",
+    "otvorenje/jpg/IMG_5430.jpg",
+    "otvorenje/jpg/IMG_5431.jpg",
+    "otvorenje/jpg/IMG_5432.jpg",
+    "otvorenje/jpg/IMG_5433.jpg",
+    "otvorenje/jpg/IMG_5434.jpg",
+    "otvorenje/jpg/IMG_5435.jpg",
+    "otvorenje/jpg/IMG_5436.jpg",
+    "otvorenje/jpg/IMG_5437.jpg",
+    "otvorenje/jpg/IMG_5438.jpg",
+    "otvorenje/jpg/IMG_5439.jpg",
+    "otvorenje/jpg/IMG_5440.jpg",
+    "otvorenje/jpg/IMG_5441.jpg",
+    "otvorenje/jpg/IMG_5442.jpg",
+    "otvorenje/jpg/IMG_5443.jpg",
+    "otvorenje/jpg/IMG_5444.jpg",
+    "otvorenje/jpg/IMG_5445.jpg",
+    "otvorenje/jpg/IMG_5446.jpg",
+    "otvorenje/jpg/IMG_5447.jpg",
+    "otvorenje/jpg/IMG_5448.jpg",
+    "otvorenje/jpg/IMG_5449.jpg",
+    "otvorenje/jpg/IMG_5450.jpg",
+    "otvorenje/jpg/IMG_5451.jpg",
+    "otvorenje/jpg/IMG_5453.jpg",
+    "otvorenje/jpg/IMG_5454.jpg",
+    "otvorenje/jpg/IMG_5455.jpg",
+    "otvorenje/jpg/IMG_5457.jpg",
+    "otvorenje/jpg/IMG_5463.jpg",
+    "otvorenje/jpg/IMG_5464.jpg",
+    "otvorenje/jpg/IMG_5465.jpg",
+    "otvorenje/jpg/IMG_5466.jpg",
+    "otvorenje/jpg/IMG_5467.jpg",
+    "otvorenje/jpg/IMG_5468.jpg",
+    "otvorenje/jpg/IMG_5469.jpg",
+    "otvorenje/jpg/IMG_5472.jpg",
+    "otvorenje/jpg/IMG_5473.jpg",
+    "otvorenje/jpg/IMG_5474.jpg",
+    "otvorenje/jpg/IMG_5476.jpg",
+    "otvorenje/jpg/IMG_5477.jpg",
+    "otvorenje/jpg/IMG_5478.jpg",
+    "otvorenje/jpg/IMG_5480.jpg",
+    "otvorenje/jpg/IMG_5482.jpg",
+    "otvorenje/jpg/IMG_5483.jpg",  ];
+  var VISIBLE_COUNT = 6;
+  var galleries = document.querySelectorAll('[data-opening-gallery]');
+  if (!galleries.length || !OPENING_IMAGES.length) return;
+
+  // Build a single shared lightbox DOM for the page
+  var lb = document.createElement('div');
+  lb.className = 'opening-lightbox';
+  lb.setAttribute('role', 'dialog');
+  lb.setAttribute('aria-modal', 'true');
+  lb.setAttribute('aria-label', 'Pregled fotografija sa otvorenja izložbe');
+
+  var closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.className = 'opening-lb opening-lb-close';
+  closeBtn.setAttribute('aria-label', 'Zatvori');
+  closeBtn.innerHTML = '&times;';
+
+  var prevBtn = document.createElement('button');
+  prevBtn.type = 'button';
+  prevBtn.className = 'opening-lb opening-lb-prev';
+  prevBtn.setAttribute('aria-label', 'Prethodna fotografija');
+  prevBtn.innerHTML = '&lsaquo;';
+
+  var nextBtn = document.createElement('button');
+  nextBtn.type = 'button';
+  nextBtn.className = 'opening-lb opening-lb-next';
+  nextBtn.setAttribute('aria-label', 'Sljedeća fotografija');
+  nextBtn.innerHTML = '&rsaquo;';
+
+  var lbImg = document.createElement('img');
+  lbImg.className = 'opening-lb-img';
+  lbImg.alt = '';
+
+  lb.appendChild(closeBtn);
+  lb.appendChild(prevBtn);
+  lb.appendChild(lbImg);
+  lb.appendChild(nextBtn);
+  document.body.appendChild(lb);
+
+  var current = 0;
+  function show() { lbImg.src = OPENING_IMAGES[current]; }
+  function open(idx) {
+    current = ((idx % OPENING_IMAGES.length) + OPENING_IMAGES.length) % OPENING_IMAGES.length;
+    show();
+    lb.classList.add('is-open');
+    document.body.classList.add('opening-lb-active');
+  }
+  function close() {
+    lb.classList.remove('is-open');
+    document.body.classList.remove('opening-lb-active');
+  }
+  function step(delta) {
+    current = ((current + delta) % OPENING_IMAGES.length + OPENING_IMAGES.length) % OPENING_IMAGES.length;
+    show();
+  }
+
+  closeBtn.addEventListener('click', close);
+  prevBtn.addEventListener('click', function () { step(-1); });
+  nextBtn.addEventListener('click', function () { step(1); });
+  lb.addEventListener('click', function (event) {
+    if (event.target === lb) close();
+  });
+
+  // Build thumbnails in each gallery
+  galleries.forEach(function (gallery) {
+    var grid = gallery.querySelector('[data-opening-grid]');
+    if (!grid) return;
+
+    var shown = Math.min(VISIBLE_COUNT, OPENING_IMAGES.length);
+    for (var i = 0; i < shown; i++) {
+      var item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'opening-gallery-item';
+      item.dataset.openingIndex = String(i);
+      item.setAttribute('aria-label', 'Fotografija ' + (i + 1) + ' od ' + OPENING_IMAGES.length);
+
+      var img = document.createElement('img');
+      img.src = OPENING_IMAGES[i];
+      img.alt = 'Fotografija sa otvorenja izložbe Srce Semberije';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      item.appendChild(img);
+
+      // "+X fotografija" overlay on the LAST visible thumbnail
+      if (i === shown - 1) {
+        var remaining = OPENING_IMAGES.length - shown;
+        if (remaining > 0) {
+          var overlay = document.createElement('span');
+          overlay.className = 'opening-gallery-overlay';
+          overlay.textContent = '+' + remaining + ' fotografij' + (remaining === 1 ? 'a' : 'a');
+          item.appendChild(overlay);
+        }
+      }
+
+      grid.appendChild(item);
+    }
+
+    grid.addEventListener('click', function (event) {
+      var btn = event.target.closest('.opening-gallery-item');
+      if (!btn) return;
+      var idx = parseInt(btn.dataset.openingIndex, 10);
+      if (Number.isInteger(idx)) open(idx);
+    });
+  });
+
+  // Global keyboard navigation while lightbox is open
+  document.addEventListener('keydown', function (event) {
+    if (!lb.classList.contains('is-open')) return;
+    if (event.key === 'Escape') close();
+    else if (event.key === 'ArrowLeft') step(-1);
+    else if (event.key === 'ArrowRight') step(1);
+  });
+})();
