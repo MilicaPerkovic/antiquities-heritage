@@ -502,6 +502,21 @@ const I18N = {
     'about.stat4.label': 'Online visits',
     'about.cta.text': 'For the full story of the association, its founding, members and rich collection of over 30,000 exhibits',
     'about.cta.button': 'More about the Association',
+    // Opening news (Novosti) — index.html & current.html
+    'opening.eyebrow': 'News',
+    'opening.h2.index': 'New Ethno Exhibition Opened',
+    'opening.h2.current': 'Exhibition is Open',
+    'opening.date': '25 September 2026.',
+    'opening.p1.index': 'Today a new ethno exhibition was ceremonially opened in Bijeljina, presenting objects, stories and memories connected to the life and everyday life of a former rural household.',
+    'opening.p1.current': 'Today the ethno exhibition "Srce Semberije" was ceremonially opened in Bijeljina, presenting through more than 1,000 exhibits the objects, stories and memories connected to the life and everyday life of a former rural household.',
+    'opening.p2': 'Through preserved objects and collections, the exhibition safeguards a part of the material and cultural heritage of Semberija and brings visitors closer to the way of life, work and customs of previous generations.',
+    'opening.p3.current': 'Special attention is given to objects that were once part of everyday life — from furniture, textiles and dishes to old radio sets, books, tools, cameras, clocks, typewriters and other items.',
+    'opening.hint': 'View photos from the exhibition opening.',
+    'opening.gallery.aria': 'Photo gallery from the exhibition opening',
+    'opening.thumb.alt': 'Photograph from the opening of the Srce Semberije exhibition',
+    'opening.thumb.aria': 'Photograph {n} of {total}',
+    'opening.lb.aria': 'Preview of photographs from the exhibition opening',
+    'opening.cta': 'View Exhibition',
     // Current teaser
     'current.eyebrow': 'Current',
     'current.h2': 'Current Exhibition in Progress',
@@ -650,6 +665,22 @@ const I18N = {
     'about.stat4.label': 'Poseta online',
     'about.cta.text': 'Za cjelokupnu priču o udruženju, osnivanju, članovima i bogatoj zbirci od preko 30.000 eksponata',
     'about.cta.button': 'Više o udruženju',
+
+    // Otvorenje izložbe — Novosti (index.html & current.html)
+    'opening.eyebrow': 'Novosti',
+    'opening.h2.index': 'Otvorena nova etno izložba',
+    'opening.h2.current': 'Izložba je otvorena',
+    'opening.date': '25. septembar 2026.',
+    'opening.p1.index': 'Danas je u Bijeljini svečano otvorena nova etno izložba koja predstavlja predmete, priče i uspomene vezane za život i svakodnevicu nekadašnjeg seoskog domaćinstva.',
+    'opening.p1.current': 'Danas je u Bijeljini svečano otvorena etno izložba „Srce Semberije", koja kroz više od 1.000 eksponata predstavlja predmete, priče i uspomene vezane za život i svakodnevicu nekadašnjeg seoskog domaćinstva.',
+    'opening.p2': 'Kroz sačuvane predmete i zbirke, izložba čuva dio materijalnog i kulturnog nasljeđa Semberije i približava posjetiocima način života, rada i običaja prethodnih generacija.',
+    'opening.p3.current': 'Posebna pažnja posvećena je predmetima koji su nekada bili dio svakodnevnog života — od namještaja, tekstila i posuđa do starih radio-aparata, knjiga, alata, kamera, satova, pisaćih mašina i drugih predmeta.',
+    'opening.hint': 'Pogledajte fotografije sa otvorenja izložbe.',
+    'opening.gallery.aria': 'Galerija sa otvorenja izložbe',
+    'opening.thumb.alt': 'Fotografija sa otvorenja izložbe Srce Semberije',
+    'opening.thumb.aria': 'Fotografija {n} od {total}',
+    'opening.lb.aria': 'Pregled fotografija sa otvorenja izložbe',
+    'opening.cta': 'Pogledaj izložbu',
     'current.eyebrow': 'Aktuelno',
     'current.h2': 'Trenutna izložba u toku',
     'current.lead': 'Pogledajte galeriju fotografija sa aktuelne postavke — predmeti, alati, tekstil i lične stvari iz nekadašnjeg seoskog domaćinstva.',
@@ -893,9 +924,17 @@ document.querySelectorAll('[data-lang-toggle]').forEach((btn) => {
     "otvorenje/jpg/IMG_5480.jpg",
     "otvorenje/jpg/IMG_5482.jpg",
     "otvorenje/jpg/IMG_5483.jpg",  ];
-  var VISIBLE_COUNT = 6;
+  var DEFAULT_VISIBLE = 6;
   var galleries = document.querySelectorAll('[data-opening-gallery]');
   if (!galleries.length || !OPENING_IMAGES.length) return;
+
+  // Pick the dict matching the current language so dynamic strings
+  // (alt text, aria labels, "+X fotografija") also translate.
+  var lang = document.documentElement.getAttribute('lang') === 'en' ? 'en' : 'sr';
+  var dict = (typeof I18N !== 'undefined' && I18N[lang]) || {};
+  function t(key, fallback) {
+    return (dict[key] != null) ? dict[key] : fallback;
+  }
 
   // Build a single shared lightbox DOM for the page
   var lb = document.createElement('div');
@@ -961,28 +1000,49 @@ document.querySelectorAll('[data-lang-toggle]').forEach((btn) => {
     var grid = gallery.querySelector('[data-opening-grid]');
     if (!grid) return;
 
-    var shown = Math.min(VISIBLE_COUNT, OPENING_IMAGES.length);
+    // Per-page visible count (defaults to DEFAULT_VISIBLE = 6).
+    // Homepage can show only 3 by adding data-opening-count="3".
+    var rawCount = parseInt(gallery.getAttribute('data-opening-count'), 10);
+    var visibleCount = (Number.isInteger(rawCount) && rawCount > 0)
+      ? rawCount
+      : DEFAULT_VISIBLE;
+    var shown = Math.min(visibleCount, OPENING_IMAGES.length);
+
+    var thumbAlt = t('opening.thumb.alt',
+      'Fotografija sa otvorenja izložbe Srce Semberije');
+    var thumbAriaTpl = t('opening.thumb.aria', 'Fotografija {n} od {total}');
+
     for (var i = 0; i < shown; i++) {
       var item = document.createElement('button');
       item.type = 'button';
       item.className = 'opening-gallery-item';
       item.dataset.openingIndex = String(i);
-      item.setAttribute('aria-label', 'Fotografija ' + (i + 1) + ' od ' + OPENING_IMAGES.length);
+      item.setAttribute(
+        'aria-label',
+        thumbAriaTpl
+          .replace('{n}', String(i + 1))
+          .replace('{total}', String(OPENING_IMAGES.length))
+      );
 
       var img = document.createElement('img');
       img.src = OPENING_IMAGES[i];
-      img.alt = 'Fotografija sa otvorenja izložbe Srce Semberije';
+      img.alt = thumbAlt;
       img.loading = 'lazy';
       img.decoding = 'async';
       item.appendChild(img);
 
-      // "+X fotografija" overlay on the LAST visible thumbnail
-      if (i === shown - 1) {
+      // "+X fotografija" overlay on the LAST visible thumbnail,
+      // unless this gallery opts out via data-opening-overlay="false"
+      var overlayAttr = gallery.getAttribute('data-opening-overlay');
+      var showOverlay = overlayAttr !== 'false';
+      if (showOverlay && i === shown - 1) {
         var remaining = OPENING_IMAGES.length - shown;
         if (remaining > 0) {
           var overlay = document.createElement('span');
           overlay.className = 'opening-gallery-overlay';
-          overlay.textContent = '+' + remaining + ' fotografij' + (remaining === 1 ? 'a' : 'a');
+          overlay.textContent =
+            '+' + remaining +
+            ' fotografij' + (remaining === 1 ? 'a' : 'a');
           item.appendChild(overlay);
         }
       }

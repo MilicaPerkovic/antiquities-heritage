@@ -62,6 +62,7 @@
           <a href="current.html">Predstojeća izložba</a>
           <a href="archive.html">Arhiv</a>
           <a href="#kontakt">Kontakt</a>
+          <button class="lang-toggle" type="button" data-lang-toggle>SR</button>
         </nav>
       </div>
     </header>
@@ -103,31 +104,34 @@
       <section class="section reveal">
         <div class="container">
           <div class="section-heading">
-            <span class="eyebrow">Novosti</span>
-            <h2>Otvorena nova etno izložba</h2>
-            <p class="hero-lead"><strong>25. septembar 2026.</strong></p>
+            <span class="eyebrow" data-i18n="opening.eyebrow">Novosti</span>
+            <h2 data-i18n="opening.h2.index">Otvorena nova etno izložba</h2>
+            <p class="hero-lead"><strong data-i18n="opening.date">25. septembar 2026.</strong></p>
           </div>
 
           <div class="opening-news">
-            <p>
-              Danas je u Bijeljini svečano otvorena nova etno izložba koja
+            <p data-i18n="opening.p1.index">Danas je u Bijeljini svečano otvorena nova etno izložba koja
               predstavlja predmete, priče i uspomene vezane za život i
-              svakodnevicu nekadašnjeg seoskog domaćinstva.
-            </p>
-            <p>
-              Kroz sačuvane predmete i zbirke, izložba čuva dio materijalnog
+              svakodnevicu nekadašnjeg seoskog domaćinstva.</p>
+            <p data-i18n="opening.p2">Kroz sačuvane predmete i zbirke, izložba čuva dio materijalnog
               i kulturnog nasljeđa Semberije i približava posjetiocima način
-              života, rada i običaja prethodnih generacija.
-            </p>
-            <p class="opening-hint">Pogledajte fotografije sa otvorenja izložbe.</p>
+              života, rada i običaja prethodnih generacija.</p>
+            <p class="opening-hint" data-i18n="opening.hint">Pogledajte fotografije sa otvorenja izložbe.</p>
           </div>
 
-          <div class="opening-gallery" data-opening-gallery aria-label="Galerija sa otvorenja izložbe">
+          <div
+            class="opening-gallery opening-gallery-compact"
+            data-opening-gallery
+            data-opening-count="3"
+            data-opening-overlay="false"
+            data-i18n-aria="opening.gallery.aria"
+            aria-label="Galerija sa otvorenja izložbe"
+          >
             <div class="opening-gallery-grid" data-opening-grid></div>
           </div>
 
           <div class="opening-cta">
-            <a class="button button-primary" href="current.html">Pogledaj izložbu</a>
+            <a class="button button-primary" href="current.html" data-i18n="opening.cta">Pogledaj izložbu</a>
           </div>
         </div>
       </section>
