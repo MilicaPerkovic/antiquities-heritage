@@ -1,3 +1,6 @@
 .DS_Store
 slika*.png
 .claude/
+
+# Apple HEIC originals — converted to JPG for web at otvorenje/jpg/
+*.HEIC
