@@ -522,6 +522,18 @@ const I18N = {
     'media.h2': 'Exhibition in the Media',
     'media.lead': 'See how the media covered the opening of the „Srce Semberije" exhibition.',
     'media.readarticle': 'Read article',
+    // Media cards (current.html) — Card 0: RTV BN
+    'media.cards.0.title': 'Ethnographic Exhibition on Customs and Crafts',
+    'media.cards.0.date': '25 September 2026.',
+    'media.cards.0.description': 'An ethnographic exhibition on the everyday life, customs and crafts of our ancestors was opened in Bijeljina, organized by the Agricultural Producers Association "Poljoprivreda".',
+    // Media cards (current.html) — Card 1: YouTube
+    'media.cards.1.title': 'An Ethnographic Exhibition on the Everyday Life, Customs and Crafts of Our Ancestors Opened in Bijeljina',
+    'media.cards.1.date': '25 September 2026.',
+    'media.cards.1.description': 'An ethnographic exhibition was opened in Bijeljina, organized by the Agricultural Producers Association "Poljoprivreda".',
+    // Media cards (current.html) — Card 2: Glas Banja Luke
+    'media.cards.2.title': 'Ethnographic Exhibition in Bijeljina: More Than 1,500 Objects Preserve Tradition',
+    'media.cards.2.date': '25 September 2026.',
+    'media.cards.2.description': 'Organized by the Agricultural Producers Association "Poljoprivreda", a unique ethnographic exhibition was ceremonially opened in Bijeljina, which through more than 1,500 carefully collected exhibits brings to life the everyday life, work and customs of our ancestors from the territory of the former Yugoslavia.',
     // Current teaser
     'current.eyebrow': 'Current',
     'current.h2': 'Current Exhibition in Progress',
