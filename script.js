@@ -517,6 +517,11 @@ const I18N = {
     'opening.thumb.aria': 'Photograph {n} of {total}',
     'opening.lb.aria': 'Preview of photographs from the exhibition opening',
     'opening.cta': 'View Exhibition',
+    // Media section (current.html)
+    'media.eyebrow': 'Media',
+    'media.h2': 'Exhibition in the Media',
+    'media.lead': 'See how the media covered the opening of the „Srce Semberije" exhibition.',
+    'media.readarticle': 'Read article',
     // Current teaser
     'current.eyebrow': 'Current',
     'current.h2': 'Current Exhibition in Progress',
@@ -681,6 +686,11 @@ const I18N = {
     'opening.thumb.aria': 'Fotografija {n} od {total}',
     'opening.lb.aria': 'Pregled fotografija sa otvorenja izložbe',
     'opening.cta': 'Pogledaj izložbu',
+    // Mediji — Izložba u medijima (current.html)
+    'media.eyebrow': 'Mediji',
+    'media.h2': 'Izložba u medijima',
+    'media.lead': 'Pogledajte kako su mediji zabilježili otvorenje izložbe „Srce Semberije".',
+    'media.readarticle': 'Pročitaj članak',
     'current.eyebrow': 'Aktuelno',
     'current.h2': 'Trenutna izložba u toku',
     'current.lead': 'Pogledajte galeriju fotografija sa aktuelne postavke — predmeti, alati, tekstil i lične stvari iz nekadašnjeg seoskog domaćinstva.',
