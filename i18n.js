@@ -5,13 +5,9 @@
 const I18N = {
   en: {
     // Brand & navigation (common)
-    'brand.home': 'Association "Poljoprivreda"',
-    'brand.home.about': 'Association "Poljoprivreda"',
+    'brand.kicker': 'Association',
     'brand.subtitle.home': 'Antiquities and Heritage',
-    'brand.subtitle.current': 'Current Exhibition',
-    'brand.subtitle.archive': 'Exhibition Archive',
-    'brand.subtitle.about': 'About the Association',
-    'brand.img.alt': 'Antiquities and Heritage',
+    'brand.img.alt': 'Logo of the Association "Poljoprivreda"',
     'nav.about': 'About the Association',
     'nav.home': 'Home',
     'nav.upcoming': 'Current Exhibition',
@@ -202,13 +198,9 @@ const I18N = {
     'theme.memorabilia': 'Memorabilia',
   },
   sr: {
-    'brand.home': 'Udruženje "Poljoprivreda"',
-    'brand.home.about': 'Udruženje "Poljoprivreda"',
+    'brand.kicker': 'Udruženje',
     'brand.subtitle.home': 'Antikviteti i nasljeđe',
-    'brand.subtitle.current': 'Trenutna izložba',
-    'brand.subtitle.archive': 'Arhiv izložbe',
-    'brand.subtitle.about': 'O udruženju',
-    'brand.img.alt': 'Antikviteti i nasljeđe',
+    'brand.img.alt': 'Logo Udruženja „Poljoprivreda“',
     'nav.about': 'O udruženju',
     'nav.home': 'Početna',
     'nav.upcoming': 'Trenutna izložba',
