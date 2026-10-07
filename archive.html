@@ -33,8 +33,6 @@
     <script defer src="script.js"></script>
   </head>
   <body class="archive-page">
-    <div class="page-noise"></div>
-
     <header class="site-header">
       <div class="container header-inner">
         <a class="brand" href="index.html">
@@ -46,7 +44,13 @@
           </span>
         </a>
 
-        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <button
+          class="menu-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="site-nav"
+          data-i18n-aria="nav.menu" aria-label="Meni"
+        >
           <span></span>
           <span></span>
           <span></span>
@@ -58,63 +62,33 @@
           <a href="current.html" data-i18n="nav.upcoming">Trenutna izložba</a>
           <a href="archive.html" aria-current="page" data-i18n="nav.archive">Arhiv</a>
           <a href="index.html#kontakt" data-i18n="nav.contact">Kontakt</a>
-          <button class="lang-toggle" type="button" data-lang-toggle>SR</button>
+          <button class="lang-toggle" type="button" data-lang-toggle>EN</button>
         </nav>
       </div>
     </header>
 
     <main>
-      <section class="hero section archive-hero reveal">
-        <div class="container hero-grid">
-          <div class="eyebrow" data-i18n="archive.eyebrow.hero">Etno izložba, oktobar 2025.</div>
-          <h1 class="archive-title" data-i18n="archive.h1">Arhiv izložbi</h1>
-          <p class="hero-lead" data-i18n="archive.hero.p">Udruženje poljoprivrednih proizvođača "Poljoprivreda" Bijeljina i Poljoprivredni fakultet Univerziteta u Istočnom Sarajevu organizovali su u Bijeljini etno izložbu sa više stotina eksponata.</p>
+      <section class="page-header">
+        <div class="container">
+          <div class="section-heading center">
+            <span class="eyebrow" data-i18n="archive.eyebrow.hero">Etno izložba, oktobar 2025.</span>
+            <h1 data-i18n="archive.h1">Arhiv izložbi</h1>
+            <p class="lead" data-i18n="archive.hero.p">Udruženje poljoprivrednih proizvođača "Poljoprivreda" Bijeljina i Poljoprivredni fakultet Univerziteta u Istočnom Sarajevu organizovali su u Bijeljini etno izložbu sa više stotina eksponata.</p>
+          </div>
           <div class="carousel" data-carousel>
-            <button
-              class="carousel-arrow carousel-prev"
-              type="button"
-              data-i18n-aria="current.carousel.prev"
-              aria-label="Prethodna slika"
-            >
+            <button class="carousel-arrow carousel-prev" type="button" data-i18n-aria="current.carousel.prev" aria-label="Prethodna slika">
               <span aria-hidden="true">‹</span>
             </button>
-
             <div class="carousel-stage" data-carousel-stage>
-              <article
-                class="carousel-card carousel-card-side"
-                data-carousel-side="left"
-                data-i18n-aria="current.carousel.prev"
-                aria-label="Prethodna slika"
-              ></article>
-              <article
-                class="carousel-card carousel-card-active"
-                data-carousel-side="center"
-                data-i18n-aria="current.carousel.center"
-                aria-label="Centralna slika — kliknite da uvećate"
-              ></article>
-              <article
-                class="carousel-card carousel-card-side"
-                data-carousel-side="right"
-                data-i18n-aria="current.carousel.right"
-                aria-label="Sljedeća slika"
-              ></article>
+              <article class="carousel-card carousel-card-side" data-carousel-side="left" data-i18n-aria="current.carousel.prev" aria-label="Prethodna slika"></article>
+              <article class="carousel-card carousel-card-active" data-carousel-side="center" data-i18n-aria="current.carousel.center" aria-label="Centralna slika — kliknite da uvećate"></article>
+              <article class="carousel-card carousel-card-side" data-carousel-side="right" data-i18n-aria="current.carousel.right" aria-label="Sljedeća slika"></article>
             </div>
-
-            <button
-              class="carousel-arrow carousel-next"
-              type="button"
-              data-i18n-aria="current.carousel.right"
-              aria-label="Sljedeća slika"
-            >
+            <button class="carousel-arrow carousel-next" type="button" data-i18n-aria="current.carousel.right" aria-label="Sljedeća slika">
               <span aria-hidden="true">›</span>
             </button>
           </div>
-
-          <div
-            class="carousel-dots"
-            data-i18n-aria="current.carousel.dots.aria"
-            aria-label="Direktan odabir slike"
-          ></div>
+          <div class="carousel-dots" data-i18n-aria="current.carousel.dots.aria" aria-label="Direktan odabir slike"></div>
         </div>
 
         <ul class="carousel-source" hidden aria-hidden="true">
@@ -152,44 +126,35 @@
         </script>
       </section>
 
-      <section class="section reveal">
+      <section class="section section-alt reveal">
         <div class="container">
-          <div class="section-heading">
+          <div class="section-heading center">
             <span class="eyebrow" data-i18n="archive.media.eyebrow">Mediji o izložbi</span>
+            <h2 data-i18n="media.h2">Izložba u medijima</h2>
           </div>
-
-          <ul class="archive-media-list">
-            <li>
+          <div class="grid-3">
+            <article class="card">
               <span class="label" data-i18n="archive.media.label1">Video</span>
-              <a
-                href="https://www.youtube.com/watch?v=gKn2Y_U2BnE"
-                target="_blank"
-                rel="noopener"
-              >
-                <span data-i18n="archive.media.title1">Goran Perković o etno izložbi u Bijeljini — 15.10.2025.</span>
+              <h3 data-i18n="archive.media.title1">Goran Perković o etno izložbi u Bijeljini — 15.10.2025.</h3>
+              <a class="more" href="https://www.youtube.com/watch?v=gKn2Y_U2BnE" target="_blank" rel="noopener noreferrer">
+                <span data-i18n="media.watchvideo">Pogledaj video</span> <span aria-hidden="true">→</span>
               </a>
-            </li>
-            <li>
+            </article>
+            <article class="card">
               <span class="label" data-i18n="archive.media.label2">TV emisija</span>
-              <a
-                href="https://www.youtube.com/watch?v=oej5N43hMgU"
-                target="_blank"
-                rel="noopener"
-              >
-                <span data-i18n="archive.media.title2">Jutro za sve: Goran Perković, kolekcionar iz Bijeljine</span>
+              <h3 data-i18n="archive.media.title2">Jutro za sve: Goran Perković, kolekcionar iz Bijeljine</h3>
+              <a class="more" href="https://www.youtube.com/watch?v=oej5N43hMgU" target="_blank" rel="noopener noreferrer">
+                <span data-i18n="media.watchvideo">Pogledaj video</span> <span aria-hidden="true">→</span>
               </a>
-            </li>
-            <li>
+            </article>
+            <article class="card">
               <span class="label" data-i18n="archive.media.label3">Članak</span>
-              <a
-                href="https://infobijeljina.com/vijesti/etno-izlozba-u-bijeljini--predmeti-stari-vise-od-vijeka-ozivjeli-duh-proslih-vremena"
-                target="_blank"
-                rel="noopener"
-              >
-                <span data-i18n="archive.media.title3">Predmeti stariji od vijeka izloženi u Bijeljini — Infobijeljina</span>
+              <h3 data-i18n="archive.media.title3">Predmeti stariji od vijeka izloženi u Bijeljini — Infobijeljina</h3>
+              <a class="more" href="https://infobijeljina.com/vijesti/etno-izlozba-u-bijeljini--predmeti-stari-vise-od-vijeka-ozivjeli-duh-proslih-vremena" target="_blank" rel="noopener noreferrer">
+                <span data-i18n="media.readarticle">Pročitaj članak</span> <span aria-hidden="true">→</span>
               </a>
-            </li>
-          </ul>
+            </article>
+          </div>
         </div>
       </section>
 
@@ -197,51 +162,33 @@
         <div class="container">
           <div class="section-heading">
             <span class="eyebrow" data-i18n="archive.events.eyebrow">Prethodne postavke</span>
+            <h2 data-i18n="archive.events.h2">Ranije izložbe i nastupi</h2>
           </div>
-
-          <article class="archive-event">
-            <h3 data-i18n="archive.event1.title">"Zvuci prošlosti", septembar 2023.</h3>
-            <p data-i18n="archive.event1.text">"Zvuci prošlosti" iz kolekcije radio-aparata naziv je izložbe sa 43 eksponata koja je održana u Muzeju Semberije.</p>
-            <ul class="archive-event-links">
-              <li>
-                <a
-                  href="https://ntvarena.com/zvuci-proslosti-iz-kolekcije-radio-aparata-gorana-perkovica/"
-                  target="_blank"
-                  rel="noopener"
-                >
-                  <span data-i18n="archive.event1.link1">Zvuci prošlosti — kolekcija radio-aparata</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://bijeljina.com/drustvo/cetrdeset-i-tri-radio-aparata-iz-zbirke-gorana-perkovica/"
-                  target="_blank"
-                  rel="noopener"
-                >
-                  <span data-i18n="archive.event1.link2">Zbirka od 43 radio-aparata</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://www.rtrs.tv/vijesti/vijest.php?id=527618"
-                  target="_blank"
-                  rel="noopener"
-                >
-                  <span data-i18n="archive.event1.link3">Zvuci prošlosti — RTRS</span>
-                </a>
-              </li>
-            </ul>
-
-            <div class="radio-gallery" data-radio-gallery>
-              <div class="radio-gallery-eyebrow" data-i18n="archive.radio.eyebrow">Pogledajte fotografije izložbe</div>
-              <div class="radio-gallery-grid" data-radio-gallery-grid></div>
-            </div>
-          </article>
-
-          <article class="archive-event">
-            <h3 data-i18n="archive.event2.title">Sajam poljoprivrede "Interagro", septembar 2023.</h3>
-            <p data-i18n="archive.event2.text">Etno-kolekcija sa 40 vrsta kliješta koje su koristili kovači izložena je na Sajmu poljoprivrede "Interagro" u Bijeljini.</p>
-          </article>
+          <ol class="timeline">
+            <li class="timeline-item">
+              <div class="timeline-year">2023</div>
+              <div class="timeline-body">
+                <h3 data-i18n="archive.event1.title">"Zvuci prošlosti", septembar 2023.</h3>
+                <p data-i18n="archive.event1.text">"Zvuci prošlosti" iz kolekcije radio-aparata naziv je izložbe sa 43 eksponata koja je održana u Muzeju Semberije.</p>
+                <ul class="link-list">
+                  <li><a href="https://ntvarena.com/zvuci-proslosti-iz-kolekcije-radio-aparata-gorana-perkovica/" target="_blank" rel="noopener noreferrer" data-i18n="archive.event1.link1">Zvuci prošlosti — kolekcija radio-aparata</a></li>
+                  <li><a href="https://bijeljina.com/drustvo/cetrdeset-i-tri-radio-aparata-iz-zbirke-gorana-perkovica/" target="_blank" rel="noopener noreferrer" data-i18n="archive.event1.link2">Zbirka od 43 radio-aparata</a></li>
+                  <li><a href="https://www.rtrs.tv/vijesti/vijest.php?id=527618" target="_blank" rel="noopener noreferrer" data-i18n="archive.event1.link3">Zvuci prošlosti — RTRS</a></li>
+                </ul>
+                <div class="radio-gallery" data-radio-gallery>
+                  <p class="radio-gallery-eyebrow label" data-i18n="archive.radio.eyebrow">Pogledajte fotografije izložbe</p>
+                  <div class="radio-gallery-grid" data-radio-gallery-grid></div>
+                </div>
+              </div>
+            </li>
+            <li class="timeline-item">
+              <div class="timeline-year">2023</div>
+              <div class="timeline-body">
+                <h3 data-i18n="archive.event2.title">Sajam poljoprivrede "Interagro", septembar 2023.</h3>
+                <p data-i18n="archive.event2.text">Etno-kolekcija sa 40 vrsta kliješta koje su koristili kovači izložena je na Sajmu poljoprivrede "Interagro" u Bijeljini.</p>
+              </div>
+            </li>
+          </ol>
         </div>
       </section>
     </main>
@@ -249,17 +196,36 @@
     <footer class="site-footer">
       <div class="container footer-inner">
         <div>
-          <strong data-i18n="brand.subtitle.home">Antikviteti i nasljeđe</strong>
-          <p data-i18n="footer.copy">Izložba i arhiv Udruženja poljoprivrednih proizvođača.</p>
-          <p class="footer-rights" data-i18n="footer.rights">© 2026 Udruženje „Poljoprivreda", Bijeljina</p>
+          <a class="brand" href="index.html">
+          <span class="brand-mark"><img src="logo-mark.png" alt="" aria-hidden="true" /></span>
+          <span class="brand-text">
+            <small class="brand-kicker" data-i18n="brand.kicker">Udruženje</small>
+            <strong class="brand-name">Poljoprivreda</strong>
+            <small class="brand-place">Bijeljina</small>
+          </span>
+          </a>
+          <p data-i18n="footer.copy.about">Izložba i arhiv Udruženja poljoprivrednih proizvođača "Poljoprivreda".</p>
         </div>
-        <div class="footer-actions">
-          <a class="button button-secondary" href="udruzenje.html" data-i18n="footer.about">O udruženju</a>
-          <a class="button button-primary" href="current.html" data-i18n="footer.current">Trenutna izložba</a>
-          <a class="button button-secondary" href="index.html" data-i18n="footer.back">Nazad na početnu</a>
+        <nav data-i18n-aria="footer.pages" aria-label="Stranice">
+          <p class="footer-title" data-i18n="footer.pages">Stranice</p>
+          <ul class="footer-links">
+            <li><a href="index.html" data-i18n="nav.home">Početna</a></li>
+            <li><a href="udruzenje.html" data-i18n="nav.about">O udruženju</a></li>
+            <li><a href="current.html" data-i18n="nav.upcoming">Trenutna izložba</a></li>
+            <li><a href="archive.html" data-i18n="nav.archive">Arhiv</a></li>
+            <li><a href="index.html#kontakt" data-i18n="nav.contact">Kontakt</a></li>
+          </ul>
+        </nav>
+        <div>
+          <p class="footer-title" data-i18n="footer.contact">Kontakt</p>
+          <ul class="footer-links">
+            <li><a href="mailto:perkan66@gmail.com">perkan66@gmail.com</a></li>
+            <li><a href="tel:+38765512942">+387 65 512 942</a></li>
+            <li><a href="https://www.google.com/maps/search/?api=1&amp;query=Komitska+bb%2C+Bijeljina" target="_blank" rel="noopener noreferrer" data-i18n="visit.address.value">Komitska bb, Bijeljina</a></li>
+          </ul>
         </div>
+        <p class="footer-bottom" data-i18n="footer.rights">© 2026 Udruženje „Poljoprivreda", Bijeljina</p>
       </div>
     </footer>
-
   </body>
 </html>

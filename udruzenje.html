@@ -51,9 +51,7 @@
     <script defer src="i18n.js"></script>
     <script defer src="script.js"></script>
   </head>
-  <body class="udruzenje-page">
-    <div class="page-noise"></div>
-
+  <body class="about-page">
     <header class="site-header">
       <div class="container header-inner">
         <a class="brand" href="index.html">
@@ -65,7 +63,13 @@
           </span>
         </a>
 
-        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <button
+          class="menu-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="site-nav"
+          data-i18n-aria="nav.menu" aria-label="Meni"
+        >
           <span></span>
           <span></span>
           <span></span>
@@ -77,35 +81,53 @@
           <a href="current.html" data-i18n="nav.upcoming">Trenutna izložba</a>
           <a href="archive.html" data-i18n="nav.archive">Arhiv</a>
           <a href="index.html#kontakt" data-i18n="nav.contact">Kontakt</a>
-          <button class="lang-toggle" type="button" data-lang-toggle>SR</button>
+          <button class="lang-toggle" type="button" data-lang-toggle>EN</button>
         </nav>
       </div>
     </header>
 
     <main>
-      <section class="section reveal">
-        <div class="container">
-          <div class="facts-grid">
-            <article class="fact-card">
-              <span class="label" data-i18n="about.headquarters.label">Sjedište</span>
-              <strong data-i18n="about.headquarters.value">Bijeljina, Bosna i Hercegovina</strong>
-            </article>
-            <article class="fact-card">
-              <span class="label" data-i18n="about.founded.label">Osnovano</span>
-              <strong data-i18n="about.founded.value">2007. godine</strong>
-            </article>
-            <article class="fact-card">
-              <span class="label" data-i18n="about.members.label">Članovi</span>
-              <strong data-i18n="about.members.value">14 posvećenih članova</strong>
-            </article>
+      <section class="page-header">
+        <div class="container split">
+          <div>
+            <div class="section-heading">
+              <span class="eyebrow" data-i18n="about.page.eyebrow">Bijeljina · od 2007.</span>
+              <h1 data-i18n="nav.about">O udruženju</h1>
+              <p class="lead" data-i18n="about.association.description">Udruženje poljoprivrednih proizvođača koje okuplja 14 članova i čuva zbirku od preko 30.000 eksponata, sa više od 1.000 autentičnih etno artefakata iz Semberije i šireg regiona.</p>
+            </div>
+            <ul class="stats three">
+              <li>
+                <strong data-i18n="about.fact.founded.value">2007.</strong>
+                <span data-i18n="about.fact.founded.label">godina osnivanja</span>
+              </li>
+              <li>
+                <strong data-i18n="about.fact.members.value">14</strong>
+                <span data-i18n="about.fact.members.label">posvećenih članova</span>
+              </li>
+              <li>
+                <strong data-i18n="about.fact.items.value">30.000+</strong>
+                <span data-i18n="about.fact.items.label">eksponata u zbirci</span>
+              </li>
+            </ul>
+          </div>
+          <div class="logo-panel">
+            <img src="logo-full.png" data-i18n-alt="brand.img.alt" alt="Logo Udruženja „Poljoprivreda“" />
           </div>
         </div>
       </section>
 
-      <section class="section reveal">
+      <section class="section section-alt reveal">
         <div class="container">
-          <div class="about-prose">
-            <p class="prose-card" data-i18n="about.prose">Udruženje poljoprivrednih proizvođača "Poljoprivreda" sa sjedištem u Bijeljini osnovano je 2007. godine. Naša zajednica okuplja 14 posvećenih članova koji već skoro tri decenije sakupljaju i čuvaju predmete, priče i uspomene iz života u Bosansko-hercegovačkim selima, spasavajući od zaborava dragocjene svjedoke prošlih vremena. Kroz višedecenijski rad i terenski sakupljački trud, stvorili smo impresivnu i bogatu zbirku koja danas broji preko 30.000 eksponata. U kolekciji se nalazi veliki broj starih mašina, alata, oruđa i predmeta koji su vezani za obradu zemlje. Očuvanje starih zanata, rukotvorina i proizvoda iz zanatskih djelatnosti koji su važni za selo, takođe se nalaze u ovoj kolekciji. Naš cilj je očuvanje identiteta, tradicije i kulturnog nasljeđa područja stare Jugoslavije, a prvenstveno sa područja naših sela, te njihovo prenošenje na buduće generacije.</p>
+          <div class="section-heading center">
+            <span class="eyebrow" data-i18n="about.story.eyebrow">Naša priča</span>
+            <h2 data-i18n="about.story.h2">Čuvamo svjedoke prošlih vremena</h2>
+          </div>
+          <div class="prose center">
+            <p data-i18n="about.prose">Udruženje poljoprivrednih proizvođača "Poljoprivreda" sa sjedištem u Bijeljini osnovano je 2007. godine. Naša zajednica okuplja 14 posvećenih članova koji već skoro tri decenije sakupljaju i čuvaju predmete, priče i uspomene iz života u Bosansko-hercegovačkim selima, spasavajući od zaborava dragocjene svjedoke prošlih vremena. Kroz višedecenijski rad i terenski sakupljački trud, stvorili smo impresivnu i bogatu zbirku koja danas broji preko 30.000 eksponata. U kolekciji se nalazi veliki broj starih mašina, alata, oruđa i predmeta koji su vezani za obradu zemlje. Očuvanje starih zanata, rukotvorina i proizvoda iz zanatskih djelatnosti koji su važni za selo, takođe se nalaze u ovoj kolekciji. Naš cilj je očuvanje identiteta, tradicije i kulturnog nasljeđa područja stare Jugoslavije, a prvenstveno sa područja naših sela, te njihovo prenošenje na buduće generacije.</p>
+          </div>
+          <div class="center-cta actions center">
+            <a class="button button-primary" href="current.html" data-i18n="hero.cta.view">Pogledaj trenutnu izložbu</a>
+            <a class="button button-secondary" href="index.html#kontakt" data-i18n="contribute.cta">Kontaktirajte nas</a>
           </div>
         </div>
       </section>
@@ -114,18 +136,36 @@
     <footer class="site-footer">
       <div class="container footer-inner">
         <div>
-          <strong data-i18n="brand.subtitle.home">Antikviteti i nasljeđe</strong>
+          <a class="brand" href="index.html">
+          <span class="brand-mark"><img src="logo-mark.png" alt="" aria-hidden="true" /></span>
+          <span class="brand-text">
+            <small class="brand-kicker" data-i18n="brand.kicker">Udruženje</small>
+            <strong class="brand-name">Poljoprivreda</strong>
+            <small class="brand-place">Bijeljina</small>
+          </span>
+          </a>
           <p data-i18n="footer.copy.about">Izložba i arhiv Udruženja poljoprivrednih proizvođača "Poljoprivreda".</p>
         </div>
-        <div class="footer-meta">
-          <span data-i18n="footer.rights">© 2026 Udruženje „Poljoprivreda", Bijeljina</span>
-          <a href="udruzenje.html" data-i18n="footer.about">O udruženju</a>
-          <a href="current.html" data-i18n="footer.current">Trenutna izložba</a>
-          <a href="archive.html" data-i18n="footer.archive">Arhiv</a>
-          <a href="index.html#kontakt" data-i18n="footer.contact">Kontakt</a>
+        <nav data-i18n-aria="footer.pages" aria-label="Stranice">
+          <p class="footer-title" data-i18n="footer.pages">Stranice</p>
+          <ul class="footer-links">
+            <li><a href="index.html" data-i18n="nav.home">Početna</a></li>
+            <li><a href="udruzenje.html" data-i18n="nav.about">O udruženju</a></li>
+            <li><a href="current.html" data-i18n="nav.upcoming">Trenutna izložba</a></li>
+            <li><a href="archive.html" data-i18n="nav.archive">Arhiv</a></li>
+            <li><a href="index.html#kontakt" data-i18n="nav.contact">Kontakt</a></li>
+          </ul>
+        </nav>
+        <div>
+          <p class="footer-title" data-i18n="footer.contact">Kontakt</p>
+          <ul class="footer-links">
+            <li><a href="mailto:perkan66@gmail.com">perkan66@gmail.com</a></li>
+            <li><a href="tel:+38765512942">+387 65 512 942</a></li>
+            <li><a href="https://www.google.com/maps/search/?api=1&amp;query=Komitska+bb%2C+Bijeljina" target="_blank" rel="noopener noreferrer" data-i18n="visit.address.value">Komitska bb, Bijeljina</a></li>
+          </ul>
         </div>
+        <p class="footer-bottom" data-i18n="footer.rights">© 2026 Udruženje „Poljoprivreda", Bijeljina</p>
       </div>
     </footer>
   </body>
 </html>
-
