@@ -12,8 +12,9 @@ antiquities and rural heritage from Semberija and the wider region.
   ("Srce Semberije") with a three-card carousel.
 - `archive.html` — archive of the 2025 exhibition with carousel, media links and
   previous exhibitions (e.g. "Zvuci prošlosti").
-- `styles.css` — full visual system (dark warm tones, gold accents, serif headings,
-  carousel, theme chips, archive media list, etc.).
+- `styles.css` — design system in the logo's colours (deep green, white, black,
+  terracotta): tokens at the top, then header, buttons, sections, cards, galleries,
+  carousel, timeline, contact form and footer.
 - `i18n.js` — all Serbian / English texts (`I18N.sr` and `I18N.en`). Every
   `data-i18n…` key used in the HTML must exist in both dictionaries. The text
   written in the HTML is the Serbian fallback.
