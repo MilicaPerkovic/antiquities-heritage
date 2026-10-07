@@ -1,24 +1,24 @@
 <!doctype html>
-<html lang="en" data-i18n-title="site.title.current">
+<html lang="sr" data-i18n-title="site.title.current">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Current Exhibition | Antiquities and Heritage</title>
+    <title>Trenutna izložba | Antikviteti i nasljeđe</title>
     <meta
       name="description"
       data-i18n="site.description.current"
-      content="Photos from the current ethno exhibition of the Agricultural Producers Association."
+      content="Fotografije sa trenutne etno izložbe Udruženja poljoprivrednih proizvođača."
     />
     <meta name="theme-color" content="#1b0f0b" />
-    <meta property="og:site_name" content="Antiquities and Heritage" />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="Srce Semberije — Antikviteti i nasljeđe" />
+    <meta property="og:locale" content="sr_RS" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Current Exhibition | Antiquities and Heritage" />
+    <meta property="og:title" content="Trenutna izložba | Antikviteti i nasljeđe" />
     <meta
       property="og:description"
-      content="Photos from the current ethno exhibition of the Agricultural Producers Association."
+      content="Fotografije sa trenutne etno izložbe Udruženja poljoprivrednih proizvođača."
     />
-    <meta property="og:image" content="trenutnaizlozba/jpg/IMG_4612.jpg" />
+    <meta property="og:image" content="https://srcesemberije.org/trenutnaizlozba/jpg/IMG_4612.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,6 +28,7 @@
     />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
+    <script defer src="i18n.js"></script>
     <script defer src="script.js"></script>
   </head>
   <body class="current-page">
@@ -36,10 +37,10 @@
     <header class="site-header">
       <div class="container header-inner">
         <a class="brand" href="index.html">
-          <span class="brand-mark"><img src="logo.jpg" data-i18n-alt="brand.img.alt" alt="Antiquities and Heritage" /></span>
+          <span class="brand-mark"><img src="logo-mark.jpg" data-i18n-alt="brand.img.alt" alt="Antikviteti i nasljeđe" /></span>
           <span>
-            <strong data-i18n="brand.home">Association "Poljoprivrednik"</strong>
-            <small data-i18n="brand.subtitle.current">Current Exhibition</small>
+            <strong data-i18n="brand.home">Udruženje "Poljoprivreda"</strong>
+            <small data-i18n="brand.subtitle.current">Trenutna izložba</small>
           </span>
         </a>
 
@@ -50,11 +51,11 @@
         </button>
 
         <nav id="site-nav" class="site-nav">
-          <a href="index.html" data-i18n="nav.home">Home</a>
-          <a href="udruzenje.html" data-i18n="nav.about">About the Association</a>
-          <a href="current.html" aria-current="page" data-i18n="nav.upcoming">Upcoming Exhibition</a>
-          <a href="archive.html" data-i18n="nav.archive">Archive</a>
-          <a href="index.html#kontakt" data-i18n="nav.contact">Contact</a>
+          <a href="index.html" data-i18n="nav.home">Početna</a>
+          <a href="udruzenje.html" data-i18n="nav.about">O udruženju</a>
+          <a href="current.html" aria-current="page" data-i18n="nav.upcoming">Trenutna izložba</a>
+          <a href="archive.html" data-i18n="nav.archive">Arhiv</a>
+          <a href="index.html#kontakt" data-i18n="nav.contact">Kontakt</a>
           <button class="lang-toggle" type="button" data-lang-toggle>SR</button>
         </nav>
       </div>
@@ -63,39 +64,59 @@
     <main>
       <section class="hero section current-hero reveal">
         <div class="container hero-grid">
-          <div class="eyebrow" data-i18n="current.eyebrow.current">Current Exhibition</div>
-          <h1
-            data-i18n="current.h1.current"
-            style="font-size: clamp(2.4rem, 6.5vw, 4.6rem); max-width: 16ch; line-height: 1.05;"
-          >Srce Semberije život u prošlosti</h1>
+          <div class="eyebrow" data-i18n="current.eyebrow.current">Trenutna postavka</div>
+          <h1 class="page-title" data-i18n="current.h1.current">Srce Semberije i život u prošlosti</h1>
           <img
+            class="feature-image"
             src="staroselo.jpeg"
             data-i18n-alt="current.feature.img.alt"
-            alt="Old village of Semberija — visual introduction to the exhibition description"
-            loading="lazy"
+            alt="Staro selo Semberije — vizuelni uvod u opis izložbe"
             decoding="async"
-            style="
-              display: block;
-              width: 100%;
-              max-width: 720px;
-              height: auto;
-              aspect-ratio: 400 / 272;
-              object-fit: cover;
-              margin: 8px auto 22px;
-              border-radius: 18px;
-              border: 1px solid rgba(200, 155, 82, 0.32);
-              box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
-            "
           />
-          <p class="hero-lead" data-i18n="current.lead.current" style="text-align: justify;">
+          <div class="about-prose">
+            <p class="hero-lead" data-i18n="current.intro">Etno izložba „Srce Semberije – život u prošlosti" otvorena je od 25. septembra do 25. oktobra 2026. godine na adresi Komitska bb u Bijeljini. Više stotina knjiga, tekstila i odjeće, zavidna kolekcija starih radio i TV aparata i bogata kolekcija starog namještaja i ćilima prikazuju šta se sve koristilo na našim prostorima krajem 19. i početkom 20. vijeka — koji materijali su se koristili, kako su predmeti pravljeni i koliko su trajali.</p>
+            <div class="about-more" id="current-more-text" hidden>
+              <p data-i18n="about.more.p2">Pažljivom posjetiocu izložbe neće promaći koliko je život i rad u prošlosti bio racionalan, efikasan i jednostavan, koliko su svakodnevni predmeti bili od prirodnih materijala, koliki je sklad postojao između života na selu i prirodnog okruženja, i to je samo jedan od ciljeva koje treba da prikaže ova izložba. Posebno želimo da istaknemo da svaki posjetilac obrati pažnju na dizajn, ergonomiju i boje predmeta ali i tekstila kao i odjeće koja se koristila u prošlosti.</p>
+              <p data-i18n="about.more.p3">Na izložbi je prikazano više od 1.000 eksponata, kojim je obuhvaćen niz segmenata iz prošlosti, kao što su: poljoprivreda, zanatstvo, školstvo, muzika i medicina. Ističemo kolekciju starih pegli, fotoaparata, radio uređaja, satova, knjiga, posuđa, odjeće, ćilima, rukotvorina, ploča, namještaja, pisaćih mašina, lampi i drugog.</p>
+              <p data-i18n="about.more.p4">Cilj izložbe je da edukuje i informiše posjetioce o prošlosti i da ih podstakne da razmišljaju o vezi između prošlosti i sadašnjosti, ali i da probudi osjećaj i emocije. Udruženje je do sada više puta javno nastupalo na sajmovima i etno smotrama u Republici Srpskoj, a tokom 2025. godine samostalno su organizovali etno izložbu koja je bila postavljena na površini od 400 m² sa takođe zavidnim brojem izloženih predmeta. Izložba je trajala dva mjeseca, a istu je posjetilo preko 10.000 posjetilaca. Internet prezentaciju je pogledalo više od 70.000 posjetilaca.</p>
+              <p data-i18n="about.more.p5">Posebno su nas obradovali pozitivni komentari izložbe, a ono što ohrabruje jeste činjenica da je na izložbi predstavljen samo dio predmeta koji se nalaze u našoj kolekciji. Zbog uslova, nemogućnosti pravilne obrade predmeta, nepostojanja adekvatnog izložbenog prostora i namještaja, veliki dio predmeta ostao je u magacinu udruženja da se čuva, nadamo se, do sljedeće izložbe. Pozivamo vas da posjetite našu izložbu.</p>
+            </div>
+          </div>
 
+          <div class="about-readmore">
+            <button
+              class="button button-secondary about-readmore-btn"
+              type="button"
+              aria-expanded="false"
+              aria-controls="current-more-text"
+            >
+              <span class="readmore-text-show" data-i18n="current.readmore.show">Više o izložbi</span>
+              <span class="readmore-text-hide" data-i18n="about.readmore.hide" hidden>Pročitaj manje</span>
+              <span class="readmore-icon" aria-hidden="true">↓</span>
+            </button>
+          </div>
 
-Hundreds of books, textiles and clothing, an impressive collection of old radio and TV sets, a rich collection of old furniture and carpets will be displayed at the ethno exhibition "Srce Semberije" (Heart of Semberija). The exhibition opens on September 25 at the address Komitska bb, and will be open to visitors until Friday, 25th October. The exhibition aims to show what was used in our region at the end of the 19th and the beginning of the 20th century, which materials were used, how they were made, how long they lasted, and many other questions this exhibition will answer.
-The careful visitor of the exhibition will not miss how rational, efficient and simple life and work in the past were, how everyday objects were made of natural materials, how much harmony existed between life in the village and the natural surroundings — and that is just one of the goals this exhibition aims to show. We particularly want to point out that each visitor should pay attention to the design, ergonomics and colours of the objects as well as the textiles and clothing used in the past.
-The exhibition will display more than 1,000 exhibits covering a range of segments from the past, such as agriculture, crafts, education, music and medicine. We highlight the collection of old irons, cameras, radio devices, clocks, books, dishes, clothing, carpets, handiwork, vinyl records, furniture, typewriters, lamps and more.
-The goal of the exhibition is to educate and inform visitors about the past and to encourage them to think about the connection between the past and the present, and to awaken feeling and emotion. The association has repeatedly appeared publicly at fairs and ethno gatherings in Republika Srpska, and during 2026 they independently organised an ethno exhibition set up across a surface of 400 m² with an equally impressive number of displayed objects. The exhibition lasted two months and was visited by more than 10,000 visitors. More than 70,000 visitors viewed the online presentation.
-We were particularly pleased by the positive comments about the exhibition, and what is encouraging is the fact that the exhibition presented only a part of the objects in our collection. Due to conditions, the impossibility of properly processing the objects, and the lack of adequate exhibition space and furniture, a large part of the objects remained in the association's storage to be preserved, hopefully until the next exhibition. We invite you to visit our exhibition.
-          </p>
+          <div class="visit-card" data-i18n-aria="visit.h2" aria-label="Posjetite izložbu">
+            <div>
+              <span class="label" data-i18n="visit.dates.label">Otvoreno</span>
+              <strong data-i18n="visit.dates.value">25. septembar – 25. oktobar 2026.</strong>
+            </div>
+            <div>
+              <span class="label" data-i18n="visit.address.label">Adresa</span>
+              <strong data-i18n="visit.address.value">Komitska bb, Bijeljina</strong>
+            </div>
+            <div>
+              <span class="label" data-i18n="visit.contact.label">Informacije i grupne posjete</span>
+              <a href="tel:+38765512942">+387 65 512 942</a>
+            </div>
+            <a
+              class="button button-primary"
+              href="https://www.google.com/maps/search/?api=1&amp;query=Komitska+bb%2C+Bijeljina"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-i18n="visit.map"
+            >Otvori u Google mapama</a>
+          </div>
         </div>
       </section>
 
@@ -108,17 +129,9 @@ We were particularly pleased by the positive comments about the exhibition, and 
           </div>
 
           <div class="opening-news">
-            <p data-i18n="opening.p1.current">Danas je u Bijeljini svečano otvorena etno izložba „Srce Semberije",
-              koja kroz više od 1.000 eksponata predstavlja predmete, priče i
-              uspomene vezane za život i svakodnevicu nekadašnjeg seoskog
-              domaćinstva.</p>
-            <p data-i18n="opening.p2">Izložba predstavlja dio materijalnog i kulturnog nasljeđa Semberije
-              i posjetiocima približava način života, rada i običaja prethodnih
-              generacija.</p>
-            <p data-i18n="opening.p3.current">Posebna pažnja posvećena je predmetima koji su nekada bili dio
-              svakodnevnog života — od namještaja, tekstila i posuđa do starih
-              radio-aparata, knjiga, alata, kamera, satova, pisaćih mašina i
-              drugih predmeta.</p>
+            <p data-i18n="opening.p1.current">Danas je u Bijeljini svečano otvorena etno izložba „Srce Semberije", koja kroz više od 1.000 eksponata predstavlja predmete, priče i uspomene vezane za život i svakodnevicu nekadašnjeg seoskog domaćinstva.</p>
+            <p data-i18n="opening.p2">Kroz sačuvane predmete i zbirke, izložba čuva dio materijalnog i kulturnog nasljeđa Semberije i približava posjetiocima način života, rada i običaja prethodnih generacija.</p>
+            <p data-i18n="opening.p3.current">Posebna pažnja posvećena je predmetima koji su nekada bili dio svakodnevnog života — od namještaja, tekstila i posuđa do starih radio-aparata, knjiga, alata, kamera, satova, pisaćih mašina i drugih predmeta.</p>
             <p class="opening-hint" data-i18n="opening.hint">Pogledajte fotografije sa otvorenja izložbe.</p>
           </div>
 
@@ -139,10 +152,7 @@ We were particularly pleased by the positive comments about the exhibition, and 
           <div class="section-heading">
             <span class="eyebrow" data-i18n="media.eyebrow">Mediji</span>
             <h2 data-i18n="media.h2">Izložba u medijima</h2>
-            <p data-i18n="media.lead">
-              Pogledajte kako su mediji zabilježili otvorenje izložbe „Srce
-              Semberije".
-            </p>
+            <p data-i18n="media.lead">Pogledajte kako su mediji zabilježili otvorenje izložbe „Srce Semberije".</p>
           </div>
 
           <div class="media-grid" data-media-grid>
@@ -151,15 +161,14 @@ We were particularly pleased by the positive comments about the exhibition, and 
                  URL na originalni članak.
 
                  Elementi sa [data-i18n] se prevode kad korisnik klikne EN/SR.
-                 Tekst ispod atributa je srpski fallback (vidi script.js za EN). -->
+                 Tekst ispod atributa je srpski fallback. Svaki novi ključ
+                 dodaj u OBA rječnika u i18n.js (I18N.en i I18N.sr). -->
 
             <article class="media-card">
               <span class="media-source">RTV BN</span>
-              <h3 class="media-title media-placeholder" data-i18n="media.cards.0.title">Etnografska izložba o običajima i zanatima</h3>
-              <span class="media-date media-placeholder" data-i18n="media.cards.0.date">25. septembar 2026.</span>
-              <p class="media-description media-placeholder" data-i18n="media.cards.0.description">
-                U Bijeljini je otvorena etnografska izložba o svakodnevnici, običajima i zanatima naših predaka u organizaciji Udruženje poljoprivrednika „Poljoprivreda“.
-              </p>
+              <h3 class="media-title" data-i18n="media.cards.0.title">Etnografska izložba o običajima i zanatima</h3>
+              <span class="media-date" data-i18n="media.cards.0.date">25. septembar 2026.</span>
+              <p class="media-description" data-i18n="media.cards.0.description">U Bijeljini je otvorena etnografska izložba o svakodnevici, običajima i zanatima naših predaka u organizaciji Udruženja poljoprivrednih proizvođača „Poljoprivreda".</p>
               <a
                 class="media-link"
                 href="https://www.rtvbn.com/4097015/etnografska-izlozba-o-obicajima-i-zanatima"
@@ -172,29 +181,24 @@ We were particularly pleased by the positive comments about the exhibition, and 
 
             <article class="media-card">
               <span class="media-source">YouTube</span>
-              <h3 class="media-title media-placeholder" data-i18n="media.cards.1.title">
-U Bijeljini je otvorena etnografska izložba o svakodnevnici, običajima i zanatima naših predaka</h3>
-              <span class="media-date media-placeholder" data-i18n="media.cards.1.date">25. septembar 2026.</span>
-              <p class="media-description media-placeholder" data-i18n="media.cards.1.description">
-                U Bijeljini je otvorena etnografska izložba u organizaciji Udruženje poljoprivrednika „Poljoprivreda“.
-              </p>
+              <h3 class="media-title" data-i18n="media.cards.1.title">U Bijeljini otvorena etnografska izložba o svakodnevici, običajima i zanatima naših predaka</h3>
+              <span class="media-date" data-i18n="media.cards.1.date">25. septembar 2026.</span>
+              <p class="media-description" data-i18n="media.cards.1.description">U Bijeljini je otvorena etnografska izložba u organizaciji Udruženja poljoprivrednih proizvođača „Poljoprivreda".</p>
               <a
                 class="media-link"
                 href="https://www.youtube.com/watch?v=efcChRlO3a0"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <span data-i18n="media.readarticle">Pročitaj članak</span> <span aria-hidden="true">→</span>
+                <span data-i18n="media.watchvideo">Pogledaj video</span> <span aria-hidden="true">→</span>
               </a>
             </article>
 
             <article class="media-card">
               <span class="media-source">Glas Banja Luke</span>
-              <h3 class="media-title media-placeholder" data-i18n="media.cards.2.title">Etnografska izložba u Bijeljini: Više od 1.500 predmeta čuva tradiciju</h3>
-              <span class="media-date media-placeholder" data-i18n="media.cards.2.date">25. septembar 2026.</span>
-              <p class="media-description media-placeholder" data-i18n="media.cards.2.description">
-                U organizaciji Udruženja poljoprivrednika „Poljoprivreda“, svečano je otvorena jedinstvena etnografska izložba u Bijeljini koja kroz više od 1.500 pažljivo prikupljenih eksponata dočarava svakodnevicu, rad i običaje naših predaka sa prostora nekadašnje Jugoslavije.
-              </p>
+              <h3 class="media-title" data-i18n="media.cards.2.title">Etnografska izložba u Bijeljini: Više od 1.500 predmeta čuva tradiciju</h3>
+              <span class="media-date" data-i18n="media.cards.2.date">25. septembar 2026.</span>
+              <p class="media-description" data-i18n="media.cards.2.description">U organizaciji Udruženja poljoprivrednih proizvođača „Poljoprivreda", svečano je otvorena jedinstvena etnografska izložba u Bijeljini koja kroz više od 1.500 pažljivo prikupljenih eksponata dočarava svakodnevicu, rad i običaje naših predaka sa prostora nekadašnje Jugoslavije.</p>
               <a
                 class="media-link"
                 href="https://glasbanjaluke.net/2026/09/25/etnografska-izlozba-u-bijeljini-vise-od-1-500-predmeta-cuva-tradiciju/"
@@ -211,9 +215,7 @@ U Bijeljini je otvorena etnografska izložba o svakodnevnici, običajima i zanat
       <section class="section reveal">
         <div class="container">
           <div class="section-heading">
-            <h2 data-i18n="current.gallery.h2">Exhibition Gallery</h2>
-
-
+            <h2 data-i18n="current.gallery.h2">Galerija izložbe</h2>
           </div>
 
           <div class="carousel" data-carousel>
@@ -221,7 +223,7 @@ U Bijeljini je otvorena etnografska izložba o svakodnevnici, običajima i zanat
               class="carousel-arrow carousel-prev"
               type="button"
               data-i18n-aria="current.carousel.prev"
-              aria-label="Previous image"
+              aria-label="Prethodna slika"
             >
               <span aria-hidden="true">‹</span>
             </button>
@@ -231,19 +233,19 @@ U Bijeljini je otvorena etnografska izložba o svakodnevnici, običajima i zanat
                 class="carousel-card carousel-card-side"
                 data-carousel-side="left"
                 data-i18n-aria="current.carousel.prev"
-                aria-label="Previous image"
+                aria-label="Prethodna slika"
               ></article>
               <article
                 class="carousel-card carousel-card-active"
                 data-carousel-side="center"
                 data-i18n-aria="current.carousel.center"
-                aria-label="Center image — click to enlarge"
+                aria-label="Centralna slika — kliknite da uvećate"
               ></article>
               <article
                 class="carousel-card carousel-card-side"
                 data-carousel-side="right"
                 data-i18n-aria="current.carousel.right"
-                aria-label="Next image"
+                aria-label="Sljedeća slika"
               ></article>
             </div>
 
@@ -251,22 +253,17 @@ U Bijeljini je otvorena etnografska izložba o svakodnevnici, običajima i zanat
               class="carousel-arrow carousel-next"
               type="button"
               data-i18n-aria="current.carousel.right"
-              aria-label="Next image"
+              aria-label="Sljedeća slika"
             >
               <span aria-hidden="true">›</span>
             </button>
           </div>
 
-
-
-          <ul
+          <div
             class="carousel-dots"
-            role="tablist"
             data-i18n-aria="current.carousel.dots.aria"
-            aria-label="Direct image selection"
-          ></ul>
-
-
+            aria-label="Direktan odabir slike"
+          ></div>
         </div>
 
         <ul class="carousel-source" hidden aria-hidden="true">
@@ -314,13 +311,14 @@ U Bijeljini je otvorena etnografska izložba o svakodnevnici, običajima i zanat
     <footer class="site-footer">
       <div class="container footer-inner">
         <div>
-          <strong>Antiquities and Heritage</strong>
-          <p data-i18n="footer.copy">Exhibition and archive of the Agricultural Producers Association.</p>
+          <strong data-i18n="brand.subtitle.home">Antikviteti i nasljeđe</strong>
+          <p data-i18n="footer.copy">Izložba i arhiv Udruženja poljoprivrednih proizvođača.</p>
+          <p class="footer-rights" data-i18n="footer.rights">© 2026 Udruženje „Poljoprivreda", Bijeljina</p>
         </div>
         <div class="footer-actions">
-          <a class="button button-secondary" href="udruzenje.html" data-i18n="footer.about">About the Association</a>
-          <a class="button button-primary" href="archive.html" data-i18n="footer.archive">Archive</a>
-          <a class="button button-secondary" href="index.html" data-i18n="footer.back">Back to Home</a>
+          <a class="button button-secondary" href="udruzenje.html" data-i18n="footer.about">O udruženju</a>
+          <a class="button button-primary" href="archive.html" data-i18n="footer.archive">Arhiv</a>
+          <a class="button button-secondary" href="index.html" data-i18n="footer.back">Nazad na početnu</a>
         </div>
       </div>
     </footer>

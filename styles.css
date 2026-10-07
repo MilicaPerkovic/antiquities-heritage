@@ -26,6 +26,7 @@ html {
 body {
   margin: 0;
   font-family: "Inter", system-ui, sans-serif;
+  font-variant-numeric: lining-nums;
   background:
     radial-gradient(circle at top, rgba(139, 65, 32, 0.28), transparent 28%),
     linear-gradient(180deg, #2f140f 0%, #1a0e0a 42%, #140b09 100%);
@@ -275,15 +276,6 @@ p {
   background: linear-gradient(90deg, transparent, rgba(200, 155, 82, 0.6), transparent);
 }
 
-.hero-grid::after {
-  content: "◊";
-  display: grid;
-  place-items: center;
-  width: 24px;
-  height: 24px;
-  color: var(--gold);
-}
-
 .hero-lead {
   max-width: 720px;
   font-size: 1.08rem;
@@ -372,15 +364,6 @@ p {
   background: linear-gradient(90deg, transparent, rgba(200, 155, 82, 0.56), transparent);
 }
 
-.section-heading::after {
-  
-  display: grid;
-  place-items: center;
-  width: 24px;
-  height: 24px;
-  color: var(--gold);
-}
-
 .section-heading.narrow {
   justify-items: start;
   text-align: left;
@@ -388,10 +371,6 @@ p {
 
 .section-heading.narrow::before {
   width: min(280px, 58vw);
-}
-
-.section-heading.narrow::after {
-  justify-self: start;
 }
 
 .intro-grid,
@@ -599,6 +578,21 @@ p {
   font-size: 0.95rem;
 }
 
+.form-status[data-state="pending"] {
+  background: transparent;
+  color: var(--muted);
+}
+
+.form-status[data-state="error"] {
+  background: rgba(176, 64, 48, 0.16);
+  border-color: rgba(214, 104, 84, 0.5);
+}
+
+.contact-form button[disabled] {
+  opacity: 0.6;
+  cursor: progress;
+}
+
 /* Confirmation panel (shown after submit) */
 .contact-field {
   display: grid;
@@ -754,8 +748,7 @@ p {
   padding: 40px 0 8px;
 }
 
-.current-divider .section-heading::before,
-.current-divider .section-heading::after {
+.current-divider .section-heading::before {
   display: none;
 }
 
@@ -1044,7 +1037,7 @@ p {
   }
 
   .about-cards {
-    grid-template-columns: 1fr;
+    gap: 10px;
   }
 
   .current-grid {
@@ -1056,7 +1049,7 @@ p {
   }
 
   .current-teaser-grid {
-    grid-template-columns: 1fr;
+    gap: 10px;
   }
 }
 
@@ -2026,11 +2019,13 @@ body.opening-lb-active {
 /* Izložba u medijima — press / media cards (current.html) */
 .media-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
+  margin: 22px auto 8px;
 }
 .media-card {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 10px;
   padding: 22px 24px;
   border: 1px solid rgba(200, 155, 82, 0.18);
@@ -2074,7 +2069,8 @@ body.opening-lb-active {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-top: 4px;
+  margin-top: auto;
+  padding-top: 4px;
   color: #c89b52;
   text-decoration: none;
   font-family: "Inter", system-ui, sans-serif;
@@ -2093,10 +2089,10 @@ body.opening-lb-active {
   outline-offset: 3px;
 }
 
-/* Placeholder styling for fields the user needs to fill */
-.media-placeholder {
-  font-style: italic;
-  color: rgba(240, 219, 192, 0.55);
+@media (max-width: 980px) {
+  .media-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 760px) {
@@ -2109,32 +2105,168 @@ body.opening-lb-active {
   }
 }
 
-/* Media in media — "Izložba u medijima" section (current.html) */
-.media-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-  margin: 22px auto 8px;
-  max-width: 100%;
+/* === Page title + feature image (current.html hero) === */
+.page-title {
+  font-size: clamp(2.4rem, 6.5vw, 4.6rem);
+  max-width: 16ch;
+  line-height: 1.05;
 }
-.media-card {
+
+.feature-image {
+  display: block;
+  width: 100%;
+  max-width: 720px;
+  height: auto;
+  aspect-ratio: 400 / 272;
+  object-fit: cover;
+  margin: 8px auto 4px;
+  border-radius: 18px;
+  border: 1px solid rgba(200, 155, 82, 0.32);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+}
+
+.current-hero .about-prose {
+  margin: 0 auto;
+  text-align: left;
+  color: var(--muted);
+}
+
+.current-hero .about-prose p {
+  margin: 0;
+}
+
+/* === Read more / read less button === */
+.about-readmore {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 22px 24px;
+  justify-content: center;
+  margin-top: 18px;
+}
+
+.about-readmore-btn {
+  font-weight: 600;
+}
+
+.readmore-icon {
+  display: inline-block;
+  margin-left: 4px;
+  font-size: 0.9em;
+  transition: transform 220ms ease;
+}
+
+/* === "Visit the exhibition" card (index.html + current.html) === */
+.visit-card {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+  align-items: center;
+  gap: 16px;
+  width: min(980px, 100%);
+  margin: 0 auto;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: rgba(34, 18, 13, 0.74);
+  box-shadow: var(--shadow);
+  text-align: left;
+}
+
+.visit-card > div {
+  display: grid;
+  gap: 6px;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.visit-card strong,
+.visit-card a:not(.button) {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.3rem;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.visit-card a:not(.button):hover {
+  color: var(--gold);
+}
+
+.opening-news + .visit-card {
+  margin-bottom: 28px;
+}
+
+@media (max-width: 980px) {
+  .visit-card {
+    grid-template-columns: 1fr;
+  }
+
+  .visit-card .button {
+    justify-self: start;
+  }
+}
+
+/* === About page: fact cards + prose card (udruzenje.html) === */
+.facts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.fact-card {
+  padding: 18px 20px;
+  border-radius: 14px;
+  border: 1px solid rgba(200, 155, 82, 0.22);
+  background: rgba(34, 18, 13, 0.74);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.32);
+}
+
+.fact-card strong {
+  display: block;
+  margin-top: 6px;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.3rem;
+  color: var(--text);
+}
+
+.prose-card {
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.85;
+  color: var(--muted);
+  padding: 24px 26px;
+  border-radius: 18px;
+  border: 1px solid rgba(200, 155, 82, 0.14);
+  background: rgba(34, 18, 13, 0.46);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+@media (max-width: 760px) {
+  .facts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .prose-card {
+    padding: 18px;
+  }
+}
+
+/* === Archive page title === */
+.archive-title {
+  font-size: clamp(2.4rem, 6vw, 4.2rem);
+}
+
+/* === Radio exhibition gallery — "Zvuci prošlosti" (archive.html) === */
+.radio-gallery {
+  margin-top: 24px;
+  padding: 18px 20px;
   border: 1px solid rgba(200, 155, 82, 0.18);
   border-radius: 14px;
-  background: rgba(34, 18, 13, 0.6);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
-  transition: transform 220ms ease, border-color 220ms ease,
-    box-shadow 220ms ease;
+  background: rgba(34, 18, 13, 0.46);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
 }
-.media-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(200, 155, 82, 0.5);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.32);
-}
-.media-card-source {
+.radio-gallery-eyebrow {
+  display: block;
+  margin-bottom: 14px;
   color: var(--gold, #c89b52);
   font-family: "Inter", system-ui, sans-serif;
   font-size: 0.78rem;
@@ -2142,67 +2274,151 @@ body.opening-lb-active {
   text-transform: uppercase;
   font-weight: 600;
 }
-.media-card-title {
+.radio-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 8px;
+}
+.radio-thumb {
+  display: block;
   margin: 0;
-  color: var(--text, #f0dbc0);
+  padding: 0;
+  border: 1px solid rgba(200, 155, 82, 0.18);
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: zoom-in;
+  background: #25130f;
+  aspect-ratio: 1 / 1;
+  transition: transform 200ms ease, border-color 200ms ease,
+    box-shadow 200ms ease;
+}
+.radio-thumb:hover,
+.radio-thumb:focus-visible {
+  transform: scale(1.04);
+  border-color: rgba(200, 155, 82, 0.62);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.38);
+  outline: none;
+}
+.radio-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Lightbox overlay (clean image, no caption) */
+.radio-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(8, 4, 2, 0.94);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.radio-lightbox.is-open {
+  display: flex;
+}
+.radio-lightbox-img {
+  display: block;
+  max-width: 100%;
+  max-height: 88vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 6px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+  user-select: none;
+}
+.radio-lb-close,
+.radio-lb-prev,
+.radio-lb-next {
+  position: absolute;
+  border: 1px solid rgba(200, 155, 82, 0.45);
+  background: rgba(43, 24, 18, 0.92);
+  color: var(--gold, #c89b52);
+  cursor: pointer;
+  border-radius: 999px;
   font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: clamp(1.2rem, 1.9vw, 1.55rem);
-  font-weight: 600;
-  line-height: 1.3;
-}
-.media-card-title:empty {
-  display: none;
-}
-.media-card-date {
-  color: rgba(240, 219, 192, 0.6);
-  font-size: 0.9rem;
-  font-style: italic;
-}
-.media-card-date:empty {
-  display: none;
-}
-.media-card-desc {
-  margin: 0;
-  color: var(--muted, rgba(240, 219, 192, 0.78));
-  line-height: 1.7;
-  font-size: 0.98rem;
-}
-.media-card-desc:empty {
-  display: none;
-}
-.media-card-link {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  align-self: flex-start;
-  margin-top: 6px;
-  padding: 10px 20px;
-  border: 1px solid var(--line, rgba(200, 155, 82, 0.24));
-  border-radius: 999px;
-  background: rgba(54, 30, 22, 0.44);
-  color: var(--text, #f0dbc0);
-  text-decoration: none;
-  font-family: "Inter", system-ui, sans-serif;
-  font-size: 0.92rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  transition: transform 220ms ease, border-color 220ms ease,
-    background 220ms ease, color 220ms ease;
+  justify-content: center;
+  line-height: 1;
+  padding: 0;
+  transition: transform 180ms ease, border-color 180ms ease,
+    background 180ms ease, color 180ms ease;
 }
-.media-card-link:hover {
-  transform: translateY(-2px);
-  border-color: rgba(200, 155, 82, 0.6);
-  background: rgba(200, 155, 82, 0.18);
+.radio-lb-close:hover,
+.radio-lb-prev:hover,
+.radio-lb-next:hover {
+  border-color: var(--gold, #c89b52);
+  background: rgba(200, 155, 82, 0.2);
   color: var(--text, #f0dbc0);
 }
-.media-card-link:focus-visible {
+.radio-lb-close:focus-visible,
+.radio-lb-prev:focus-visible,
+.radio-lb-next:focus-visible {
   outline: 2px solid var(--gold, #c89b52);
   outline-offset: 3px;
 }
+.radio-lb-close {
+  top: 18px;
+  right: 18px;
+  width: 50px;
+  height: 50px;
+  font-size: 2rem;
+}
+.radio-lb-close:hover {
+  transform: scale(1.06);
+}
+.radio-lb-prev,
+.radio-lb-next {
+  top: 50%;
+  width: 58px;
+  height: 58px;
+  font-size: 2.4rem;
+  transform: translateY(-50%);
+}
+.radio-lb-prev:hover {
+  transform: translateY(-50%) scale(1.06);
+}
+.radio-lb-next:hover {
+  transform: translateY(-50%) scale(1.06);
+}
+.radio-lb-prev {
+  left: 18px;
+}
+.radio-lb-next {
+  right: 18px;
+}
+body.radio-lb-active {
+  overflow: hidden;
+}
 
 @media (max-width: 760px) {
-  .media-grid {
-    grid-template-columns: 1fr;
-    gap: 14px;
+  .radio-gallery-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
   }
+  .radio-lb-close {
+    width: 44px;
+    height: 44px;
+    font-size: 1.6rem;
+  }
+  .radio-lb-prev,
+  .radio-lb-next {
+    width: 44px;
+    height: 44px;
+    font-size: 1.7rem;
+  }
+  .radio-lightbox {
+    padding: 16px;
+  }
+}
+
+.footer-rights {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
 }

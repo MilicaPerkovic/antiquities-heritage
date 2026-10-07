@@ -1,31 +1,33 @@
 <!doctype html>
-<html lang="sr-Latn">
+<html lang="sr" data-i18n-title="site.title">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Antikviteti i nasleđe | Početna</title>
+    <title>Antikviteti i nasljeđe | Početna</title>
     <meta
       name="description"
-      content="Izložba i arhiv antikviteta i seoskog nasleđa Udruženja agronoma i poljoprivrednika."
+      data-i18n="site.description.home"
+      content="Izložba i arhiv antikviteta i seoskog nasljeđa Udruženja poljoprivrednih proizvođača."
     />
     <meta name="theme-color" content="#1b0f0b" />
-    <meta property="og:site_name" content="Antikviteti i nasleđe" />
-    <meta property="og:locale" content="sr_Latn_RS" />
+    <meta property="og:site_name" content="Srce Semberije — Antikviteti i nasljeđe" />
+    <meta property="og:locale" content="sr_RS" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Antikviteti i nasleđe | Udruženje agronoma i poljoprivrednika" />
+    <meta property="og:title" content="Antikviteti i nasljeđe | Početna" />
     <meta
       property="og:description"
-      content="Izložba i arhiv antikviteta i seoskog nasleđa Udruženja agronoma i poljoprivrednika."
+      content="Izložba i arhiv antikviteta i seoskog nasljeđa Udruženja poljoprivrednih proizvođača."
     />
-    <meta property="og:image" content="slike/1a49226b314358939cae71356e4f564d.JPEG" />
+    <meta property="og:image" content="https://srcesemberije.org/slike/1a49226b314358939cae71356e4f564d.JPEG" />
     <meta name="twitter:card" content="summary_large_image" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "Organization",
-        "name": "Udruženje agronoma i poljoprivrednika",
-        "alternateName": "Antikviteti i nasleđe",
-        "description": "Udruženje koje čuva seosko nasleđe, predmete, zanate i uspomene iz bosansko-hercegovačkih sela."
+        "name": "Udruženje poljoprivrednih proizvođača „Poljoprivreda“",
+        "alternateName": "Srce Semberije — Antikviteti i nasljeđe",
+        "url": "https://srcesemberije.org/",
+        "description": "Udruženje koje čuva seosko nasljeđe, predmete, zanate i uspomene iz bosansko-hercegovačkih sela."
       }
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -36,6 +38,7 @@
     />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
+    <script defer src="i18n.js"></script>
     <script defer src="script.js"></script>
   </head>
   <body>
@@ -44,10 +47,10 @@
     <header class="site-header">
       <div class="container header-inner">
         <a class="brand" href="index.html">
-          <span class="brand-mark">◊</span>
+          <span class="brand-mark"><img src="logo-mark.jpg" data-i18n-alt="brand.img.alt" alt="Antikviteti i nasljeđe" /></span>
           <span>
-            <strong class="brand-title">Udruženje "Poljoprivrednik"</strong>
-            <small class="brand-subtitle">Antikviteti i nasleđe</small>
+            <strong class="brand-title" data-i18n="brand.home">Udruženje "Poljoprivreda"</strong>
+            <small class="brand-subtitle" data-i18n="brand.subtitle.home">Antikviteti i nasljeđe</small>
           </span>
         </a>
 
@@ -58,10 +61,11 @@
         </button>
 
         <nav id="site-nav" class="site-nav">
-          <a href="udruzenje.html">O udruženju</a>
-          <a href="current.html">Predstojeća izložba</a>
-          <a href="archive.html">Arhiv</a>
-          <a href="#kontakt">Kontakt</a>
+          <a href="index.html" aria-current="page" data-i18n="nav.home">Početna</a>
+          <a href="udruzenje.html" data-i18n="nav.about">O udruženju</a>
+          <a href="current.html" data-i18n="nav.upcoming">Trenutna izložba</a>
+          <a href="archive.html" data-i18n="nav.archive">Arhiv</a>
+          <a href="#kontakt" data-i18n="nav.contact">Kontakt</a>
           <button class="lang-toggle" type="button" data-lang-toggle>SR</button>
         </nav>
       </div>
@@ -70,31 +74,27 @@
     <main>
       <section class="hero section reveal">
         <div class="container hero-grid">
-          <div class="eyebrow">Etno izložba</div>
-          <h1>Antikviteti i seosko nasleđe</h1>
-          <p class="hero-lead">
-            Izložbe i arhiv čuvaju predmete, priče i sećanja seoskog domaćinstva —
-            od kuhinjskog nameštaja i tekstila, do starih telefona, knjiga i alata. 
-          </p>
+          <div class="eyebrow" data-i18n="hero.eyebrow.home">Etno izložba</div>
+          <h1 data-i18n="hero.h1.home">Antikviteti i seosko nasljeđe</h1>
+          <p class="hero-lead" data-i18n="hero.lead.home">Izložbe i arhiv čuvaju predmete, priče i sjećanja seoskog domaćinstva — od kuhinjskog namještaja i tekstila, do starih telefona, knjiga i alata.</p>
 
           <div class="hero-actions">
-            <a class="button button-primary" href="current.html">Pogledaj trenutnu izložbu</a>
-            <a class="button button-secondary" href="udruzenje.html">O udruženju</a>
-            <a class="button button-secondary intro-cta" href="udruzenje.html">Arhiv</a>
-            
+            <a class="button button-primary" href="current.html" data-i18n="hero.cta.view">Pogledaj trenutnu izložbu</a>
+            <a class="button button-secondary" href="udruzenje.html" data-i18n="hero.cta.about">O udruženju</a>
+            <a class="button button-secondary intro-cta" href="archive.html" data-i18n="hero.cta.archive">Arhiv</a>
           </div>
 
           <div class="hero-panel">
             <article>
-              <span class="label">Udruženje</span>
-              <strong>Agronomi i poljoprivrednici</strong>
+              <span class="label" data-i18n="hero.panel.association">Udruženje</span>
+              <strong data-i18n="hero.panel.association.value">Agronomi i poljoprivrednici</strong>
             </article>
             <article>
-              <span class="label">Grad</span>
-              <strong>Bijeljina, Bosna i Hercegovina, Republika Srpska</strong>
+              <span class="label" data-i18n="hero.panel.city">Grad</span>
+              <strong data-i18n="hero.panel.city.value">Bijeljina, Bosna i Hercegovina, Republika Srpska</strong>
             </article>
             <article>
-              <span class="label">Godina</span>
+              <span class="label" data-i18n="hero.panel.year">Godina</span>
               <strong>2007</strong>
             </article>
           </div>
@@ -110,13 +110,31 @@
           </div>
 
           <div class="opening-news">
-            <p data-i18n="opening.p1.index">Danas je u Bijeljini svečano otvorena nova etno izložba koja
-              predstavlja predmete, priče i uspomene vezane za život i
-              svakodnevicu nekadašnjeg seoskog domaćinstva.</p>
-            <p data-i18n="opening.p2">Kroz sačuvane predmete i zbirke, izložba čuva dio materijalnog
-              i kulturnog nasljeđa Semberije i približava posjetiocima način
-              života, rada i običaja prethodnih generacija.</p>
+            <p data-i18n="opening.p1.index">Danas je u Bijeljini svečano otvorena nova etno izložba koja predstavlja predmete, priče i uspomene vezane za život i svakodnevicu nekadašnjeg seoskog domaćinstva.</p>
+            <p data-i18n="opening.p2">Kroz sačuvane predmete i zbirke, izložba čuva dio materijalnog i kulturnog nasljeđa Semberije i približava posjetiocima način života, rada i običaja prethodnih generacija.</p>
             <p class="opening-hint" data-i18n="opening.hint">Pogledajte fotografije sa otvorenja izložbe.</p>
+          </div>
+
+          <div class="visit-card" data-i18n-aria="visit.h2" aria-label="Posjetite izložbu">
+            <div>
+              <span class="label" data-i18n="visit.dates.label">Otvoreno</span>
+              <strong data-i18n="visit.dates.value">25. septembar – 25. oktobar 2026.</strong>
+            </div>
+            <div>
+              <span class="label" data-i18n="visit.address.label">Adresa</span>
+              <strong data-i18n="visit.address.value">Komitska bb, Bijeljina</strong>
+            </div>
+            <div>
+              <span class="label" data-i18n="visit.contact.label">Informacije i grupne posjete</span>
+              <a href="tel:+38765512942">+387 65 512 942</a>
+            </div>
+            <a
+              class="button button-primary"
+              href="https://www.google.com/maps/search/?api=1&amp;query=Komitska+bb%2C+Bijeljina"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-i18n="visit.map"
+            >Otvori u Google mapama</a>
           </div>
 
           <div
@@ -126,7 +144,7 @@
           >
             <figure>
               <img
-                src="otvorenje/jpg/IMG_5396.jpg"
+                src="otvorenje/thumb/IMG_5396.jpg"
                 data-i18n-alt="opening.thumb.alt"
                 alt="Fotografija sa otvorenja izložbe Srce Semberije"
                 loading="lazy"
@@ -135,7 +153,7 @@
             </figure>
             <figure>
               <img
-                src="otvorenje/jpg/IMG_5404.jpg"
+                src="otvorenje/thumb/IMG_5404.jpg"
                 data-i18n-alt="opening.thumb.alt"
                 alt="Fotografija sa otvorenja izložbe Srce Semberije"
                 loading="lazy"
@@ -144,7 +162,7 @@
             </figure>
             <figure>
               <img
-                src="otvorenje/jpg/IMG_5416.jpg"
+                src="otvorenje/thumb/IMG_5416.jpg"
                 data-i18n-alt="opening.thumb.alt"
                 alt="Fotografija sa otvorenja izložbe Srce Semberije"
                 loading="lazy"
@@ -162,115 +180,58 @@
       <section id="o-udruzenju" class="section reveal">
         <div class="container">
           <div class="section-heading narrow">
-            <span class="eyebrow">O udruženju i predstojećoj izložbi</span>
-            <h2>Tradicija, običaji i seosko nasleđe</h2>
-            <p class="about-lead">
-              Udruženje agronoma i poljoprivrednika okuplja ljude koji čuvaju predmete,
-              priče i uspomene iz života u Bosansko-hercegovačkim selima. 
-            </p>
+            <span class="eyebrow" data-i18n="about.eyebrow">O udruženju i izložbi</span>
+            <h2 data-i18n="about.h2">Tradicija, običaji i seosko nasljeđe</h2>
+            <p class="about-lead" data-i18n="about.lead">Udruženje poljoprivrednih proizvođača okuplja ljude koji čuvaju predmete, priče i uspomene iz života u Bosansko-hercegovačkim selima.</p>
           </div>
 
           <div class="about-prose">
-            <p>
-              Udruženje je osnovano sa primarnim ciljem očuvanja tradicije, običaja i života
-              na području stare Jugoslavije, a prvenstveno sa područja Bosansko-hercegovačkih
-              sela. Članovi udruženja su i prije osnivanja aktivno radili na
-              sakupljanju predmeta i stvari iz naše prošlosti. U kolekciji se nalazi veliki
-              broj starih mašina, alata, oruđa i predmeta koji su vezani za obradu zemlje.
-              Očuvanje starih zanata, rukotvorina i proizvoda iz zanatskih djelatnosti koji
-              su važni za selo, takođe se nalaze u ovoj kolekciji.
-            </p>
+            <p data-i18n="about.p1">Udruženje je osnovano sa primarnim ciljem očuvanja tradicije, običaja i života na području stare Jugoslavije, a prvenstveno sa područja Bosansko-hercegovačkih sela. Članovi udruženja su i prije osnivanja aktivno radili na sakupljanju predmeta i stvari iz naše prošlosti. U kolekciji se nalazi veliki broj starih mašina, alata, oruđa i predmeta koji su vezani za obradu zemlje. Očuvanje starih zanata, rukotvorina i proizvoda iz zanatskih djelatnosti koji su važni za selo, takođe se nalaze u ovoj kolekciji.</p>
 
             <div class="about-more" id="about-more-text" hidden>
-              <p>
-                Više stotina knjiga, tekstila i odjeće, zavidna kolekcija starih radio i TV
-              aparata, bogata kolekcija starog namještaja i ćilima će biti izložena na etno
-              izložbi „Srce Semberije - život u prošlosti". Izložba treba da prikaže šta se sve koristilo na
-              našim prostorima krajem 19. i početkom 20. vijeka, koji materijali su se
-              koristili, kako su pravljeni, koliko su trajali i niz drugih pitanja i
-              odgovora daće ova izložba.
-            </p>
-            <p>
-              Pažljivom posjetiocu izložbe neće promaći koliko je život i rad u prošlosti
-              bio racionalan, efikasan i jednostavan, koliko su svakodnevni predmeti bili od
-              prirodnih materijala, koliki je sklad postojao između života na selu i
-              prirodnog okruženja, i to je samo jedan od ciljeva koje treba da prikaže ova izložba.
-              Posebno želimo da istaknemo da svaki posjetilac obrati pažnju na dizajn, ergonomiju i
-              boje predmeta ali i tekstila kao i odjeće koja se koristila u prošlosti.
-            </p>
-            <p>
-              Na izložbi će biti prikazano više od 1000 eksponata, kojim je obuhvaćen niz segmenata iz prošlosti, kao što su: poljoprivreda, zanatstvo, školstvo, muzika i medicina. Ističemo kolekciju starih pegli,
-              fotoaparata, radio uređaja, satova, knjiga, posuđa, odjeće, ćilima,
-              rukotvorina, ploča, namještaja, pisaćih mašina, lampi i drugog.
-            </p>
-            <p>
-              Cilj izložbe je da edukuje i informiše posjetioce o prošlosti i da ih podstakne da razmišljaju o vezi između prošlosti i sadašnjosti, ali i da probudi osjećaj i emocije. Udruženje je do sada više puta javno nastupalo na
-              sajmovima i etno smotrama u Republici Srpskoj, a tokom 2026. godine samostalno su organizovali
-              etno izložbu koja je bila postavljena na površini od 400 m² sa takođe zavidnim
-              brojem izloženih predmeta. Izložba je trajala dva mjeseca, a istu je posjetilo
-              preko 10.000 posjetilaca. Internet prezentaciju je pogledalo više od 70.000
-              posjetilaca.
-            </p>
-            <p>
-              Posebno su nas obradovali pozitivni komentari izložbe, a ono što ohrabruje
-              jeste činjenica da je na izložbi predstavljen samo dio predmeta koji se nalaze
-              u našoj kolekciji. Zbog uslova, nemogućnosti pravilne obrade predmeta,
-              nepostojanja adekvatnog izložbenog prostora i namještaja, veliki dio predmeta
-              ostao je u magacinu udruženja da se čuva, nadamo se, do sledeće izložbe.
-              Pozivamo vas da posjetite našu izložbu.
-              </p>
+              <p data-i18n="about.more.p1">Više stotina knjiga, tekstila i odjeće, zavidna kolekcija starih radio i TV aparata, bogata kolekcija starog namještaja i ćilima izloženi su na etno izložbi „Srce Semberije - život u prošlosti". Izložba treba da prikaže šta se sve koristilo na našim prostorima krajem 19. i početkom 20. vijeka, koji materijali su se koristili, kako su pravljeni, koliko su trajali i niz drugih pitanja i odgovora daće ova izložba.</p>
+            <p data-i18n="about.more.p2">Pažljivom posjetiocu izložbe neće promaći koliko je život i rad u prošlosti bio racionalan, efikasan i jednostavan, koliko su svakodnevni predmeti bili od prirodnih materijala, koliki je sklad postojao između života na selu i prirodnog okruženja, i to je samo jedan od ciljeva koje treba da prikaže ova izložba. Posebno želimo da istaknemo da svaki posjetilac obrati pažnju na dizajn, ergonomiju i boje predmeta ali i tekstila kao i odjeće koja se koristila u prošlosti.</p>
+            <p data-i18n="about.more.p3">Na izložbi je prikazano više od 1.000 eksponata, kojim je obuhvaćen niz segmenata iz prošlosti, kao što su: poljoprivreda, zanatstvo, školstvo, muzika i medicina. Ističemo kolekciju starih pegli, fotoaparata, radio uređaja, satova, knjiga, posuđa, odjeće, ćilima, rukotvorina, ploča, namještaja, pisaćih mašina, lampi i drugog.</p>
+            <p data-i18n="about.more.p4">Cilj izložbe je da edukuje i informiše posjetioce o prošlosti i da ih podstakne da razmišljaju o vezi između prošlosti i sadašnjosti, ali i da probudi osjećaj i emocije. Udruženje je do sada više puta javno nastupalo na sajmovima i etno smotrama u Republici Srpskoj, a tokom 2025. godine samostalno su organizovali etno izložbu koja je bila postavljena na površini od 400 m² sa takođe zavidnim brojem izloženih predmeta. Izložba je trajala dva mjeseca, a istu je posjetilo preko 10.000 posjetilaca. Internet prezentaciju je pogledalo više od 70.000 posjetilaca.</p>
+            <p data-i18n="about.more.p5">Posebno su nas obradovali pozitivni komentari izložbe, a ono što ohrabruje jeste činjenica da je na izložbi predstavljen samo dio predmeta koji se nalaze u našoj kolekciji. Zbog uslova, nemogućnosti pravilne obrade predmeta, nepostojanja adekvatnog izložbenog prostora i namještaja, veliki dio predmeta ostao je u magacinu udruženja da se čuva, nadamo se, do sljedeće izložbe. Pozivamo vas da posjetite našu izložbu.</p>
             </div>
 
-            <div class="about-readmore" style="margin-top: 18px; display: flex; justify-content: center;">
+            <div class="about-readmore">
               <button
                 class="button button-secondary about-readmore-btn"
                 type="button"
                 aria-expanded="false"
                 aria-controls="about-more-text"
-                style="
-                  display: inline-flex;
-                  align-items: center;
-                  gap: 10px;
-                  font-weight: 600;
-                "
               >
-                <span class="readmore-text-show">Pročitaj više</span>
-                <span class="readmore-text-hide" hidden>Pročitaj manje</span>
-                <span class="readmore-icon" aria-hidden="true" style="
-                  display: inline-block;
-                  margin-left: 4px;
-                  transition: transform 220ms ease;
-                  font-size: 0.9em;
-                ">↓</span>
+                <span class="readmore-text-show" data-i18n="about.readmore.show">Pročitaj više</span>
+                <span class="readmore-text-hide" data-i18n="about.readmore.hide" hidden>Pročitaj manje</span>
+                <span class="readmore-icon" aria-hidden="true">↓</span>
               </button>
             </div>
           </div>
 
           <ul class="about-cards">
             <li class="info-card">
-              <strong>100+</strong>
-              <span>Eksponata u kolekciji</span>
+              <strong data-i18n="about.stat1.value">30.000+</strong>
+              <span data-i18n="about.stat1.label">Eksponata u kolekciji</span>
             </li>
             <li class="info-card">
-              <strong>400 m²</strong>
-              <span>Površina najveće izložbe</span>
+              <strong data-i18n="about.stat2.value">400 m²</strong>
+              <span data-i18n="about.stat2.label">Površina najveće izložbe</span>
             </li>
             <li class="info-card">
-              <strong>10.000+</strong>
-              <span>Posetilaca izložbe</span>
+              <strong data-i18n="about.stat3.value">10.000+</strong>
+              <span data-i18n="about.stat3.label">Posjetilaca izložbe</span>
             </li>
             <li class="info-card">
-              <strong>70.000+</strong>
-              <span>Poseta online</span>
+              <strong data-i18n="about.stat4.value">70.000+</strong>
+              <span data-i18n="about.stat4.label">Posjeta online</span>
             </li>
           </ul>
 
           <div class="about-cta">
-            <p>
-              Za cjelokupnu priču o udruženju, osnivanju, članovima i bogatoj zbirci od
-              preko 30.000 eksponata
-            </p>
-            <a class="button button-primary" href="udruzenje.html">Više o udruženju</a>
+            <p data-i18n="about.cta.text">Za cjelokupnu priču o udruženju, osnivanju, članovima i bogatoj zbirci od preko 30.000 eksponata</p>
+            <a class="button button-primary" href="udruzenje.html" data-i18n="about.cta.button">Više o udruženju</a>
           </div>
         </div>
       </section>
@@ -278,63 +239,52 @@
       <section class="section reveal">
         <div class="container">
           <div class="section-heading">
-            <span class="eyebrow">Aktuelno</span>
-            <h2>Trenutna izložba u toku</h2>
-            <p>
-              Pogledajte galeriju fotografija sa aktuelne postavke — predmeti, alati,
-              tekstil i lične stvari iz nekadašnjeg seoskog domaćinstva.
-            </p>
+            <span class="eyebrow" data-i18n="current.eyebrow">Aktuelno</span>
+            <h2 data-i18n="current.h2">Trenutna izložba u toku</h2>
+            <p data-i18n="current.lead">Pogledajte galeriju fotografija sa aktuelne postavke — predmeti, alati, tekstil i lične stvari iz nekadašnjeg seoskog domaćinstva.</p>
           </div>
 
           <div class="current-teaser">
             <div class="current-teaser-grid">
               <a class="current-teaser-card" href="current.html">
-                <img src="trenutnaizlozba/jpg/IMG_4612.jpg" alt="" loading="lazy" decoding="async" />
+                <img src="trenutnaizlozba/thumb/IMG_4612.jpg" alt="" loading="lazy" decoding="async" />
               </a>
               <a class="current-teaser-card" href="current.html">
-                <img src="trenutnaizlozba/jpg/IMG_4615.jpg" alt="" loading="lazy" decoding="async" />
+                <img src="trenutnaizlozba/thumb/IMG_4615.jpg" alt="" loading="lazy" decoding="async" />
               </a>
               <a class="current-teaser-card" href="current.html">
-                <img src="trenutnaizlozba/jpg/IMG_4623.jpg" alt="" loading="lazy" decoding="async" />
+                <img src="trenutnaizlozba/thumb/IMG_4623.jpg" alt="" loading="lazy" decoding="async" />
               </a>
               <a class="current-teaser-card" href="current.html">
-                <img src="trenutnaizlozba/jpg/IMG_4643.jpg" alt="" loading="lazy" decoding="async" />
+                <img src="trenutnaizlozba/thumb/IMG_4643.jpg" alt="" loading="lazy" decoding="async" />
               </a>
             </div>
-            <a class="button button-primary current-teaser-cta" href="current.html">
-              Otvori galeriju
-            </a>
+            <a class="button button-primary current-teaser-cta" href="current.html" data-i18n="current.cta">Otvori galeriju</a>
           </div>
         </div>
       </section>
 
-      
-
       <section class="section reveal">
         <div class="container contribute-grid">
           <div class="section-heading narrow">
-            <span class="eyebrow">Učestvovanje</span>
-            <h2>Imate predmet, fotografiju ili priču?</h2>
-            <p>
-              Udruženje prikuplja predmete, svedočanstva i fotografije vezane za seosko
-              domaćinstvo i nasleđe. Svaki prilog pomaže da se priča izložbe sačuva za
-              buduće generacije.
-            </p>
-            <a class="button button-secondary intro-cta" href="#kontakt">Kontaktirajte nas</a>
+            <span class="eyebrow" data-i18n="contribute.eyebrow">Učestvovanje</span>
+            <h2 data-i18n="contribute.h2">Imate predmet, fotografiju ili priču?</h2>
+            <p data-i18n="contribute.lead">Udruženje prikuplja predmete, svjedočanstva i fotografije vezane za seosko domaćinstvo i nasljeđe. Svaki prilog pomaže da se priča izložbe sačuva za buduće generacije.</p>
+            <a class="button button-secondary intro-cta" href="#kontakt" data-i18n="contribute.cta">Kontaktirajte nas</a>
           </div>
 
           <ul class="contribute-list">
             <li>
-              <span class="label">Predmeti</span>
-              <p>Stari kućni predmeti, nameštaj, tekstil, alati i tehničke naprave.</p>
+              <span class="label" data-i18n="contribute.item1.label">Predmeti</span>
+              <p data-i18n="contribute.item1.text">Stari kućni predmeti, namještaj, tekstil, alati i tehničke naprave.</p>
             </li>
             <li>
-              <span class="label">Fotografije</span>
-              <p>Porodične fotografije, razglednice i snimci iz domaćinstva.</p>
+              <span class="label" data-i18n="contribute.item2.label">Fotografije</span>
+              <p data-i18n="contribute.item2.text">Porodične fotografije, razglednice i snimci iz domaćinstva.</p>
             </li>
             <li>
-              <span class="label">Priče</span>
-              <p>Sećanja, zanatski saveti i usmena predanja vezana za selo.</p>
+              <span class="label" data-i18n="contribute.item3.label">Priče</span>
+              <p data-i18n="contribute.item3.text">Sjećanja, zanatski savjeti i usmena predanja vezana za selo.</p>
             </li>
           </ul>
         </div>
@@ -343,46 +293,41 @@
       <section class="section reveal">
         <div class="container contact-card" id="kontakt">
           <div class="contact-info">
-            <span class="eyebrow">Kontakt</span>
-            <h2>Javite se udruženju</h2>
-            <p>
-              Za sve informacije o izložbi, predaji predmeta ili budućim postavkama,
-              pišite ili pozovite udruženje.
-            </p>
+            <span class="eyebrow" data-i18n="contact.eyebrow">Kontakt</span>
+            <h2 data-i18n="contact.h2">Javite se udruženju</h2>
+            <p data-i18n="contact.lead">Za sve informacije o izložbi, predaji predmeta ili budućim postavkama, pišite ili pozovite udruženje.</p>
 
             <ul class="contact-list">
               <li>
-                <span class="label">Email</span>
+                <span class="label" data-i18n="contact.label.email">Email</span>
                 <a href="mailto:perkan66@gmail.com">perkan66@gmail.com</a>
               </li>
               <li>
-                <span class="label">Telefon</span>
+                <span class="label" data-i18n="contact.label.phone">Telefon</span>
                 <a href="tel:+38765512942">+387 65 512 942</a>
               </li>
               <li>
-                <span class="label">Mesto</span>
+                <span class="label" data-i18n="contact.label.place">Mjesto</span>
                 <span>Bijeljina</span>
               </li>
             </ul>
           </div>
 
-          <form class="contact-form" novalidate>
+          <form class="contact-form">
             <label>
-              Ime i prezime
-              <input type="text" name="name" placeholder="Tvoje ime" required />
+              <span data-i18n="contact.form.name">Ime i prezime</span>
+              <input type="text" name="name" data-i18n-placeholder="contact.form.name.placeholder" placeholder="Vaše ime" required />
             </label>
             <label>
-              Email
-              <input type="email" name="email" placeholder="ime@primer.rs" required />
+              <span data-i18n="contact.form.email">Email</span>
+              <input type="email" name="email" data-i18n-placeholder="contact.form.email.placeholder" placeholder="ime@primjer.com" required />
             </label>
             <label>
-              Poruka
-              <textarea name="message" rows="4" placeholder="Napiši kratko šta te zanima" required></textarea>
+              <span data-i18n="contact.form.message">Poruka</span>
+              <textarea name="message" rows="4" data-i18n-placeholder="contact.form.message.placeholder" placeholder="Ukratko napišite šta vas zanima" required></textarea>
             </label>
-            <button class="button button-primary" type="submit">Pošalji upit</button>
-            <p class="form-status" role="status" aria-live="polite" hidden>
-              Hvala na poruci. Udruženje će odgovoriti u najkraćem roku.
-            </p>
+            <button class="button button-primary" type="submit" data-i18n="contact.form.submit">Pošalji upit</button>
+            <p class="form-status" role="status" aria-live="polite" data-i18n="contact.form.status" hidden>Hvala na poruci. Udruženje će odgovoriti u najkraćem roku.</p>
           </form>
         </div>
       </section>
@@ -391,15 +336,15 @@
     <footer class="site-footer">
       <div class="container footer-inner">
         <div>
-          <strong>Antikviteti i nasleđe</strong>
-          <p>Izložba i arhiv Udruženja agronoma i poljoprivrednika.</p>
+          <strong data-i18n="brand.subtitle.home">Antikviteti i nasljeđe</strong>
+          <p data-i18n="footer.copy">Izložba i arhiv Udruženja poljoprivrednih proizvođača.</p>
         </div>
         <div class="footer-meta">
-          <span>© 2026 ProjectG</span>
-          <a href="udruzenje.html">O udruženju</a>
-          <a href="current.html">Trenutna izložba</a>
-          <a href="archive.html">Arhiv </a>
-          <a href="#kontakt">Kontakt</a>
+          <span data-i18n="footer.rights">© 2026 Udruženje „Poljoprivreda", Bijeljina</span>
+          <a href="udruzenje.html" data-i18n="footer.about">O udruženju</a>
+          <a href="current.html" data-i18n="footer.current">Trenutna izložba</a>
+          <a href="archive.html" data-i18n="footer.archive">Arhiv</a>
+          <a href="#kontakt" data-i18n="footer.contact">Kontakt</a>
         </div>
       </div>
     </footer>
