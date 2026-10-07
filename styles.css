@@ -81,15 +81,6 @@ body::before {
   border-bottom: 1px solid rgba(200, 155, 82, 0.14);
 }
 
-.brand-title{
-  font: size 10px;
-}
-.site-header .brand-subtitle{
-  color: var(--muted);
-  font-size: 1rem;
-  padding: 5px;
-}
-
 .header-inner {
   display: flex;
   align-items: center;
@@ -106,28 +97,58 @@ body::before {
   text-decoration: none;
 }
 
-.brand strong,
-.brand small {
-  display: block;
+/* Header lockup modelled on the association logo:
+   UDRUŽENJE / POLJOPRIVREDA / BIJELJINA */
+.brand-text {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  line-height: 1;
 }
 
-.brand strong {
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 1.08rem;
-  letter-spacing: 0.08em;
+.brand-kicker,
+.brand-place {
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.32em;
   text-transform: uppercase;
+  color: var(--muted);
+  /* letter-spacing adds space after the last letter; balance it */
+  padding-left: 0.32em;
 }
 
-.brand small {
-  color: var(--muted);
-  font-size: 0.82rem;
+.brand-name {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.brand-place {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--gold);
+}
+
+/* Thin rules either side of BIJELJINA, like the logo */
+.brand-place::before,
+.brand-place::after {
+  content: "";
+  width: 16px;
+  height: 1px;
+  background: rgba(200, 155, 82, 0.6);
 }
 
 .brand-mark {
   display: grid;
   place-items: center;
-  width: 42px;
-  height: 42px;
+  flex: none;
+  width: 50px;
+  height: 50px;
   border: 1px solid var(--line);
   border-radius: 999px;
   color: var(--gold);

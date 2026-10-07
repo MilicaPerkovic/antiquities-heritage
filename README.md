@@ -31,9 +31,9 @@ projectG/
 ├── styles.css
 ├── i18n.js               ← translations (SR + EN)
 ├── script.js
-├── logo.jpg              ← site logo (original)
-├── logo-mark.jpg         ← small logo used in the header
-├── favicon.svg
+├── logo-full.png         ← full association logo
+├── logo-mark.png         ← logo emblem used in the header
+├── favicon.png           ← browser tab icon (+ apple-touch-icon.png)
 ├── staroselo.jpeg        ← featured village photo (current.html hero)
 ├── slika*.png            ← unused — ignored by git
 ├── slike/                ← archive photos used by archive.html
