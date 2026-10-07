@@ -5,6 +5,106 @@ const APP_CONFIG = {
   formspreeEndpoint: 'https://formspree.io/f/mnpqgngz',
 };
 
+// === Internationalisation (EN / SR toggle) — dictionaries live in i18n.js ===
+const STORAGE_KEY = 'site-lang';
+
+// Visitors whose browser is set to any language of the region read Serbian.
+const REGIONAL_LANGS = ['sr', 'bs', 'hr', 'sh', 'cnr', 'me'];
+
+function detectLang() {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored === 'en' || stored === 'sr') return stored;
+  } catch (e) {
+    // ignore (e.g., localStorage disabled)
+  }
+  const langs = (navigator && (navigator.languages || [navigator.language])) || [];
+  const regional = langs.some((l) =>
+    REGIONAL_LANGS.includes(String(l).toLowerCase().split('-')[0]),
+  );
+  return regional ? 'sr' : 'en';
+}
+
+// Translate one key in the active language (for strings built in JS).
+function t(key, fallback) {
+  const lang = document.documentElement.getAttribute('lang') === 'en' ? 'en' : 'sr';
+  const value = I18N[lang] && I18N[lang][key];
+  return value != null ? value : fallback;
+}
+
+function applyLang(lang) {
+  const dict = I18N[lang];
+  if (!dict) return;
+  document.documentElement.setAttribute('lang', lang);
+  document.body && document.body.setAttribute('data-lang', lang);
+
+  // 1. text content (and aria-labels) on every element with [data-i18n]
+  document.querySelectorAll('[data-i18n]').forEach((el) => {
+    const key = el.getAttribute('data-i18n');
+    const value = dict[key];
+    if (value != null) el.textContent = value;
+  });
+
+  // 2. placeholders via data-i18n-placeholder
+  document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    const value = dict[key];
+    if (value != null) el.setAttribute('placeholder', value);
+  });
+
+  // 3. alt text via data-i18n-alt
+  document.querySelectorAll('[data-i18n-alt]').forEach((el) => {
+    const key = el.getAttribute('data-i18n-alt');
+    const value = dict[key];
+    if (value != null) el.setAttribute('alt', value);
+  });
+
+  // 4. aria-label via data-i18n-aria
+  document.querySelectorAll('[data-i18n-aria]').forEach((el) => {
+    const key = el.getAttribute('data-i18n-aria');
+    const value = dict[key];
+    if (value != null) el.setAttribute('aria-label', value);
+  });
+
+  // 5. document title
+  const titleKey = document.documentElement.getAttribute('data-i18n-title');
+  if (titleKey && dict[titleKey]) {
+    document.title = dict[titleKey];
+  }
+
+  // 6. meta description
+  const metaDesc = document.querySelector('meta[name="description"][data-i18n]');
+  if (metaDesc) {
+    const key = metaDesc.getAttribute('data-i18n');
+    if (dict[key]) metaDesc.setAttribute('content', dict[key]);
+  }
+
+  // 7. Update lang toggle button label, if present
+  const toggle = document.querySelector('[data-lang-toggle]');
+  if (toggle) {
+    toggle.textContent = lang === 'en' ? 'SR' : 'EN';
+    toggle.setAttribute('aria-label', `${dict['lang.toggle.label'] || 'Language'}: ${lang === 'en' ? 'Srpski' : 'English'}`);
+  }
+
+  // 8. Let widgets built in JS (carousel, galleries, lightbox) re-translate themselves
+  document.dispatchEvent(new CustomEvent('langchange', { detail: { lang } }));
+}
+
+function setLang(lang) {
+  try { localStorage.setItem(STORAGE_KEY, lang); } catch (e) {}
+  applyLang(lang);
+}
+
+const currentLang = detectLang();
+applyLang(currentLang);
+
+document.querySelectorAll('[data-lang-toggle]').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const next = (document.documentElement.getAttribute('lang') === 'en') ? 'sr' : 'en';
+    setLang(next);
+  });
+});
+
 const menuToggle = document.querySelector('.menu-toggle');
 const siteNav = document.querySelector('.site-nav');
 const revealItems = document.querySelectorAll('.reveal');
@@ -43,35 +143,21 @@ if ('IntersectionObserver' in window) {
 }
 
 if (contactForm) {
-  const fields = contactForm.querySelectorAll('.contact-field');
   const submitBtn = contactForm.querySelector('button[type="submit"]');
-  const confirmation = contactForm.querySelector('[data-form-confirmation]');
-  const resetBtn = contactForm.querySelector('[data-form-reset]');
-  const confirmationFields = contactForm.querySelectorAll('[data-confirmation-field]');
+  const status = contactForm.querySelector('.form-status');
 
-  function showConfirmation(data) {
-    confirmationFields.forEach((el) => {
-      const key = el.getAttribute('data-confirmation-field');
-      const val = data[key] || '';
-      el.textContent = val;
-      if (key === 'message') {
-        el.style.whiteSpace = 'pre-wrap';
-      }
-    });
-    fields.forEach((el) => { el.hidden = true; });
-    if (submitBtn) submitBtn.hidden = true;
-    if (confirmation) confirmation.hidden = false;
+  // The status line keeps its data-i18n key, so the EN/SR toggle re-translates it.
+  function setStatus(key, state) {
+    if (!status) return;
+    status.setAttribute('data-i18n', key);
+    status.textContent = t(key, '');
+    status.dataset.state = state;
+    status.hidden = false;
   }
 
-  function resetForm() {
-    contactForm.reset();
-    fields.forEach((el) => { el.hidden = false; });
-    if (submitBtn) submitBtn.hidden = false;
-    if (confirmation) confirmation.hidden = true;
-    if (contactForm.elements.name) contactForm.elements.name.focus();
-  }
-
-  contactForm.addEventListener('submit', (event) => {
+  // The browser validates the required fields and the email format before
+  // this runs; the message is only confirmed once Formspree accepts it.
+  contactForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
     const data = {
@@ -80,30 +166,28 @@ if (contactForm) {
       message: contactForm.elements.message.value.trim(),
     };
 
-    // Show confirmation immediately for best UX
-    showConfirmation(data);
+    if (submitBtn) submitBtn.disabled = true;
+    setStatus('contact.form.sending', 'pending');
 
-    // Then try to send the inquiry via Formspree (no-op until endpoint is configured)
-    const endpoint = APP_CONFIG.formspreeEndpoint;
-    if (endpoint && !endpoint.includes('yourEndpointId')) {
-      fetch(endpoint, {
+    try {
+      const response = await fetch(APP_CONFIG.formspreeEndpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
         },
         body: JSON.stringify(data),
-      }).catch((err) => {
-        // Network errors are non-blocking — the user has already seen the
-        // confirmation panel, so they know we received their inquiry.
-        console.warn('Inquiry remote send failed:', err);
       });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      contactForm.reset();
+      setStatus('contact.form.status', 'success');
+    } catch (err) {
+      console.warn('Inquiry send failed:', err);
+      setStatus('contact.form.error', 'error');
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
     }
   });
-
-  if (resetBtn) {
-    resetBtn.addEventListener('click', resetForm);
-  }
 }
 
 // === Lightbox + Carousel shared state ===
@@ -122,16 +206,22 @@ function buildLightbox() {
   lightboxEl.className = 'lightbox';
   lightboxEl.setAttribute('role', 'dialog');
   lightboxEl.setAttribute('aria-modal', 'true');
-  lightboxEl.setAttribute('aria-label', 'Photo viewer');
+  lightboxEl.setAttribute('data-i18n-aria', 'lightbox.viewer');
   lightboxEl.innerHTML = `
-    <button class="lightbox-close" type="button" aria-label="Close">&times;</button>
-    <button class="lightbox-nav lightbox-prev" type="button" aria-label="Previous">&lsaquo;</button>
+    <button class="lightbox-close" type="button" data-i18n-aria="lightbox.close">&times;</button>
+    <button class="lightbox-nav lightbox-prev" type="button" data-i18n-aria="lightbox.prev">&lsaquo;</button>
     <figure class="lightbox-figure">
       <img src="" alt="" />
       <figcaption></figcaption>
     </figure>
-    <button class="lightbox-nav lightbox-next" type="button" aria-label="Next">&rsaquo;</button>
+    <button class="lightbox-nav lightbox-next" type="button" data-i18n-aria="lightbox.next">&rsaquo;</button>
   `;
+  // Built after the first applyLang() ran, so label it now; later toggles
+  // pick up the data-i18n-aria attributes automatically.
+  lightboxEl.setAttribute('aria-label', t('lightbox.viewer', 'Pregled fotografija'));
+  lightboxEl.querySelectorAll('[data-i18n-aria]').forEach((el) => {
+    el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria'), ''));
+  });
   document.body.appendChild(lightboxEl);
 
   lightboxEl.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
@@ -181,7 +271,8 @@ if (galleryImages.length) {
     figure.style.cursor = 'zoom-in';
     img.tabIndex = 0;
     img.setAttribute('role', 'button');
-    img.setAttribute('aria-label', 'Enlarge photo');
+    img.setAttribute('data-i18n-aria', 'lightbox.enlarge');
+    img.setAttribute('aria-label', t('lightbox.enlarge', 'Uvećaj fotografiju'));
 
     const handleOpen = (event) => {
       event.preventDefault();
@@ -223,15 +314,16 @@ if (carousel && carouselDataEl && carouselSourceItems.length) {
   const captionTitle = carousel.querySelector('[data-carousel-title]');
   const captionDetail = carousel.querySelector('[data-carousel-detail]');
   const captionTheme = carousel.querySelector('[data-carousel-theme]');
-  const dotsContainer = carousel.querySelector('.carousel-dots');
+  // The dots list sits right after the carousel, not inside it.
+  const dotsContainer = carousel.parentElement.querySelector('.carousel-dots');
   const prevBtn = carousel.querySelector('.carousel-prev');
   const nextBtn = carousel.querySelector('.carousel-next');
 
-  const themeLabels = {
-    domacinstvo: 'Household',
-    tekstil: 'Textile',
-    tehnika: 'Technology',
-    memorabilije: 'Memorabilia',
+  const themeKeys = {
+    domacinstvo: 'theme.household',
+    tekstil: 'theme.textile',
+    tehnika: 'theme.technology',
+    memorabilije: 'theme.memorabilia',
   };
 
   const themeTabs = Array.from(
@@ -244,24 +336,36 @@ if (carousel && carouselDataEl && carouselSourceItems.length) {
 
   const wrapIndex = (i) => ((i % total) + total) % total;
 
+  // "Fotografija 3 od 16" — used for alt text and dot labels.
+  const photoLabel = (i) =>
+    t('opening.thumb.aria', 'Fotografija {n} od {total}')
+      .replace('{n}', String(i + 1))
+      .replace('{total}', String(total));
+
   function buildCard(slot, offset) {
     const idx = wrapIndex(current + offset);
     const sourceImg = carouselSourceItems[idx].querySelector('img');
     const item = items[idx] || {};
-    const title = item.title || sourceImg.alt || '';
-    const alt = sourceImg.alt || '';
-    slot.innerHTML = `
-      <img
-        src="${sourceImg.getAttribute('src')}"
-        alt="${alt}"
-        loading="lazy"
-        decoding="async"
-      />
-      <figcaption>
-        <span class="label">Photo ${pad(idx + 1)}</span>
-        <h3>${title}</h3>
-      </figcaption>
-    `;
+    const alt = sourceImg.alt || photoLabel(idx);
+
+    const img = document.createElement('img');
+    img.src = sourceImg.getAttribute('src');
+    img.alt = alt;
+    img.loading = 'lazy';
+    img.decoding = 'async';
+
+    const caption = document.createElement('figcaption');
+    const counter = document.createElement('span');
+    counter.className = 'label';
+    counter.textContent = `${pad(idx + 1)} / ${pad(total)}`;
+    caption.appendChild(counter);
+    if (item.title) {
+      const heading = document.createElement('h3');
+      heading.textContent = item.title;
+      caption.appendChild(heading);
+    }
+
+    slot.replaceChildren(img, caption);
     slot.dataset.index = String(idx);
   }
 
@@ -273,8 +377,8 @@ if (carousel && carouselDataEl && carouselSourceItems.length) {
     if (captionDetail) captionDetail.textContent = sourceImg.alt || '';
     if (captionTheme) {
       const theme = item.theme;
-      if (theme && themeLabels[theme]) {
-        captionTheme.textContent = themeLabels[theme];
+      if (theme && themeKeys[theme]) {
+        captionTheme.textContent = t(themeKeys[theme], theme);
         captionTheme.hidden = false;
       } else {
         captionTheme.hidden = true;
@@ -304,12 +408,10 @@ if (carousel && carouselDataEl && carouselSourceItems.length) {
     if (!dotsContainer) return;
     dotsContainer.innerHTML = '';
     carouselSourceItems.forEach((_item, i) => {
-      const item = items[i] || {};
       const dot = document.createElement('button');
       dot.type = 'button';
       dot.className = 'carousel-dot';
-      dot.setAttribute('role', 'tab');
-      dot.setAttribute('aria-label', `Image ${i + 1}: ${item.title || ''}`);
+      dot.setAttribute('aria-label', photoLabel(i));
       dot.addEventListener('click', () => {
         current = i;
         render();
@@ -400,6 +502,16 @@ if (carousel && carouselDataEl && carouselSourceItems.length) {
   buildDots();
   render();
 
+  // Re-label the cards and dots when the visitor switches EN/SR.
+  document.addEventListener('langchange', () => {
+    render();
+    if (dotsContainer) {
+      dotsContainer.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+        dot.setAttribute('aria-label', photoLabel(i));
+      });
+    }
+  });
+
   // Global keyboard navigation when not in a form field or button
   document.addEventListener('keydown', (event) => {
     if (!carousel) return;
@@ -408,6 +520,8 @@ if (carousel && carouselDataEl && carouselSourceItems.length) {
     if (tag === 'INPUT' || tag === 'TEXTAREA') return;
     if (event.altKey || event.ctrlKey || event.metaKey) return;
     if (lightboxEl && lightboxEl.classList.contains('is-open')) return;
+    // The other galleries' lightboxes handle the arrow keys themselves
+    if (document.querySelector('.opening-lightbox.is-open, .radio-lightbox.is-open')) return;
 
     if (event.key === 'ArrowLeft') {
       event.preventDefault();
@@ -442,545 +556,104 @@ readMoreBtns.forEach((btn) => {
   });
 });
 
-// === Internationalisation (EN / SR toggle) ===
-const STORAGE_KEY = 'site-lang';
-
-const I18N = {
-  en: {
-    // Brand & navigation (common)
-    'brand.home': 'Association "Poljoprivrednik"',
-    'brand.home.about': 'Association "Poljoprivreda"',
-    'brand.subtitle.home': 'Antiquities and Heritage',
-    'brand.subtitle.current': 'Current Exhibition',
-    'brand.subtitle.archive': 'Exhibition Archive',
-    'brand.subtitle.about': 'About the Association',
-    'brand.img.alt': 'Antiquities and Heritage',
-    'nav.about': 'About the Association',
-    'nav.home': 'Home',
-    'nav.upcoming': 'Upcoming Exhibition',
-    'nav.archive': 'Archive',
-    'nav.contact': 'Contact',
-    'footer.copy': 'Exhibition and archive of the Agricultural Producers Association.',
-    'footer.copy.about': 'Exhibition and archive of the Agricultural Producers Association "Poljoprivreda".',
-    'footer.about': 'About the Association',
-    'footer.current': 'Current Exhibition',
-    'footer.archive': 'Archive',
-    'footer.contact': 'Contact',
-    'footer.back': 'Back to Home',
-
-    // index.html — Hero
-    'hero.eyebrow.home': 'Ethno Exhibition',
-    'hero.h1.home': 'Antiquities and Rural Heritage',
-    'hero.lead.home': 'Exhibitions and archives preserve objects, stories and memories of the rural household — from kitchen furniture and textiles to old telephones, books and tools.',
-    'hero.cta.view': 'View Current Exhibition',
-    'hero.cta.about': 'About the Association',
-    'hero.cta.archive': 'Archive',
-    'hero.panel.association': 'Association',
-    'hero.panel.association.value': 'Agronomists and Farmers',
-    'hero.panel.city': 'City',
-    'hero.panel.city.value': 'Bijeljina, Bosnia and Herzegovina, Republika Srpska',
-    'hero.panel.year': 'Year',
-    // About
-    'about.eyebrow': 'About the Association and the Upcoming Exhibition',
-    'about.h2': 'Tradition, Customs and Rural Heritage',
-    'about.lead': 'The Agricultural Producers Association brings together people who preserve objects, stories and memories of life in Bosnian-Herzegovinian villages.',
-    'about.p1': 'The association was founded with the primary goal of preserving tradition, customs and life across the territory of the former Yugoslavia, primarily from the area of the Bosnian-Herzegovinian villages. Members of the association had been actively collecting objects and items from our past even before the formal founding. The collection holds a large number of old machines, tools, implements and objects connected to land cultivation. The preservation of old crafts, handiwork and products of artisan activities that are important for the village can also be found in this collection.',
-    'about.more.p1': 'Hundreds of books, textiles and clothing, an impressive collection of old radio and TV sets, a rich collection of old furniture and carpets will be displayed at the ethno exhibition "Srce Semberije - život u prošlosti" (Heart of Semberija). The exhibition aims to show what was used in our region at the end of the 19th and the beginning of the 20th century, which materials were used, how they were made, how long they lasted, and many other questions this exhibition will answer.',
-    'about.more.p2': 'The careful visitor of the exhibition will not miss how rational, efficient and simple life and work in the past were, how everyday objects were made of natural materials, how much harmony existed between life in the village and the natural surroundings — and that is just one of the goals this exhibition aims to show. We particularly want to point out that each visitor should pay attention to the design, ergonomics and colours of the objects as well as the textiles and clothing used in the past.',
-    'about.more.p3': 'The exhibition will display more than 1,000 exhibits covering a range of segments from the past, such as agriculture, crafts, education, music and medicine. We highlight the collection of old irons, cameras, radio devices, clocks, books, dishes, clothing, carpets, handiwork, vinyl records, furniture, typewriters, lamps and more.',
-    'about.more.p4': 'The goal of the exhibition is to educate and inform visitors about the past and to encourage them to think about the connection between the past and the present, and to awaken feeling and emotion. The association has repeatedly appeared publicly at fairs and ethno gatherings in Republika Srpska, and during 2026 they independently organised an ethno exhibition set up across a surface of 400 m² with an equally impressive number of displayed objects. The exhibition lasted two months and was visited by more than 10,000 visitors. More than 70,000 visitors viewed the online presentation.',
-    'about.more.p5': 'We were particularly pleased by the positive comments about the exhibition, and what is encouraging is the fact that the exhibition presented only a part of the objects in our collection. Due to conditions, the impossibility of properly processing the objects, and the lack of adequate exhibition space and furniture, a large part of the objects remained in the association\'s storage to be preserved, hopefully until the next exhibition. We invite you to visit our exhibition.',
-    'about.readmore.show': 'Read more',
-    'about.readmore.hide': 'Read less',
-    'about.stat1.value': '100+',
-    'about.stat1.label': 'Exhibits in the collection',
-    'about.stat2.value': '400 m²',
-    'about.stat2.label': 'Area of the largest exhibition',
-    'about.stat3.value': '10,000+',
-    'about.stat3.label': 'Exhibition visitors',
-    'about.stat4.value': '70,000+',
-    'about.stat4.label': 'Online visits',
-    'about.cta.text': 'For the full story of the association, its founding, members and rich collection of over 30,000 exhibits',
-    'about.cta.button': 'More about the Association',
-    // Opening news (Novosti) — index.html & current.html
-    'opening.eyebrow': 'News',
-    'opening.h2.index': 'New Ethno Exhibition Opened',
-    'opening.h2.current': 'Exhibition is Open',
-    'opening.date': '25 September 2026.',
-    'opening.p1.index': 'Today a new ethno exhibition was ceremonially opened in Bijeljina, presenting objects, stories and memories connected to the life and everyday life of a former rural household.',
-    'opening.p1.current': 'Today the ethno exhibition "Srce Semberije" was ceremonially opened in Bijeljina, presenting through more than 1,000 exhibits the objects, stories and memories connected to the life and everyday life of a former rural household.',
-    'opening.p2': 'Through preserved objects and collections, the exhibition safeguards a part of the material and cultural heritage of Semberija and brings visitors closer to the way of life, work and customs of previous generations.',
-    'opening.p3.current': 'Special attention is given to objects that were once part of everyday life — from furniture, textiles and dishes to old radio sets, books, tools, cameras, clocks, typewriters and other items.',
-    'opening.hint': 'View photos from the exhibition opening.',
-    'opening.gallery.aria': 'Photo gallery from the exhibition opening',
-    'opening.thumb.alt': 'Photograph from the opening of the Srce Semberije exhibition',
-    'opening.thumb.aria': 'Photograph {n} of {total}',
-    'opening.lb.aria': 'Preview of photographs from the exhibition opening',
-    'opening.cta': 'View Exhibition',
-    // Media section (current.html)
-    'media.eyebrow': 'Media',
-    'media.h2': 'Exhibition in the Media',
-    'media.lead': 'See how the media covered the opening of the „Srce Semberije" exhibition.',
-    'media.readarticle': 'Read article',
-    // Media cards (current.html) — Card 0: RTV BN
-    'media.cards.0.title': 'Ethnographic Exhibition on Customs and Crafts',
-    'media.cards.0.date': '25 September 2026.',
-    'media.cards.0.description': 'An ethnographic exhibition on the everyday life, customs and crafts of our ancestors was opened in Bijeljina, organized by the Agricultural Producers Association "Poljoprivreda".',
-    // Media cards (current.html) — Card 1: YouTube
-    'media.cards.1.title': 'An Ethnographic Exhibition on the Everyday Life, Customs and Crafts of Our Ancestors Opened in Bijeljina',
-    'media.cards.1.date': '25 September 2026.',
-    'media.cards.1.description': 'An ethnographic exhibition was opened in Bijeljina, organized by the Agricultural Producers Association "Poljoprivreda".',
-    // Media cards (current.html) — Card 2: Glas Banja Luke
-    'media.cards.2.title': 'Ethnographic Exhibition in Bijeljina: More Than 1,500 Objects Preserve Tradition',
-    'media.cards.2.date': '25 September 2026.',
-    'media.cards.2.description': 'Organized by the Agricultural Producers Association "Poljoprivreda", a unique ethnographic exhibition was ceremonially opened in Bijeljina, which through more than 1,500 carefully collected exhibits brings to life the everyday life, work and customs of our ancestors from the territory of the former Yugoslavia.',
-    // Current teaser
-    'current.eyebrow': 'Current',
-    'current.h2': 'Current Exhibition in Progress',
-    'current.lead': 'Browse the photo gallery from the latest exhibition — objects, tools, textiles and personal items from a former rural household.',
-    'current.cta': 'Open Gallery',
-    // Contribute
-    'contribute.eyebrow': 'Participate',
-    'contribute.h2': 'Have an object, photo or story?',
-    'contribute.lead': 'The association collects objects, testimonies and photographs related to rural households and heritage. Each contribution helps preserve the story of the exhibition for future generations.',
-    'contribute.cta': 'Contact Us',
-    'contribute.item1.label': 'Objects',
-    'contribute.item1.text': 'Old household items, furniture, textiles, tools and technical devices.',
-    'contribute.item2.label': 'Photographs',
-    'contribute.item2.text': 'Family photos, postcards and household shots.',
-    'contribute.item3.label': 'Stories',
-    'contribute.item3.text': 'Memories, craft tips and oral traditions connected to the village.',
-    // Contact form
-    'contact.eyebrow': 'Contact',
-    'contact.h2': 'Reach the Association',
-    'contact.lead': 'For all information about the exhibition, donating objects or future displays, write or call the association.',
-    'contact.label.email': 'Email',
-    'contact.label.phone': 'Phone',
-    'contact.label.place': 'Place',
-    'contact.form.name': 'Full Name',
-    'contact.form.name.placeholder': 'Your name',
-    'contact.form.email': 'Email',
-    'contact.form.email.placeholder': 'name@example.com',
-    'contact.form.message': 'Message',
-    'contact.form.message.placeholder': "Briefly write what you'd like to know",
-    'contact.form.submit': 'Send Inquiry',
-    'contact.form.status': 'Thank you for your message. The association will reply as soon as possible.',
-    'contact.form.confirmation.title': 'Your message has been received',
-    'contact.form.confirmation.lead': 'Thank you for reaching out. Here is what we received from you:',
-    'contact.form.confirmation.name': 'Name',
-    'contact.form.confirmation.email': 'Email',
-    'contact.form.confirmation.message': 'Message',
-    'contact.form.confirmation.new': 'Send another message',
-
-    // current.html
-    'current.eyebrow.current': 'Current Exhibition',
-    'current.h1.current': 'Heart of Semberija',
-    'current.lead.current': 'Hundreds of books, textiles and clothing, an impressive collection of old radio and TV sets, a rich collection of old furniture and carpets will be displayed at the ethno exhibition "Srce Semberije - život u prošlosti" (Heart of Semberija). The exhibition opens on September 25 at the address Komitka bb and will be open to visitors until 25th October. The exhibition aims to show what was used in our region at the end of the 19th and the beginning of the 20th century, which materials were used, how they were made, how long they lasted, and many other questions this exhibition will answer. The careful visitor of the exhibition will not miss how rational, efficient and simple life and work in the past were, how everyday objects were made of natural materials, how much harmony existed between life in the village and the natural surroundings — and that is just one of the goals this exhibition aims to show. We particularly want to point out that each visitor should pay attention to the design, ergonomics and colours of the objects as well as the textiles and clothing used in the past. The exhibition will display more than 1,000 exhibits covering a range of segments from the past, such as agriculture, crafts, education, music and medicine. We highlight the collection of old irons, cameras, radio devices, clocks, books, dishes, clothing, carpets, handiwork, vinyl records, furniture, typewriters, lamps and more. The goal of the exhibition is to educate and inform visitors about the past and to encourage them to think about the connection between the past and the present, and to awaken feeling and emotion. The association has repeatedly appeared publicly at fairs and ethno gatherings in Republika Srpska, and during 2026 they independently organised an ethno exhibition set up across a surface of 400 m² with an equally impressive number of displayed objects. The exhibition lasted two months and was visited by more than 10,000 visitors. More than 70,000 visitors viewed the online presentation. We were particularly pleased by the positive comments about the exhibition, and what is encouraging is the fact that the exhibition presented only a part of the objects in our collection. Due to conditions, the impossibility of properly processing the objects, and the lack of adequate exhibition space and furniture, a large part of the objects remained in the association\'s storage to be preserved, hopefully until the next exhibition. We invite you to visit our exhibition.',
-    'current.feature.img.alt': 'Old village of Semberija — visual introduction to the exhibition description',
-    'current.gallery.h2': 'Exhibition Gallery',
-    'current.carousel.prev': 'Previous image',
-    'current.carousel.center': 'Center image — click to enlarge',
-    'current.carousel.right': 'Next image',
-    'current.carousel.dots.aria': 'Direct image selection',
-
-    // archive.html
-    'archive.subtitle': 'Exhibition archive',
-    'archive.eyebrow.hero': 'Ethno Exhibition, October 2025',
-    'archive.hero.p': 'The Agricultural Producers Association "Poljoprivreda" from Bijeljina and the Faculty of Agriculture of the University of East Sarajevo organised an ethno exhibition in Bijeljina with several hundred exhibits.',
-    'archive.media.eyebrow': 'Media about the Exhibition',
-    'archive.media.label1': 'Video',
-    'archive.media.title1': 'Goran Perković on the ethno exhibition in Bijeljina — 15.10.2025.',
-    'archive.media.label2': 'TV Show',
-    'archive.media.title2': 'Morning for Everyone: Goran Perković, collector from Bijeljina',
-    'archive.media.label3': 'Article',
-    'archive.media.title3': 'Objects older than a century exhibited in Bijeljina — Infobijeljina',
-    'archive.events.eyebrow': 'Previous Exhibitions',
-    'archive.event1.title': '"Zvuci prošlosti" (Sounds of the Past), September 2023.',
-    'archive.event1.text': '"Zvuci prošlosti" — Sounds of the Past — from the radio device collection is the name of an exhibition with 43 exhibits held at the Semberija Museum.',
-    'archive.event1.link1': 'Sounds of the Past — Radio Device Collection',
-    'archive.event1.link2': 'Collection of 43 Radio Devices',
-    'archive.event1.link3': 'Sounds of the Past — RTRS',
-    'archive.event2.title': 'Agriculture Fair "Interagro", September 2023.',
-    'archive.event2.text': 'An ethno collection with 40 types of pliers used by blacksmiths was exhibited at the "Interagro" Agriculture Fair in Bijeljina.',
-
-    // udruzenje.html
-    'about.headquarters.label': 'Headquarters',
-    'about.headquarters.value': 'Bijeljina, Bosnia and Herzegovina',
-    'about.founded.label': 'Founded',
-    'about.founded.value': '2007',
-    'about.members.label': 'Members',
-    'about.members.value': '14 dedicated members',
-    'about.prose': 'The Agricultural Producers Association "Poljoprivreda" with its headquarters in Bijeljina was founded in 2007. Our community brings together 14 dedicated members who have been passionately collecting and preserving objects, stories and memories of life in the villages of Bosnia and Herzegovina for nearly three decades, saving valuable witnesses of past times from being forgotten. Through decades of work and field collection efforts, we have created an impressive and rich collection that today holds over 30,000 exhibits. The collection contains a large number of old machines, tools, implements and objects connected to land cultivation. The preservation of old crafts, handiwork and products of artisan activities that are important for the village can also be found in this collection. Our goal is to preserve the identity, tradition and cultural heritage of the territory of the former Yugoslavia, primarily that of our villages, and to pass them on to future generations.',
-    'about.association.name': 'Agricultural Producers Association Poljoprivreda',
-    'about.association.founder': 'Jelena Perković',
-    'about.association.description': 'Agricultural Producers Association that brings together 14 members and preserves a collection of over 30,000 exhibits, with more than 1,000 authentic ethno artefacts from Semberija and the wider region.',
-    'site.author.name': 'MilicaPerkovic',
-    'site.title': 'Antiquities and Heritage | Home',
-    'site.title.about': 'About the Association | Antiquities and Heritage',
-    'site.title.current': 'Current Exhibition | Antiquities and Heritage',
-    'site.title.archive': 'Archive | Antiquities and Heritage',
-    'site.description.home': 'Exhibition and archive of antiquities and rural heritage of the Agricultural Producers Association.',
-    'site.description.about': 'Agricultural Producers Association Poljoprivreda from Bijeljina — founding, members, collection of over 30,000 exhibits and the preservation of Semberija\'s tradition.',
-    'site.description.current': 'Photos from the current ethno exhibition of the Agricultural Producers Association.',
-    'site.description.archive': 'Archive page with clearly arranged photographs of the 2025 exhibition of antiquities and rural heritage.',
-    'lang.toggle.label': 'Language',
-    'theme.household': 'Household',
-    'theme.textile': 'Textile',
-    'theme.technology': 'Technology',
-    'theme.memorabilia': 'Memorabilia',
-  },
-  sr: {
-    'brand.home': 'Udruženje "Poljoprivrednik"',
-    'brand.home.about': 'Udruženje "Poljoprivreda"',
-    'brand.subtitle.home': 'Antikviteti i nasleđe',
-    'brand.subtitle.current': 'Trenutna izložba',
-    'brand.subtitle.archive': 'Arhiv izložbe',
-    'brand.subtitle.about': 'O udruženju',
-    'brand.img.alt': 'Antikviteti i nasleđe',
-    'nav.about': 'O udruženju',
-    'nav.home': 'Početna',
-    'nav.upcoming': 'Predstojeća izložba',
-    'nav.archive': 'Arhiv',
-    'nav.contact': 'Kontakt',
-    'footer.copy': 'Izložba i arhiv Udruženja poljoprivrednih proizvođača.',
-    'footer.copy.about': 'Izložba i arhiv Udruženja poljoprivrednih proizvođača "Poljoprivreda".',
-    'footer.about': 'O udruženju',
-    'footer.current': 'Trenutna izložba',
-    'footer.archive': 'Arhiv',
-    'footer.contact': 'Kontakt',
-    'footer.back': 'Nazad na početnu',
-
-    'hero.eyebrow.home': 'Etno izložba',
-    'hero.h1.home': 'Antikviteti i seosko nasleđe',
-    'hero.lead.home': 'Izložbe i arhiv čuvaju predmete, priče i sećanja seoskog domaćinstva — od kuhinjskog nameštaja i tekstila, do starih telefona, knjiga i alata.',
-    'hero.cta.view': 'Pogledaj trenutnu izložbu',
-    'hero.cta.about': 'O udruženju',
-    'hero.cta.archive': 'Arhiv',
-    'hero.panel.association': 'Udruženje',
-    'hero.panel.association.value': 'Agronomi i poljoprivrednici',
-    'hero.panel.city': 'Grad',
-    'hero.panel.city.value': 'Bijeljina, Bosna i Hercegovina, Republika Srpska',
-    'hero.panel.year': 'Godina',
-    'about.eyebrow': 'O udruženju i predstojećoj izložbi',
-    'about.h2': 'Tradicija, običaji i seosko nasleđe',
-    'about.lead': 'Udruženje poljoprivrednih proizvođača okuplja ljude koji čuvaju predmete, priče i uspomene iz života u Bosansko-hercegovačkim selima.',
-    'about.p1': 'Udruženje je osnovano sa primarnim ciljem očuvanja tradicije, običaja i života na području stare Jugoslavije, a prvenstveno sa područja Bosansko-hercegovačkih sela. Članovi udruženja su i prije osnivanja aktivno radili na sakupljanju predmeta i stvari iz naše prošlosti. U kolekciji se nalazi veliki broj starih mašina, alata, oruđa i predmeta koji su vezani za obradu zemlje. Očuvanje starih zanata, rukotvorina i proizvoda iz zanatskih djelatnosti koji su važni za selo, takođe se nalaze u ovoj kolekciji.',
-    'about.more.p1': 'Više stotina knjiga, tekstila i odjeće, zavidna kolekcija starih radio i TV aparata, bogata kolekcija starog namještaja i ćilima će biti izložena na etno izložbi „Srce Semberije - život u prošlosti". Izložba treba da prikaže šta se sve koristilo na našim prostorima krajem 19. i početkom 20. vijeka, koji materijali su se koristili, kako su pravljeni, koliko su trajali i niz drugih pitanja i odgovora daće ova izložba.',
-    'about.more.p2': 'Pažljivom posjetiocu izložbe neće promaći koliko je život i rad u prošlosti bio racionalan, efikasan i jednostavan, koliko su svakodnevni predmeti bili od prirodnih materijala, koliki je sklad postojao između života na selu i prirodnog okruženja, i to je samo jedan od ciljeva koje treba da prikaže ova izložba. Posebno želimo da istaknemo da svaki posjetilac obrati pažnju na dizajn, ergonomiju i boje predmeta ali i tekstila kao i odjeće koja se koristila u prošlosti.',
-    'about.more.p3': 'Na izložbi će biti prikazano više od 1000 eksponata, kojim je obuhvaćen niz segmenata iz prošlosti, kao što su: poljoprivreda, zanatstvo, školstvo, muzika i medicina. Ističemo kolekciju starih pegli, fotoaparata, radio uređaja, satova, knjiga, posuđa, odjeće, ćilima, rukotvorina, ploča, namještaja, pisaćih mašina, lampi i drugog.',
-    'about.more.p4': 'Cilj izložbe je da edukuje i informiše posjetioce o prošlosti i da ih podstakne da razmišljaju o vezi između prošlosti i sadašnjosti, ali i da probudi osjećaj i emocije. Udruženje je do sada više puta javno nastupalo na sajmovima i etno smotrama u Republici Srpskoj, a tokom 2026. godine samostalno su organizovali etno izložbu koja je bila postavljena na površini od 400 m² sa takođe zavidnim brojem izloženih predmeta. Izložba je trajala dva mjeseca, a istu je posjetilo preko 10.000 posjetilaca. Internet prezentaciju je pogledalo više od 70.000 posjetilaca.',
-    'about.more.p5': 'Posebno su nas obradovali pozitivni komentari izložbe, a ono što ohrabruje jeste činjenica da je na izložbi predstavljen samo dio predmeta koji se nalaze u našoj kolekciji. Zbog uslova, nemogućnosti pravilne obrade predmeta, nepostojanja adekvatnog izložbenog prostora i namještaja, veliki dio predmeta ostao je u magacinu udruženja da se čuva, nadamo se, do sledeće izložbe. Pozivamo vas da posjetite našu izložbu.',
-    'about.readmore.show': 'Pročitaj više',
-    'about.readmore.hide': 'Pročitaj manje',
-    'about.stat1.value': '100+',
-    'about.stat1.label': 'Eksponata u kolekciji',
-    'about.stat2.value': '400 m²',
-    'about.stat2.label': 'Površina najveće izložbe',
-    'about.stat3.value': '10.000+',
-    'about.stat3.label': 'Posetilaca izložbe',
-    'about.stat4.value': '70.000+',
-    'about.stat4.label': 'Poseta online',
-    'about.cta.text': 'Za cjelokupnu priču o udruženju, osnivanju, članovima i bogatoj zbirci od preko 30.000 eksponata',
-    'about.cta.button': 'Više o udruženju',
-
-    // Otvorenje izložbe — Novosti (index.html & current.html)
-    'opening.eyebrow': 'Novosti',
-    'opening.h2.index': 'Otvorena nova etno izložba',
-    'opening.h2.current': 'Izložba je otvorena',
-    'opening.date': '25. septembar 2026.',
-    'opening.p1.index': 'Danas je u Bijeljini svečano otvorena nova etno izložba koja predstavlja predmete, priče i uspomene vezane za život i svakodnevicu nekadašnjeg seoskog domaćinstva.',
-    'opening.p1.current': 'Danas je u Bijeljini svečano otvorena etno izložba „Srce Semberije", koja kroz više od 1.000 eksponata predstavlja predmete, priče i uspomene vezane za život i svakodnevicu nekadašnjeg seoskog domaćinstva.',
-    'opening.p2': 'Kroz sačuvane predmete i zbirke, izložba čuva dio materijalnog i kulturnog nasljeđa Semberije i približava posjetiocima način života, rada i običaja prethodnih generacija.',
-    'opening.p3.current': 'Posebna pažnja posvećena je predmetima koji su nekada bili dio svakodnevnog života — od namještaja, tekstila i posuđa do starih radio-aparata, knjiga, alata, kamera, satova, pisaćih mašina i drugih predmeta.',
-    'opening.hint': 'Pogledajte fotografije sa otvorenja izložbe.',
-    'opening.gallery.aria': 'Galerija sa otvorenja izložbe',
-    'opening.thumb.alt': 'Fotografija sa otvorenja izložbe Srce Semberije',
-    'opening.thumb.aria': 'Fotografija {n} od {total}',
-    'opening.lb.aria': 'Pregled fotografija sa otvorenja izložbe',
-    'opening.cta': 'Pogledaj izložbu',
-    // Mediji — Izložba u medijima (current.html)
-    'media.eyebrow': 'Mediji',
-    'media.h2': 'Izložba u medijima',
-    'media.lead': 'Pogledajte kako su mediji zabilježili otvorenje izložbe „Srce Semberije".',
-    'media.readarticle': 'Pročitaj članak',
-    'current.eyebrow': 'Aktuelno',
-    'current.h2': 'Trenutna izložba u toku',
-    'current.lead': 'Pogledajte galeriju fotografija sa aktuelne postavke — predmeti, alati, tekstil i lične stvari iz nekadašnjeg seoskog domaćinstva.',
-    'current.cta': 'Otvori galeriju',
-    'contribute.eyebrow': 'Učestvovanje',
-    'contribute.h2': 'Imate predmet, fotografiju ili priču?',
-    'contribute.lead': 'Udruženje prikuplja predmete, svedočanstva i fotografije vezane za seosko domaćinstvo i nasleđe. Svaki prilog pomaže da se priča izložbe sačuva za buduće generacije.',
-    'contribute.cta': 'Kontaktirajte nas',
-    'contribute.item1.label': 'Predmeti',
-    'contribute.item1.text': 'Stari kućni predmeti, nameštaj, tekstil, alati i tehničke naprave.',
-    'contribute.item2.label': 'Fotografije',
-    'contribute.item2.text': 'Porodične fotografije, razglednice i snimci iz domaćinstva.',
-    'contribute.item3.label': 'Priče',
-    'contribute.item3.text': 'Sećanja, zanatski saveti i usmena predanja vezana za selo.',
-    'contact.eyebrow': 'Kontakt',
-    'contact.h2': 'Javite se udruženju',
-    'contact.lead': 'Za sve informacije o izložbi, predaji predmeta ili budućim postavkama, pišite ili pozovite udruženje.',
-    'contact.label.email': 'Email',
-    'contact.label.phone': 'Telefon',
-    'contact.label.place': 'Mesto',
-    'contact.form.name': 'Ime i prezime',
-    'contact.form.name.placeholder': 'Tvoje ime',
-    'contact.form.email': 'Email',
-    'contact.form.email.placeholder': 'ime@primer.rs',
-    'contact.form.message': 'Poruka',
-    'contact.form.message.placeholder': 'Napiši kratko šta te zanima',
-    'contact.form.submit': 'Pošalji upit',
-    'contact.form.status': 'Hvala na poruci. Udruženje će odgovoriti u najkraćem roku.',
-    'contact.form.confirmation.title': 'Vaša poruka je primljena',
-    'contact.form.confirmation.lead': 'Hvala vam što ste nas kontaktirali. Evo šta smo primili od vas:',
-    'contact.form.confirmation.name': 'Ime',
-    'contact.form.confirmation.email': 'Email',
-    'contact.form.confirmation.message': 'Poruka',
-    'contact.form.confirmation.new': 'Pošalji novu poruku',
-
-    'current.eyebrow.current': 'Trenutna postavka',
-    'current.h1.current': 'Srce Semberije i život u prošlosti',
-    'current.lead.current': 'Više stotina knjiga, tekstila i odjeće, zavidna kolekcija starih radio i TV aparata, bogata kolekcija starog namještaja i ćilima će biti izložena na etno izložbi „Srce Semberije". Izložba se otvara 25. Septembra na adresi Komitska bb i biće otvorena za posjetioce do petka, 25. oktobra. Izložba treba da prikaže šta se sve koristilo na našim prostorima krajem 19. i početkom 20. vijeka, koji materijali su se koristili, kako su pravljeni, koliko su trajali i niz drugih pitanja i odgovora daće ova izložba. Pažljivom posjetiocu izložbe neće promaći koliko je život i rad u prošlosti bio racionalan, efikasan i jednostavan, koliko su svakodnevni predmeti bili od prirodnih materijala, koliki je sklad postojao između života na selu i prirodnog okruženja, i to je samo jedan od ciljeva koje treba da prikaže ova izložba. Posebno želimo da istaknemo da svaki posjetilac obrati pažnju na dizajn, ergonomiju i boje predmeta ali i tekstila kao i odjeće koja se koristila u prošlosti. Na izložbi će biti prikazano više od 1000 eksponata, kojim je obuhvaćen niz segmenata iz prošlosti, kao što su: poljoprivreda, zanatstvo, školstvo, muzika i medicina. Ističemo kolekciju starih pegli, fotoaparata, radio uređaja, satova, knjiga, posuđa, odjeće, ćilima, rukotvorina, ploča, namještaja, pisaćih mašina, lampi i drugog. Cilj izložbe je da edukuje i informiše posjetioce o prošlosti i da ih podstakne da razmišljaju o vezi između prošlosti i sadašnjosti, ali i da probudi osjećaj i emocije. Udruženje je do sada više puta javno nastupalo na sajmovima i etno smotrama u Republici Srpskoj, a tokom 2026. godine samostalno su organizovali etno izložbu koja je bila postavljena na površini od 400 m² sa takođe zavidnim brojem izloženih predmeta. Izložba je trajala dva mjeseca, a istu je posjetilo preko 10.000 posjetilaca. Internet prezentaciju je pogledalo više od 70.000 posjetilaca. Posebno su nas obradovali pozitivni komentari izložbe, a ono što ohrabruje jeste činjenica da je na izložbi predstavljen samo dio predmeta koji se nalaze u našoj kolekciji. Zbog uslova, nemogućnosti pravilne obrade predmeta, nepostojanja adekvatnog izložbenog prostora i namještaja, veliki dio predmeta ostao je u magacinu udruženja da se čuva, nadamo se, do sledeće izložbe. Pozivamo vas da posjetite našu izložbu.',
-    'current.feature.img.alt': 'Staro selo Semberije — vizuelni uvod u opis izložbe',
-    'current.gallery.h2': 'Galerija izložbe',
-    'current.carousel.prev': 'Prethodna slika',
-    'current.carousel.center': 'Centralna slika — kliknite da uvećate',
-    'current.carousel.right': 'Sljedeća slika',
-    'current.carousel.dots.aria': 'Direktan odabir slike',
-
-    'archive.subtitle': 'Arhiv izložbe',
-    'archive.eyebrow.hero': 'Etno izložba, oktobar 2025.',
-    'archive.hero.p': 'Udruženje poljoprivrednih proizvođača "Poljoprivreda" Bijeljina i Poljoprivredni fakultet Univerziteta u Istočnom Sarajevu organizovali su u Bijeljini etno izložbu sa više stotina eksponata.',
-    'archive.media.eyebrow': 'Mediji o izložbi',
-    'archive.media.label1': 'Video',
-    'archive.media.title1': 'Goran Perković o etno izložbi u Bijeljini — 15.10.2025.',
-    'archive.media.label2': 'TV emisija',
-    'archive.media.title2': 'Jutro za sve: Goran Perković, kolekcionar iz Bijeljine',
-    'archive.media.label3': 'Članak',
-    'archive.media.title3': 'Predmeti stariji od vijeka izloženi u Bijeljini — Infobijeljina',
-    'archive.events.eyebrow': 'Prethodne postavke',
-    'archive.event1.title': '"Zvuci prošlosti", septembar 2023.',
-    'archive.event1.text': '"Zvuci prošlosti" iz kolekcije radio-aparata naziv je izložbe sa 43 eksponata koja je održana u Muzeju Semberije.',
-    'archive.event1.link1': 'Zvuci prošlosti — kolekcija radio-aparata',
-    'archive.event1.link2': 'Zbirka od 43 radio-aparata',
-    'archive.event1.link3': 'Zvuci prošlosti — RTRS',
-    'archive.event2.title': 'Sajam poljoprivrede "Interagro", septembar 2023.',
-    'archive.event2.text': 'Etno-kolekcija sa 40 vrsta kliješta koje su koristili kovači izložena je na Sajmu poljoprivrede "Interagro" u Bijeljini.',
-
-    'about.headquarters.label': 'Sjedište',
-    'about.headquarters.value': 'Bijeljina, Bosna i Hercegovina',
-    'about.founded.label': 'Osnovano',
-    'about.founded.value': '2007. godine',
-    'about.members.label': 'Članovi',
-    'about.members.value': '14 posvećenih članova',
-    'about.prose': 'Udruženje poljoprivrednih proizvođača "Poljoprivreda" sa sjedištem u Bijeljini osnovano je 2007. godine. Naša zajednica okuplja 14 posvećenih članova koji već skoro tri decenije sakupljaju i čuvaju predmete, priče i uspomene iz života u Bosansko-hercegovačkim selima, spasavajući od zaborava dragocjene svjedoke prošlih vremena. Kroz višedecenijski rad i terenski sakupljački trud, stvorili smo impresivnu i bogatu zbirku koja danas broji preko 30.000 eksponata. U kolekciji se nalazi veliki broj starih mašina, alata, oruđa i predmeta koji su vezani za obradu zemlje. Očuvanje starih zanata, rukotvorina i proizvoda iz zanatskih djelatnosti koji su važni za selo, takođe se nalaze u ovoj kolekciji. Naš cilj je očuvanje identiteta, tradicije i kulturnog nasljeđa područja stare Jugoslavije, a prvenstveno sa područja naših sela, te njihovo prenošenje na buduće generacije.',
-    'about.association.name': 'Udruženje poljoprivrednih proizvođača Poljoprivreda',
-    'about.association.founder': 'Jelena Perković',
-    'about.association.description': 'Udruženje poljoprivrednih proizvođača koje okuplja 14 članova i čuva zbirku od preko 30.000 eksponata, sa više od 1.000 autentičnih etno artefakata iz Semberije i šireg regiona.',
-    'site.author.name': 'MilicaPerkovic',
-    'site.title': 'Antikviteti i nasleđe | Početna',
-    'site.title.about': 'O udruženju | Antikviteti i nasleđe',
-    'site.title.current': 'Trenutna izložba | Antikviteti i nasleđe',
-    'site.title.archive': 'Arhiv | Antikviteti i nasleđe',
-    'site.description.home': 'Izložba i arhiv antikviteta i seoskog nasleđa Udruženja poljoprivrednih proizvođača.',
-    'site.description.about': 'Udruženje poljoprivrednih proizvođača Poljoprivreda iz Bijeljine — osnivanje, članovi, zbirka od preko 30.000 eksponata i očuvanje tradicije Semberije.',
-    'site.description.current': 'Fotografije sa trenutne etno izložbe Udruženja poljoprivrednih proizvođača.',
-    'site.description.archive': 'Arhivska stranica sa pregledno raspoređenim fotografijama izložbe antikviteta i seoskog nasleđa iz 2025. godine.',
-    'lang.toggle.label': 'Jezik',
-    'theme.household': 'Domaćinstvo',
-    'theme.textile': 'Tekstil',
-    'theme.technology': 'Tehnika',
-    'theme.memorabilia': 'Memorabilije',
-  },
-};
-
-function detectLang() {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored === 'en' || stored === 'sr') return stored;
-  } catch (e) {
-    // ignore (e.g., localStorage disabled)
-  }
-  const nav = (navigator && navigator.language) || '';
-  return nav.toLowerCase().startsWith('sr') ? 'sr' : 'en';
-}
-
-function applyLang(lang) {
-  const dict = I18N[lang];
-  if (!dict) return;
-  document.documentElement.setAttribute('lang', lang);
-  document.body && document.body.setAttribute('data-lang', lang);
-
-  // 1. text content (and aria-labels) on every element with [data-i18n]
-  document.querySelectorAll('[data-i18n]').forEach((el) => {
-    const key = el.getAttribute('data-i18n');
-    const value = dict[key];
-    if (value != null) el.textContent = value;
-  });
-
-  // 2. placeholders via data-i18n-placeholder
-  document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
-    const key = el.getAttribute('data-i18n-placeholder');
-    const value = dict[key];
-    if (value != null) el.setAttribute('placeholder', value);
-  });
-
-  // 3. alt text via data-i18n-alt
-  document.querySelectorAll('[data-i18n-alt]').forEach((el) => {
-    const key = el.getAttribute('data-i18n-alt');
-    const value = dict[key];
-    if (value != null) el.setAttribute('alt', value);
-  });
-
-  // 4. aria-label via data-i18n-aria
-  document.querySelectorAll('[data-i18n-aria]').forEach((el) => {
-    const key = el.getAttribute('data-i18n-aria');
-    const value = dict[key];
-    if (value != null) el.setAttribute('aria-label', value);
-  });
-
-  // 5. document title
-  const titleKey = document.documentElement.getAttribute('data-i18n-title');
-  if (titleKey && dict[titleKey]) {
-    document.title = dict[titleKey];
-  }
-
-  // 6. meta description
-  const metaDesc = document.querySelector('meta[name="description"][data-i18n]');
-  if (metaDesc) {
-    const key = metaDesc.getAttribute('data-i18n');
-    if (dict[key]) metaDesc.setAttribute('content', dict[key]);
-  }
-
-  // 7. Update lang toggle button label, if present
-  const toggle = document.querySelector('[data-lang-toggle]');
-  if (toggle) {
-    toggle.textContent = lang === 'en' ? 'SR' : 'EN';
-    toggle.setAttribute('aria-label', `${dict['lang.toggle.label'] || 'Language'}: ${lang === 'en' ? 'Srpski' : 'English'}`);
-  }
-}
-
-function setLang(lang) {
-  try { localStorage.setItem(STORAGE_KEY, lang); } catch (e) {}
-  applyLang(lang);
-}
-
-const currentLang = detectLang();
-applyLang(currentLang);
-
-document.querySelectorAll('[data-lang-toggle]').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    const next = (document.documentElement.getAttribute('lang') === 'en') ? 'sr' : 'en';
-    setLang(next);
-  });
-});
-
-
 // === Otvorenje izložbe — gallery section ===
 (function () {
   var OPENING_IMAGES = [
-    "otvorenje/jpg/IMG_5396.jpg",
-    "otvorenje/jpg/IMG_5399.jpg",
-    "otvorenje/jpg/IMG_5402.jpg",
-    "otvorenje/jpg/IMG_5403.jpg",
-    "otvorenje/jpg/IMG_5404.jpg",
-    "otvorenje/jpg/IMG_5405.jpg",
-    "otvorenje/jpg/IMG_5406.jpg",
-    "otvorenje/jpg/IMG_5407.jpg",
-    "otvorenje/jpg/IMG_5408.jpg",
-    "otvorenje/jpg/IMG_5409.jpg",
-    "otvorenje/jpg/IMG_5410.jpg",
-    "otvorenje/jpg/IMG_5411.jpg",
-    "otvorenje/jpg/IMG_5413.jpg",
-    "otvorenje/jpg/IMG_5414.jpg",
-    "otvorenje/jpg/IMG_5416.jpg",
-    "otvorenje/jpg/IMG_5417.jpg",
-    "otvorenje/jpg/IMG_5419.jpg",
-    "otvorenje/jpg/IMG_5421.jpg",
-    "otvorenje/jpg/IMG_5422.jpg",
-    "otvorenje/jpg/IMG_5423.jpg",
-    "otvorenje/jpg/IMG_5424.jpg",
-    "otvorenje/jpg/IMG_5425.jpg",
-    "otvorenje/jpg/IMG_5426.jpg",
-    "otvorenje/jpg/IMG_5427.jpg",
-    "otvorenje/jpg/IMG_5429.jpg",
-    "otvorenje/jpg/IMG_5430.jpg",
-    "otvorenje/jpg/IMG_5431.jpg",
-    "otvorenje/jpg/IMG_5432.jpg",
-    "otvorenje/jpg/IMG_5433.jpg",
-    "otvorenje/jpg/IMG_5434.jpg",
-    "otvorenje/jpg/IMG_5435.jpg",
-    "otvorenje/jpg/IMG_5436.jpg",
-    "otvorenje/jpg/IMG_5437.jpg",
-    "otvorenje/jpg/IMG_5438.jpg",
-    "otvorenje/jpg/IMG_5439.jpg",
-    "otvorenje/jpg/IMG_5440.jpg",
-    "otvorenje/jpg/IMG_5441.jpg",
-    "otvorenje/jpg/IMG_5442.jpg",
-    "otvorenje/jpg/IMG_5443.jpg",
-    "otvorenje/jpg/IMG_5444.jpg",
-    "otvorenje/jpg/IMG_5445.jpg",
-    "otvorenje/jpg/IMG_5446.jpg",
-    "otvorenje/jpg/IMG_5447.jpg",
-    "otvorenje/jpg/IMG_5448.jpg",
-    "otvorenje/jpg/IMG_5449.jpg",
-    "otvorenje/jpg/IMG_5450.jpg",
-    "otvorenje/jpg/IMG_5451.jpg",
-    "otvorenje/jpg/IMG_5453.jpg",
-    "otvorenje/jpg/IMG_5454.jpg",
-    "otvorenje/jpg/IMG_5455.jpg",
-    "otvorenje/jpg/IMG_5457.jpg",
-    "otvorenje/jpg/IMG_5463.jpg",
-    "otvorenje/jpg/IMG_5464.jpg",
-    "otvorenje/jpg/IMG_5465.jpg",
-    "otvorenje/jpg/IMG_5466.jpg",
-    "otvorenje/jpg/IMG_5467.jpg",
-    "otvorenje/jpg/IMG_5468.jpg",
-    "otvorenje/jpg/IMG_5469.jpg",
-    "otvorenje/jpg/IMG_5472.jpg",
-    "otvorenje/jpg/IMG_5473.jpg",
-    "otvorenje/jpg/IMG_5474.jpg",
-    "otvorenje/jpg/IMG_5476.jpg",
-    "otvorenje/jpg/IMG_5477.jpg",
-    "otvorenje/jpg/IMG_5478.jpg",
-    "otvorenje/jpg/IMG_5480.jpg",
-    "otvorenje/jpg/IMG_5482.jpg",
-    "otvorenje/jpg/IMG_5483.jpg",  ];
+    "IMG_5396.jpg",
+    "IMG_5399.jpg",
+    "IMG_5402.jpg",
+    "IMG_5403.jpg",
+    "IMG_5404.jpg",
+    "IMG_5405.jpg",
+    "IMG_5406.jpg",
+    "IMG_5407.jpg",
+    "IMG_5408.jpg",
+    "IMG_5409.jpg",
+    "IMG_5410.jpg",
+    "IMG_5411.jpg",
+    "IMG_5413.jpg",
+    "IMG_5414.jpg",
+    "IMG_5416.jpg",
+    "IMG_5417.jpg",
+    "IMG_5419.jpg",
+    "IMG_5421.jpg",
+    "IMG_5422.jpg",
+    "IMG_5423.jpg",
+    "IMG_5424.jpg",
+    "IMG_5425.jpg",
+    "IMG_5426.jpg",
+    "IMG_5427.jpg",
+    "IMG_5429.jpg",
+    "IMG_5430.jpg",
+    "IMG_5431.jpg",
+    "IMG_5432.jpg",
+    "IMG_5433.jpg",
+    "IMG_5434.jpg",
+    "IMG_5435.jpg",
+    "IMG_5436.jpg",
+    "IMG_5437.jpg",
+    "IMG_5438.jpg",
+    "IMG_5439.jpg",
+    "IMG_5440.jpg",
+    "IMG_5441.jpg",
+    "IMG_5442.jpg",
+    "IMG_5443.jpg",
+    "IMG_5444.jpg",
+    "IMG_5445.jpg",
+    "IMG_5446.jpg",
+    "IMG_5447.jpg",
+    "IMG_5448.jpg",
+    "IMG_5449.jpg",
+    "IMG_5450.jpg",
+    "IMG_5451.jpg",
+    "IMG_5453.jpg",
+    "IMG_5454.jpg",
+    "IMG_5455.jpg",
+    "IMG_5457.jpg",
+    "IMG_5463.jpg",
+    "IMG_5464.jpg",
+    "IMG_5465.jpg",
+    "IMG_5466.jpg",
+    "IMG_5467.jpg",
+    "IMG_5468.jpg",
+    "IMG_5469.jpg",
+    "IMG_5472.jpg",
+    "IMG_5473.jpg",
+    "IMG_5474.jpg",
+    "IMG_5476.jpg",
+    "IMG_5477.jpg",
+    "IMG_5478.jpg",
+    "IMG_5480.jpg",
+    "IMG_5482.jpg",
+    "IMG_5483.jpg",
+  ];
+  // Small 600px copies for the grid, 1600px copies for the lightbox.
+  // (Full-size originals stay in otvorenje/jpg and are not loaded.)
+  var THUMB_DIR = 'otvorenje/thumb/';
+  var FULL_DIR = 'otvorenje/web/';
   var DEFAULT_VISIBLE = 6;
   var galleries = document.querySelectorAll('[data-opening-gallery]');
   if (!galleries.length || !OPENING_IMAGES.length) return;
-
-  // Pick the dict matching the current language so dynamic strings
-  // (alt text, aria labels, "+X fotografija") also translate.
-  var lang = document.documentElement.getAttribute('lang') === 'en' ? 'en' : 'sr';
-  var dict = (typeof I18N !== 'undefined' && I18N[lang]) || {};
-  function t(key, fallback) {
-    return (dict[key] != null) ? dict[key] : fallback;
-  }
 
   // Build a single shared lightbox DOM for the page
   var lb = document.createElement('div');
   lb.className = 'opening-lightbox';
   lb.setAttribute('role', 'dialog');
   lb.setAttribute('aria-modal', 'true');
-  lb.setAttribute('aria-label', 'Pregled fotografija sa otvorenja izložbe');
 
   var closeBtn = document.createElement('button');
   closeBtn.type = 'button';
   closeBtn.className = 'opening-lb opening-lb-close';
-  closeBtn.setAttribute('aria-label', 'Zatvori');
   closeBtn.innerHTML = '&times;';
 
   var prevBtn = document.createElement('button');
   prevBtn.type = 'button';
   prevBtn.className = 'opening-lb opening-lb-prev';
-  prevBtn.setAttribute('aria-label', 'Prethodna fotografija');
   prevBtn.innerHTML = '&lsaquo;';
 
   var nextBtn = document.createElement('button');
   nextBtn.type = 'button';
   nextBtn.className = 'opening-lb opening-lb-next';
-  nextBtn.setAttribute('aria-label', 'Sljedeća fotografija');
   nextBtn.innerHTML = '&rsaquo;';
 
   var lbImg = document.createElement('img');
@@ -994,7 +667,7 @@ document.querySelectorAll('[data-lang-toggle]').forEach((btn) => {
   document.body.appendChild(lb);
 
   var current = 0;
-  function show() { lbImg.src = OPENING_IMAGES[current]; }
+  function show() { lbImg.src = FULL_DIR + OPENING_IMAGES[current]; }
   function open(idx) {
     current = ((idx % OPENING_IMAGES.length) + OPENING_IMAGES.length) % OPENING_IMAGES.length;
     show();
@@ -1030,25 +703,14 @@ document.querySelectorAll('[data-lang-toggle]').forEach((btn) => {
       : DEFAULT_VISIBLE;
     var shown = Math.min(visibleCount, OPENING_IMAGES.length);
 
-    var thumbAlt = t('opening.thumb.alt',
-      'Fotografija sa otvorenja izložbe Srce Semberije');
-    var thumbAriaTpl = t('opening.thumb.aria', 'Fotografija {n} od {total}');
-
     for (var i = 0; i < shown; i++) {
       var item = document.createElement('button');
       item.type = 'button';
       item.className = 'opening-gallery-item';
       item.dataset.openingIndex = String(i);
-      item.setAttribute(
-        'aria-label',
-        thumbAriaTpl
-          .replace('{n}', String(i + 1))
-          .replace('{total}', String(OPENING_IMAGES.length))
-      );
 
       var img = document.createElement('img');
-      img.src = OPENING_IMAGES[i];
-      img.alt = thumbAlt;
+      img.src = THUMB_DIR + OPENING_IMAGES[i];
       img.loading = 'lazy';
       img.decoding = 'async';
       item.appendChild(img);
@@ -1062,9 +724,7 @@ document.querySelectorAll('[data-lang-toggle]').forEach((btn) => {
         if (remaining > 0) {
           var overlay = document.createElement('span');
           overlay.className = 'opening-gallery-overlay';
-          overlay.textContent =
-            '+' + remaining +
-            ' fotografij' + (remaining === 1 ? 'a' : 'a');
+          overlay.dataset.remaining = String(remaining);
           item.appendChild(overlay);
         }
       }
@@ -1080,11 +740,168 @@ document.querySelectorAll('[data-lang-toggle]').forEach((btn) => {
     });
   });
 
+  // Translate everything this widget built; re-run on every EN/SR toggle.
+  function translateGallery() {
+    lb.setAttribute('aria-label', t('opening.lb.aria', 'Pregled fotografija sa otvorenja izložbe'));
+    closeBtn.setAttribute('aria-label', t('lightbox.close', 'Zatvori'));
+    prevBtn.setAttribute('aria-label', t('lightbox.prev', 'Prethodna fotografija'));
+    nextBtn.setAttribute('aria-label', t('lightbox.next', 'Sljedeća fotografija'));
+
+    var thumbAlt = t('opening.thumb.alt', 'Fotografija sa otvorenja izložbe Srce Semberije');
+    var thumbAriaTpl = t('opening.thumb.aria', 'Fotografija {n} od {total}');
+    var moreTpl = t('opening.more', '+{n} fotografija');
+
+    document.querySelectorAll('.opening-gallery-item').forEach(function (item) {
+      var n = parseInt(item.dataset.openingIndex, 10) + 1;
+      item.setAttribute(
+        'aria-label',
+        thumbAriaTpl
+          .replace('{n}', String(n))
+          .replace('{total}', String(OPENING_IMAGES.length))
+      );
+      var img = item.querySelector('img');
+      if (img) img.alt = thumbAlt;
+      var overlay = item.querySelector('.opening-gallery-overlay');
+      if (overlay) overlay.textContent = moreTpl.replace('{n}', overlay.dataset.remaining);
+    });
+  }
+
+  translateGallery();
+  document.addEventListener('langchange', translateGallery);
+
   // Global keyboard navigation while lightbox is open
   document.addEventListener('keydown', function (event) {
     if (!lb.classList.contains('is-open')) return;
     if (event.key === 'Escape') close();
     else if (event.key === 'ArrowLeft') step(-1);
     else if (event.key === 'ArrowRight') step(1);
+  });
+})();
+
+// === Radio exhibition gallery ("Zvuci prošlosti") — archive.html ===
+(function () {
+  var IMAGES = [];
+  for (var i = 5365; i <= 5384; i++) {
+    IMAGES.push('radioizlozba/IMG_' + i + '.JPG');
+  }
+
+  var grid = document.querySelector('[data-radio-gallery-grid]');
+  if (!grid || !IMAGES.length) return;
+
+  function photoLabel(idx) {
+    return t('opening.thumb.aria', 'Fotografija {n} od {total}')
+      .replace('{n}', String(idx + 1))
+      .replace('{total}', String(IMAGES.length));
+  }
+
+  // Build thumbnails
+  IMAGES.forEach(function (src, idx) {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'radio-thumb';
+    btn.dataset.radioIndex = String(idx);
+    var img = document.createElement('img');
+    img.src = src;
+    img.alt = '';
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    btn.appendChild(img);
+    grid.appendChild(btn);
+  });
+
+  // Build lightbox DOM
+  var lb = document.createElement('div');
+  lb.className = 'radio-lightbox';
+  lb.setAttribute('role', 'dialog');
+  lb.setAttribute('aria-modal', 'true');
+
+  var closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.className = 'radio-lb-close';
+  closeBtn.innerHTML = '&times;';
+
+  var prevBtn = document.createElement('button');
+  prevBtn.type = 'button';
+  prevBtn.className = 'radio-lb-prev';
+  prevBtn.innerHTML = '&lsaquo;';
+
+  var nextBtn = document.createElement('button');
+  nextBtn.type = 'button';
+  nextBtn.className = 'radio-lb-next';
+  nextBtn.innerHTML = '&rsaquo;';
+
+  var lbImg = document.createElement('img');
+  lbImg.className = 'radio-lightbox-img';
+  lbImg.alt = '';
+
+  lb.appendChild(closeBtn);
+  lb.appendChild(prevBtn);
+  lb.appendChild(lbImg);
+  lb.appendChild(nextBtn);
+  document.body.appendChild(lb);
+
+  function translateGallery() {
+    lb.setAttribute('aria-label', t('lightbox.viewer', 'Pregled fotografija'));
+    closeBtn.setAttribute('aria-label', t('lightbox.close', 'Zatvori'));
+    prevBtn.setAttribute('aria-label', t('lightbox.prev', 'Prethodna fotografija'));
+    nextBtn.setAttribute('aria-label', t('lightbox.next', 'Sljedeća fotografija'));
+    grid.querySelectorAll('.radio-thumb').forEach(function (btn) {
+      btn.setAttribute('aria-label', photoLabel(parseInt(btn.dataset.radioIndex, 10)));
+    });
+  }
+
+  translateGallery();
+  document.addEventListener('langchange', translateGallery);
+
+  var current = 0;
+
+  function show() {
+    lbImg.src = IMAGES[current];
+  }
+
+  function open(idx) {
+    current = ((idx % IMAGES.length) + IMAGES.length) % IMAGES.length;
+    show();
+    lb.classList.add('is-open');
+    document.body.classList.add('radio-lb-active');
+  }
+
+  function close() {
+    lb.classList.remove('is-open');
+    document.body.classList.remove('radio-lb-active');
+  }
+
+  function step(delta) {
+    current = ((current + delta) % IMAGES.length + IMAGES.length) % IMAGES.length;
+    show();
+  }
+
+  // Click a thumbnail -> open at its index
+  grid.addEventListener('click', function (event) {
+    var btn = event.target.closest('.radio-thumb');
+    if (!btn) return;
+    var idx = parseInt(btn.dataset.radioIndex, 10);
+    if (Number.isInteger(idx)) open(idx);
+  });
+
+  closeBtn.addEventListener('click', close);
+  prevBtn.addEventListener('click', function () { step(-1); });
+  nextBtn.addEventListener('click', function () { step(1); });
+
+  // Click on overlay (but not on image / buttons) -> close
+  lb.addEventListener('click', function (event) {
+    if (event.target === lb) close();
+  });
+
+  // Keyboard: Esc / ← / →
+  document.addEventListener('keydown', function (event) {
+    if (!lb.classList.contains('is-open')) return;
+    if (event.key === 'Escape') {
+      close();
+    } else if (event.key === 'ArrowLeft') {
+      step(-1);
+    } else if (event.key === 'ArrowRight') {
+      step(1);
+    }
   });
 })();

@@ -1,24 +1,24 @@
 <!doctype html>
-<html lang="en" data-i18n-title="site.title.archive">
+<html lang="sr" data-i18n-title="site.title.archive">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Archive | Antiquities and Heritage</title>
+    <title>Arhiv | Antikviteti i nasljeđe</title>
     <meta
       name="description"
       data-i18n="site.description.archive"
-      content="Archive page with clearly arranged photographs of the 2025 exhibition of antiquities and rural heritage."
+      content="Arhivska stranica sa pregledno raspoređenim fotografijama izložbe antikviteta i seoskog nasljeđa iz 2025. godine."
     />
     <meta name="theme-color" content="#1b0f0b" />
-    <meta property="og:site_name" content="Antiquities and Heritage" />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="Srce Semberije — Antikviteti i nasljeđe" />
+    <meta property="og:locale" content="sr_RS" />
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Archive | Antiquities and Heritage" />
+    <meta property="og:title" content="Arhiv | Antikviteti i nasljeđe" />
     <meta
       property="og:description"
-      content="Archive page with photographs of the 2025 exhibition of antiquities and rural heritage."
+      content="Arhivska stranica sa pregledno raspoređenim fotografijama izložbe antikviteta i seoskog nasljeđa iz 2025. godine."
     />
-    <meta property="og:image" content="slike/15d1168e807b13f45b83cdadcd7f8cd1.JPEG" />
+    <meta property="og:image" content="https://srcesemberije.org/slike/15d1168e807b13f45b83cdadcd7f8cd1.JPEG" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,170 +28,8 @@
     />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
+    <script defer src="i18n.js"></script>
     <script defer src="script.js"></script>
-    <style>
-      /* === Radio exhibition gallery (inline, archive.html only) === */
-      .radio-gallery {
-        margin-top: 24px;
-        padding: 18px 20px;
-        border: 1px solid rgba(200, 155, 82, 0.18);
-        border-radius: 14px;
-        background: rgba(34, 18, 13, 0.46);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
-      }
-      .radio-gallery-eyebrow {
-        display: block;
-        margin-bottom: 14px;
-        color: var(--gold, #c89b52);
-        font-family: "Inter", system-ui, sans-serif;
-        font-size: 0.78rem;
-        letter-spacing: 0.18em;
-        text-transform: uppercase;
-        font-weight: 600;
-      }
-      .radio-gallery-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-        gap: 8px;
-      }
-      .radio-thumb {
-        display: block;
-        margin: 0;
-        padding: 0;
-        border: 1px solid rgba(200, 155, 82, 0.18);
-        border-radius: 8px;
-        overflow: hidden;
-        cursor: zoom-in;
-        background: #25130f;
-        aspect-ratio: 1 / 1;
-        transition: transform 200ms ease, border-color 200ms ease,
-          box-shadow 200ms ease;
-      }
-      .radio-thumb:hover,
-      .radio-thumb:focus-visible {
-        transform: scale(1.04);
-        border-color: rgba(200, 155, 82, 0.62);
-        box-shadow: 0 10px 22px rgba(0, 0, 0, 0.38);
-        outline: none;
-      }
-      .radio-thumb img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      /* Lightbox overlay (clean image, no caption) */
-      .radio-lightbox {
-        position: fixed;
-        inset: 0;
-        z-index: 9999;
-        background: rgba(8, 4, 2, 0.94);
-        display: none;
-        align-items: center;
-        justify-content: center;
-        padding: 24px;
-      }
-      .radio-lightbox.is-open {
-        display: flex;
-      }
-      .radio-lightbox-img {
-        display: block;
-        max-width: 100%;
-        max-height: 88vh;
-        width: auto;
-        height: auto;
-        object-fit: contain;
-        border-radius: 6px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
-        user-select: none;
-      }
-      .radio-lb-close,
-      .radio-lb-prev,
-      .radio-lb-next {
-        position: absolute;
-        border: 1px solid rgba(200, 155, 82, 0.45);
-        background: rgba(43, 24, 18, 0.92);
-        color: var(--gold, #c89b52);
-        cursor: pointer;
-        border-radius: 999px;
-        font-family: "Cormorant Garamond", Georgia, serif;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        line-height: 1;
-        padding: 0;
-        transition: transform 180ms ease, border-color 180ms ease,
-          background 180ms ease, color 180ms ease;
-      }
-      .radio-lb-close:hover,
-      .radio-lb-prev:hover,
-      .radio-lb-next:hover {
-        border-color: var(--gold, #c89b52);
-        background: rgba(200, 155, 82, 0.2);
-        color: var(--text, #f0dbc0);
-      }
-      .radio-lb-close:focus-visible,
-      .radio-lb-prev:focus-visible,
-      .radio-lb-next:focus-visible {
-        outline: 2px solid var(--gold, #c89b52);
-        outline-offset: 3px;
-      }
-      .radio-lb-close {
-        top: 18px;
-        right: 18px;
-        width: 50px;
-        height: 50px;
-        font-size: 2rem;
-      }
-      .radio-lb-close:hover {
-        transform: scale(1.06);
-      }
-      .radio-lb-prev,
-      .radio-lb-next {
-        top: 50%;
-        width: 58px;
-        height: 58px;
-        font-size: 2.4rem;
-        transform: translateY(-50%);
-      }
-      .radio-lb-prev:hover {
-        transform: translateY(-50%) scale(1.06);
-      }
-      .radio-lb-next:hover {
-        transform: translateY(-50%) scale(1.06);
-      }
-      .radio-lb-prev {
-        left: 18px;
-      }
-      .radio-lb-next {
-        right: 18px;
-      }
-      body.radio-lb-active {
-        overflow: hidden;
-      }
-
-      @media (max-width: 760px) {
-        .radio-gallery-grid {
-          grid-template-columns: repeat(4, 1fr);
-          gap: 6px;
-        }
-        .radio-lb-close {
-          width: 44px;
-          height: 44px;
-          font-size: 1.6rem;
-        }
-        .radio-lb-prev,
-        .radio-lb-next {
-          width: 44px;
-          height: 44px;
-          font-size: 1.7rem;
-        }
-        .radio-lightbox {
-          padding: 16px;
-        }
-      }
-    </style>
   </head>
   <body class="archive-page">
     <div class="page-noise"></div>
@@ -199,10 +37,10 @@
     <header class="site-header">
       <div class="container header-inner">
         <a class="brand" href="index.html">
-          <span class="brand-mark"><img src="logo.jpg" data-i18n-alt="brand.img.alt" alt="Antiquities and Heritage" /></span>
+          <span class="brand-mark"><img src="logo-mark.jpg" data-i18n-alt="brand.img.alt" alt="Antikviteti i nasljeđe" /></span>
           <span>
-            <strong data-i18n="brand.home">Association "Poljoprivrednik"</strong>
-            <small data-i18n="brand.subtitle.archive">Exhibition Archive</small>
+            <strong data-i18n="brand.home">Udruženje "Poljoprivreda"</strong>
+            <small data-i18n="brand.subtitle.archive">Arhiv izložbe</small>
           </span>
         </a>
 
@@ -213,11 +51,11 @@
         </button>
 
         <nav id="site-nav" class="site-nav">
-          <a href="index.html" data-i18n="nav.home">Home</a>
-          <a href="udruzenje.html" data-i18n="nav.about">About the Association</a>
-          <a href="current.html" data-i18n="nav.upcoming">Upcoming Exhibition</a>
-          <a href="archive.html" aria-current="page" data-i18n="nav.archive">Archive</a>
-          <a href="index.html#kontakt" data-i18n="nav.contact">Contact</a>
+          <a href="index.html" data-i18n="nav.home">Početna</a>
+          <a href="udruzenje.html" data-i18n="nav.about">O udruženju</a>
+          <a href="current.html" data-i18n="nav.upcoming">Trenutna izložba</a>
+          <a href="archive.html" aria-current="page" data-i18n="nav.archive">Arhiv</a>
+          <a href="index.html#kontakt" data-i18n="nav.contact">Kontakt</a>
           <button class="lang-toggle" type="button" data-lang-toggle>SR</button>
         </nav>
       </div>
@@ -226,14 +64,15 @@
     <main>
       <section class="hero section archive-hero reveal">
         <div class="container hero-grid">
-          <div class="eyebrow" data-i18n="archive.eyebrow.hero">Ethno Exhibition, October 2025</div>
-          <p data-i18n="archive.hero.p">The Agricultural Producers Association "Poljoprivreda" from Bijeljina and the Faculty of Agriculture of the University of East Sarajevo organised an ethno exhibition in Bijeljina with several hundred exhibits.</p>
-           <div class="carousel" data-carousel>
+          <div class="eyebrow" data-i18n="archive.eyebrow.hero">Etno izložba, oktobar 2025.</div>
+          <h1 class="archive-title" data-i18n="archive.h1">Arhiv izložbi</h1>
+          <p class="hero-lead" data-i18n="archive.hero.p">Udruženje poljoprivrednih proizvođača "Poljoprivreda" Bijeljina i Poljoprivredni fakultet Univerziteta u Istočnom Sarajevu organizovali su u Bijeljini etno izložbu sa više stotina eksponata.</p>
+          <div class="carousel" data-carousel>
             <button
               class="carousel-arrow carousel-prev"
               type="button"
               data-i18n-aria="current.carousel.prev"
-              aria-label="Previous image"
+              aria-label="Prethodna slika"
             >
               <span aria-hidden="true">‹</span>
             </button>
@@ -243,19 +82,19 @@
                 class="carousel-card carousel-card-side"
                 data-carousel-side="left"
                 data-i18n-aria="current.carousel.prev"
-                aria-label="Previous image"
+                aria-label="Prethodna slika"
               ></article>
               <article
                 class="carousel-card carousel-card-active"
                 data-carousel-side="center"
                 data-i18n-aria="current.carousel.center"
-                aria-label="Center image — click to enlarge"
+                aria-label="Centralna slika — kliknite da uvećate"
               ></article>
               <article
                 class="carousel-card carousel-card-side"
                 data-carousel-side="right"
                 data-i18n-aria="current.carousel.right"
-                aria-label="Next image"
+                aria-label="Sljedeća slika"
               ></article>
             </div>
 
@@ -263,22 +102,17 @@
               class="carousel-arrow carousel-next"
               type="button"
               data-i18n-aria="current.carousel.right"
-              aria-label="Next image"
+              aria-label="Sljedeća slika"
             >
               <span aria-hidden="true">›</span>
             </button>
           </div>
 
-
-
-          <ul
+          <div
             class="carousel-dots"
-            role="tablist"
             data-i18n-aria="current.carousel.dots.aria"
-            aria-label="Direct image selection"
-          ></ul>
-
-
+            aria-label="Direktan odabir slike"
+          ></div>
         </div>
 
         <ul class="carousel-source" hidden aria-hidden="true">
@@ -319,8 +153,7 @@
       <section class="section reveal">
         <div class="container">
           <div class="section-heading">
-            <span class="eyebrow" data-i18n="archive.media.eyebrow">Media about the Exhibition</span>
-            <p></p>
+            <span class="eyebrow" data-i18n="archive.media.eyebrow">Mediji o izložbi</span>
           </div>
 
           <ul class="archive-media-list">
@@ -331,27 +164,27 @@
                 target="_blank"
                 rel="noopener"
               >
-                <span data-i18n="archive.media.title1">Goran Perković on the ethno exhibition in Bijeljina — 15.10.2025.</span>
+                <span data-i18n="archive.media.title1">Goran Perković o etno izložbi u Bijeljini — 15.10.2025.</span>
               </a>
             </li>
             <li>
-              <span class="label" data-i18n="archive.media.label2">TV Show</span>
+              <span class="label" data-i18n="archive.media.label2">TV emisija</span>
               <a
                 href="https://www.youtube.com/watch?v=oej5N43hMgU"
                 target="_blank"
                 rel="noopener"
               >
-                <span data-i18n="archive.media.title2">Morning for Everyone: Goran Perković, collector from Bijeljina</span>
+                <span data-i18n="archive.media.title2">Jutro za sve: Goran Perković, kolekcionar iz Bijeljine</span>
               </a>
             </li>
             <li>
-              <span class="label" data-i18n="archive.media.label3">Article</span>
+              <span class="label" data-i18n="archive.media.label3">Članak</span>
               <a
                 href="https://infobijeljina.com/vijesti/etno-izlozba-u-bijeljini--predmeti-stari-vise-od-vijeka-ozivjeli-duh-proslih-vremena"
                 target="_blank"
                 rel="noopener"
               >
-                <span data-i18n="archive.media.title3">Objects older than a century exhibited in Bijeljina — Infobijeljina</span>
+                <span data-i18n="archive.media.title3">Predmeti stariji od vijeka izloženi u Bijeljini — Infobijeljina</span>
               </a>
             </li>
           </ul>
@@ -361,17 +194,12 @@
       <section class="section reveal">
         <div class="container">
           <div class="section-heading">
-            <span class="eyebrow" data-i18n="archive.events.eyebrow">Previous Exhibitions</span>
-
+            <span class="eyebrow" data-i18n="archive.events.eyebrow">Prethodne postavke</span>
           </div>
 
           <article class="archive-event">
-            <h3 data-i18n="archive.event1.title">"Zvuci prošlosti" (Sounds of the Past), September 2023.</h3>
-            <p data-i18n="archive.event1.text">
-              "Zvuci prošlosti" — Sounds of the Past — from the radio device collection
-              is the name of an exhibition with 43 exhibits held at the Semberija
-              Museum.
-            </p>
+            <h3 data-i18n="archive.event1.title">"Zvuci prošlosti", septembar 2023.</h3>
+            <p data-i18n="archive.event1.text">"Zvuci prošlosti" iz kolekcije radio-aparata naziv je izložbe sa 43 eksponata koja je održana u Muzeju Semberije.</p>
             <ul class="archive-event-links">
               <li>
                 <a
@@ -379,7 +207,7 @@
                   target="_blank"
                   rel="noopener"
                 >
-                  <span data-i18n="archive.event1.link1">Sounds of the Past — Radio Device Collection</span>
+                  <span data-i18n="archive.event1.link1">Zvuci prošlosti — kolekcija radio-aparata</span>
                 </a>
               </li>
               <li>
@@ -388,7 +216,7 @@
                   target="_blank"
                   rel="noopener"
                 >
-                  <span data-i18n="archive.event1.link2">Collection of 43 Radio Devices</span>
+                  <span data-i18n="archive.event1.link2">Zbirka od 43 radio-aparata</span>
                 </a>
               </li>
               <li>
@@ -397,27 +225,20 @@
                   target="_blank"
                   rel="noopener"
                 >
-                  <span data-i18n="archive.event1.link3">Sounds of the Past — RTRS</span>
+                  <span data-i18n="archive.event1.link3">Zvuci prošlosti — RTRS</span>
                 </a>
               </li>
             </ul>
 
-            <div
-              class="radio-gallery"
-              data-radio-gallery
-              aria-label="Pogledajte fotografije izložbe"
-            >
-              <div class="radio-gallery-eyebrow">Pogledajte fotografije izložbe</div>
+            <div class="radio-gallery" data-radio-gallery>
+              <div class="radio-gallery-eyebrow" data-i18n="archive.radio.eyebrow">Pogledajte fotografije izložbe</div>
               <div class="radio-gallery-grid" data-radio-gallery-grid></div>
             </div>
           </article>
 
           <article class="archive-event">
-            <h3 data-i18n="archive.event2.title">Agriculture Fair "Interagro", September 2023.</h3>
-            <p data-i18n="archive.event2.text">
-              An ethno collection with 40 types of pliers used by blacksmiths was
-              exhibited at the "Interagro" Agriculture Fair in Bijeljina.
-            </p>
+            <h3 data-i18n="archive.event2.title">Sajam poljoprivrede "Interagro", septembar 2023.</h3>
+            <p data-i18n="archive.event2.text">Etno-kolekcija sa 40 vrsta kliješta koje su koristili kovači izložena je na Sajmu poljoprivrede "Interagro" u Bijeljini.</p>
           </article>
         </div>
       </section>
@@ -425,125 +246,18 @@
 
     <footer class="site-footer">
       <div class="container footer-inner">
-
+        <div>
+          <strong data-i18n="brand.subtitle.home">Antikviteti i nasljeđe</strong>
+          <p data-i18n="footer.copy">Izložba i arhiv Udruženja poljoprivrednih proizvođača.</p>
+          <p class="footer-rights" data-i18n="footer.rights">© 2026 Udruženje „Poljoprivreda", Bijeljina</p>
+        </div>
+        <div class="footer-actions">
+          <a class="button button-secondary" href="udruzenje.html" data-i18n="footer.about">O udruženju</a>
+          <a class="button button-primary" href="current.html" data-i18n="footer.current">Trenutna izložba</a>
+          <a class="button button-secondary" href="index.html" data-i18n="footer.back">Nazad na početnu</a>
+        </div>
       </div>
     </footer>
 
-    <script>
-      // === Radio exhibition gallery — inline script, archive.html only ===
-      (function () {
-        var IMAGES = [];
-        for (var i = 5365; i <= 5384; i++) {
-          IMAGES.push('radioizlozba/IMG_' + i + '.JPG');
-        }
-
-        var gallery = document.querySelector('[data-radio-gallery]');
-        var grid = document.querySelector('[data-radio-gallery-grid]');
-        if (!gallery || !grid || !IMAGES.length) return;
-
-        // Build thumbnails
-        IMAGES.forEach(function (src, idx) {
-          var btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = 'radio-thumb';
-          btn.setAttribute('aria-label', 'Fotografija ' + (idx + 1) + ' od ' + IMAGES.length);
-          btn.dataset.radioIndex = String(idx);
-          var img = document.createElement('img');
-          img.src = src;
-          img.alt = '';
-          img.loading = 'lazy';
-          img.decoding = 'async';
-          btn.appendChild(img);
-          grid.appendChild(btn);
-        });
-
-        // Build lightbox DOM
-        var lb = document.createElement('div');
-        lb.className = 'radio-lightbox';
-        lb.setAttribute('role', 'dialog');
-        lb.setAttribute('aria-modal', 'true');
-        lb.setAttribute('aria-label', 'Pregled fotografije');
-
-        var closeBtn = document.createElement('button');
-        closeBtn.type = 'button';
-        closeBtn.className = 'radio-lb-close';
-        closeBtn.setAttribute('aria-label', 'Zatvori');
-        closeBtn.innerHTML = '&times;';
-
-        var prevBtn = document.createElement('button');
-        prevBtn.type = 'button';
-        prevBtn.className = 'radio-lb-prev';
-        prevBtn.setAttribute('aria-label', 'Prethodna fotografija');
-        prevBtn.innerHTML = '&lsaquo;';
-
-        var nextBtn = document.createElement('button');
-        nextBtn.type = 'button';
-        nextBtn.className = 'radio-lb-next';
-        nextBtn.setAttribute('aria-label', 'Sljedeća fotografija');
-        nextBtn.innerHTML = '&rsaquo;';
-
-        var lbImg = document.createElement('img');
-        lbImg.className = 'radio-lightbox-img';
-        lbImg.alt = '';
-
-        lb.appendChild(closeBtn);
-        lb.appendChild(prevBtn);
-        lb.appendChild(lbImg);
-        lb.appendChild(nextBtn);
-        document.body.appendChild(lb);
-
-        var current = 0;
-
-        function show() {
-          lbImg.src = IMAGES[current];
-        }
-
-        function open(idx) {
-          current = ((idx % IMAGES.length) + IMAGES.length) % IMAGES.length;
-          show();
-          lb.classList.add('is-open');
-          document.body.classList.add('radio-lb-active');
-        }
-
-        function close() {
-          lb.classList.remove('is-open');
-          document.body.classList.remove('radio-lb-active');
-        }
-
-        function step(delta) {
-          current = ((current + delta) % IMAGES.length + IMAGES.length) % IMAGES.length;
-          show();
-        }
-
-        // Click a thumbnail -> open at its index
-        grid.addEventListener('click', function (event) {
-          var btn = event.target.closest('.radio-thumb');
-          if (!btn) return;
-          var idx = parseInt(btn.dataset.radioIndex, 10);
-          if (Number.isInteger(idx)) open(idx);
-        });
-
-        closeBtn.addEventListener('click', close);
-        prevBtn.addEventListener('click', function () { step(-1); });
-        nextBtn.addEventListener('click', function () { step(1); });
-
-        // Click on overlay (but not on image / buttons) -> close
-        lb.addEventListener('click', function (event) {
-          if (event.target === lb) close();
-        });
-
-        // Keyboard: Esc / ← / →
-        document.addEventListener('keydown', function (event) {
-          if (!lb.classList.contains('is-open')) return;
-          if (event.key === 'Escape') {
-            close();
-          } else if (event.key === 'ArrowLeft') {
-            step(-1);
-          } else if (event.key === 'ArrowRight') {
-            step(1);
-          }
-        });
-      })();
-    </script>
   </body>
 </html>
